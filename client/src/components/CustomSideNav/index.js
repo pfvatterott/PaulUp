@@ -1,7 +1,19 @@
 import React from 'react'
 import { SideNav, Button, Col, Row } from 'react-materialize'
+import API from "../../utils/API"
 
 export default function CustomSideNav() {
+
+    function handleCreateSpace() {
+        console.log('working')
+        API.saveSpace({
+            title: "it's working"
+        }).then((saveSpaceResponse) => {
+            console.log(saveSpaceResponse)
+        })
+
+    }
+
     return (
         <SideNav>
             <Row>
@@ -15,7 +27,9 @@ export default function CustomSideNav() {
                 <Col
                     s={12}
                 >
-                    <Button>New Space</Button>
+                    <Button
+                        onClick={handleCreateSpace}
+                    >New Space</Button>
                 </Col>
             </Row>
         </SideNav>
