@@ -13,4 +13,8 @@ router
   .put(spacesController.update)
   .delete(spacesController.remove);
 
+router
+  .route("/user/:id")
+  .get(spacesController.findByUserId)
+
 module.exports = router;

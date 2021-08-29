@@ -11,7 +11,8 @@
     "react-dom": "^16.13.1",
     "react-materialize": "^3.9.9",
     "react-router-dom": "^5.2.1",
-    "react-scripts": "^3.4.3"
+    "react-scripts": "^1.1.5",
+    "react-simple-tree-menu": "^1.1.18"
   },
   "scripts": {
     "start": "react-scripts start",
