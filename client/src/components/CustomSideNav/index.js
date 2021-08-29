@@ -7,7 +7,7 @@ export default function CustomSideNav() {
     function handleCreateSpace() {
         console.log('working')
         API.saveSpace({
-            title: "it's working"
+            title: "working"
         }).then((saveSpaceResponse) => {
             console.log(saveSpaceResponse)
         })
