@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { SideNav, Button, Col, Row } from 'react-materialize'
+import { SideNav, Button, Col, Row, Modal, TextInput } from 'react-materialize'
 import API from "../../utils/API"
 import TreeMenu from 'react-simple-tree-menu';
 import '../../../node_modules/react-simple-tree-menu/dist/main.css';
 
 export default function CustomSideNav() {
   const [userWorkspaceData, setUserWorkspaceData] = useState([])
+  const [openCreateSpaceModal, setOpenCreateSpaceModal] = useState(false)
+
 
 
   useEffect(() => {
@@ -24,10 +26,17 @@ export default function CustomSideNav() {
     console.log(data.data[0])
   }
 
+  function resetCreateSpaceModal() {
+    setOpenCreateSpaceModal(false)
+  }
+
+  function handleOpenCreateSpaceModal() {
+    setOpenCreateSpaceModal(true)
+
+  }
     
 
   function handleCreateSpace() {
-    console.log('working')
     console.log(userWorkspaceData.data[0])
     if (userWorkspaceData.data[0].spaces) {
       console.log('this needs work')
@@ -75,25 +84,46 @@ export default function CustomSideNav() {
        
 
   return (
-      <SideNav>
-          <Row>
-              <Col s={12}>
-                  <h3 className="left">ClickUp</h3>
-              </Col>
-          </Row>
-          <Row>
-              <Col s={12}>
-                  <Button
-                      onClick={handleCreateSpace}
-                  >New Space</Button>
-              </Col>
-          </Row>
-          <Row>
-              <Col s={12}>
-                  <TreeMenu data={treeData} />
-              </Col>
-          </Row>
-      </SideNav>
+      <div>
+        <SideNav>
+            <Row>
+                <Col s={12}>
+                    <h3 className="left">ClickUp</h3>
+                </Col>
+            </Row>
+            <Row>
+                <Col s={12}>
+                    <Button
+                        onClick={handleOpenCreateSpaceModal}
+                    >New Space</Button>
+                </Col>
+            </Row>
+            <Row>
+                <Col s={12}>
+                    <TreeMenu data={treeData} />
+                </Col>
+            </Row>
+        </SideNav>
+        <Modal
+          open={openCreateSpaceModal}
+          className='center-align'
+          actions={[]}
+          options={{
+          dismissible: false
+          }}>
+          <h3>Name your Space:</h3>
+          <br></br>
+          <TextInput
+            id="space_name"
+            placeholder="Space Name"
+          />
+          <br></br>
+          <br></br><br></br>
+          <a><Button id="modalBtn" modal="close" onClick={handleCreateSpace}>Create Space</Button></a>
+          <br></br><br></br>
+          <a><Button id="modalBtn" modal="close" onClick={resetCreateSpaceModal}>Cancel</Button></a>
+      </Modal>
+      </div>
 
     )
 }
