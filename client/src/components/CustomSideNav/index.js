@@ -90,7 +90,7 @@ export default function CustomSideNav() {
         <SideNav>
             <Row>
                 <Col s={12}>
-                    <h3 className="left">ClickUp</h3>
+                    <h3 className="left">PaulUp</h3>
                 </Col>
             </Row>
             <Row>
