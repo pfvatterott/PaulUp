@@ -9,6 +9,7 @@ export default function CustomSideNav() {
   const [userWorkspaceData, setUserWorkspaceData] = useState([])
   const [openCreateSpaceModal, setOpenCreateSpaceModal] = useState(false)
   const [userData, setUserData] = useState([])
+  const [treeData, setTreeData] = useState({})
   const location = useLocation()
   const userID = location.state
 
@@ -33,7 +34,27 @@ export default function CustomSideNav() {
   }
 
   function handleTreeRefresh(data) {
-    console.log(data.data[0])
+    console.log(data)
+    setTreeData({
+      'node': {               // key
+        label: data.data[0].spaces.space_name,
+        index: 0, // decide the rendering order on the same level
+          // any other props you need, e.g. url
+        nodes: {
+          'second-level-node-1': {
+            label: data.data[0].spaces.lists.list_name,
+            index: 0,
+            nodes: {
+              'third-level-node-1': {
+                label: 'Node 1 at the third level',
+                index: 0,
+                nodes: {} // you can remove the nodes property or leave it as an empty array
+              },
+            },
+          },
+        },
+      }
+      })
   }
 
   function resetCreateSpaceModal() {
@@ -91,31 +112,6 @@ export default function CustomSideNav() {
 
   }
 
-  const treeData = {
-      'node': {               // key
-        label: 'Node 1 at the first level',
-        index: 0, // decide the rendering order on the same level
-          // any other props you need, e.g. url
-        nodes: {
-          'second-level-node-1': {
-            label: 'Node 1 at the second level',
-            index: 0,
-            nodes: {
-              'third-level-node-1': {
-                label: 'Node 1 at the third level',
-                index: 0,
-                nodes: {} // you can remove the nodes property or leave it as an empty array
-              },
-            },
-          },
-        },
-      },
-      'first-level-node-2': {
-        label: 'Node 2 at the first level',
-        index: 1,
-      },
-      };
-       
 
   return (
       <div>
