@@ -38,26 +38,34 @@ export default function CustomSideNav() {
 
   function handleTreeRefresh(data) {
     console.log(data)
-    setTreeData({
-      'node': {               // key
+    let newTreeData = {}
+    // for (let i = 0; i < data.data.length; i++) {
+    //   const element = array[i];
+
+    // }
+    setTreeData([
+      {
+        key: data.data[0].spaces.space_id,
         label: data.data[0].spaces.space_name,
-        index: 0, // decide the rendering order on the same level
-          // any other props you need, e.g. url
-        nodes: {
-          'second-level-node-1': {
+        nodes: [
+          {
+            key: data.data[0].spaces.lists.list_id,
             label: data.data[0].spaces.lists.list_name,
-            index: 0,
-            nodes: {
-              'third-level-node-1': {
-                label: 'Node 1 at the third level',
-                index: 0,
-                nodes: {} // you can remove the nodes property or leave it as an empty array
+            nodes: [
+              {
+                key: 'third-level-node-1',
+                label: 'Last node of the branch',
+                nodes: [] // you can remove the nodes property or leave it as an empty array
               },
-            },
+            ],
           },
-        },
-      }
-      })
+        ],
+      },
+      {
+        key: 'first-level-node-2',
+        label: 'Node 2 at the first level',
+      },
+    ])
   }
 
   function resetCreateSpaceModal() {
@@ -68,7 +76,7 @@ export default function CustomSideNav() {
     setOpenCreateSpaceModal(true)
 
   }
-    
+
 
   function handleCreateSpace() {
     if (userWorkspaceData.data.length === 0) {
@@ -112,52 +120,52 @@ export default function CustomSideNav() {
       API.updateUserSpaces(userWorkspaceData.data[0]._id, updatedSpacesData)
 
     }
-    
+
 
   }
 
 
   return (
-      <div>
-        <SideNav>
-            <Row>
-                <Col s={12}>
-                    <h3 className="left">PaulUp</h3>
-                </Col>
-            </Row>
-            <Row>
-                <Col s={12}>
-                    <Button
-                        onClick={handleOpenCreateSpaceModal}
-                    >New Space</Button>
-                </Col>
-            </Row>
-            <Row>
-                <Col s={12}>
-                    <TreeMenu data={treeData} />
-                </Col>
-            </Row>
-        </SideNav>
-        <Modal
-          open={openCreateSpaceModal}
-          className='center-align'
-          actions={[]}
-          options={{
+    <div>
+      <SideNav>
+        <Row>
+          <Col s={12}>
+            <h3 className="left">PaulUp</h3>
+          </Col>
+        </Row>
+        <Row>
+          <Col s={12}>
+            <Button
+              onClick={handleOpenCreateSpaceModal}
+            >New Space</Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col s={12}>
+            <TreeMenu data={treeData} />
+          </Col>
+        </Row>
+      </SideNav>
+      <Modal
+        open={openCreateSpaceModal}
+        className='center-align'
+        actions={[]}
+        options={{
           dismissible: false
-          }}>
-          <h3>Name your Space:</h3>
-          <br></br>
-          <TextInput
-            id="space_name"
-            placeholder="Space Name"
-          />
-          <br></br>
-          <br></br><br></br>
-          <a><Button id="modalBtn" modal="close" onClick={handleCreateSpace}>Create Space</Button></a>
-          <br></br><br></br>
-          <a><Button id="modalBtn" modal="close" onClick={resetCreateSpaceModal}>Cancel</Button></a>
+        }}>
+        <h3>Name your Space:</h3>
+        <br></br>
+        <TextInput
+          id="space_name"
+          placeholder="Space Name"
+        />
+        <br></br>
+        <br></br><br></br>
+        <a><Button id="modalBtn" modal="close" onClick={handleCreateSpace}>Create Space</Button></a>
+        <br></br><br></br>
+        <a><Button id="modalBtn" modal="close" onClick={resetCreateSpaceModal}>Cancel</Button></a>
       </Modal>
-      </div>
+    </div>
 
-    )
+  )
 }
