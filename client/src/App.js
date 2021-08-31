@@ -9,7 +9,7 @@ import "./App.css";
 function App() {
   const { pathname } = useLocation();
   const pathway = pathname.split("/")
-  const [sidebar, setSidebar] = useState(true);
+  const [sidebar, setSidebar] = useState(false);
 
   useEffect(() => {
     if (pathname === "/") {

@@ -19,11 +19,14 @@ export default function CustomSideNav() {
     handleGetUser()
   }, [])
 
+
   function handleGetSpaces() {
     API.getUserSpaces(userID).then((getUserSpacesResponse) => {
       console.log(getUserSpacesResponse.data)
       setUserWorkspaceData(getUserSpacesResponse)
-      handleTreeRefresh(getUserSpacesResponse)
+      if (getUserSpacesResponse.data.length !== 0) {
+        handleTreeRefresh(getUserSpacesResponse)
+      }
     })
   }
 
@@ -91,6 +94,7 @@ export default function CustomSideNav() {
           console.log(oldUserData)
           API.updateUser(userID, oldUserData).then((updateUserResponse) => {
             console.log(updateUserResponse)
+            handleGetSpaces()
           })
         }
       })
