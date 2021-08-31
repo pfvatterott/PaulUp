@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { SideNav, Button, Col, Row, Modal, TextInput } from 'react-materialize'
+import { useLocation } from "react-router-dom";
 import API from "../../utils/API"
 import TreeMenu from 'react-simple-tree-menu';
 import '../../../node_modules/react-simple-tree-menu/dist/main.css';
@@ -7,18 +8,27 @@ import '../../../node_modules/react-simple-tree-menu/dist/main.css';
 export default function CustomSideNav() {
   const [userWorkspaceData, setUserWorkspaceData] = useState([])
   const [openCreateSpaceModal, setOpenCreateSpaceModal] = useState(false)
-
+  const [userData, setUserData] = useState([])
+  const location = useLocation()
+  const userID = location.state
 
 
   useEffect(() => {
     handleGetSpaces()
+    handleGetUser()
   }, [])
 
   function handleGetSpaces() {
-    API.getUserSpaces('PaulVatterott').then((getUserSpacesResponse) => {
-      console.log(getUserSpacesResponse)
+    API.getUserSpaces(userID).then((getUserSpacesResponse) => {
+      console.log(getUserSpacesResponse.data)
       setUserWorkspaceData(getUserSpacesResponse)
       handleTreeRefresh(getUserSpacesResponse)
+    })
+  }
+
+  function handleGetUser() {
+    API.getUser(userID).then((getUserResponse) => {
+      setUserData(getUserResponse.data[0])
     })
   }
 
@@ -37,16 +47,38 @@ export default function CustomSideNav() {
     
 
   function handleCreateSpace() {
-    if (userWorkspaceData.data) {
-      if (userWorkspaceData.data[0].spaces) {
-        console.log(userWorkspaceData.data[0])
-        console.log('this needs work')
+    if (userWorkspaceData.data.length === 0) {
+      let spaceData = {
+        workspace_name: 'WorkSpace Name!',
+        workspace_owner: userData.firstName + " " + userData.lastName,
+        workspace_ownerId: userID,
+        spaces: {
+          space_name: 'testing',
+          space_id: '123',
+          lists: {
+            list_name: 'List',
+            list_id: '123',
+          }
+        }
       }
+      API.saveSpace(spaceData).then((saveSpaceResponse) => {
+        console.log(saveSpaceResponse.data._id)
+        let oldUserData = userData
+        console.log(oldUserData)
+        if (oldUserData.workspaces.length === 0) {
+          oldUserData.workspaces = [saveSpaceResponse.data._id]
+          console.log(oldUserData)
+          API.updateUser(userID, oldUserData).then((updateUserResponse) => {
+            console.log(updateUserResponse)
+          })
+        }
+      })
     }
     else {
       let updatedSpacesData = {
-        workspace_name: userWorkspaceData.data[0].workspace_name,
-        workspace_owner: userWorkspaceData.data[0].workspace_owner,
+        workspace_name: 'WorkSpace Name!',
+        workspace_owner: userData.firstName + " " + userData.lastName,
+        workspace_ownerId: userID,
         spaces: {
           space_name: 'space name!',
           space_id: '1234'

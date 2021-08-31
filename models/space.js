@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const spaceSchema = new mongoose.Schema({
   workspace_name: { type: String },
   workspace_owner: { type: String },
+  workspace_ownerId: { type: String },
   spaces: {
     space_name: { type: String },
     space_id: { type: String},

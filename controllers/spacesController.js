@@ -37,7 +37,7 @@ module.exports = {
   findByUserId: function(req, res) {
     db.Space
       .find({
-          workspace_owner: req.params.id
+          workspace_ownerId: req.params.id
       })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
