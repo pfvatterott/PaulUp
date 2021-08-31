@@ -7,9 +7,22 @@ import CustomSideNav from "./components/CustomSideNav";
 import "./App.css";
 
 function App() {
+  const { pathname } = useLocation();
+  const pathway = pathname.split("/")
+  const [sidebar, setSidebar] = useState(true);
+
+  useEffect(() => {
+    if (pathname === "/") {
+      setSidebar(false)
+    }
+    else {
+      setSidebar(true)
+    }
+  }, [pathname])
+
   return (
     <div className="App">
-      {/* <CustomSideNav></CustomSideNav> */}
+      { sidebar ? (<CustomSideNav></CustomSideNav>) : null }
       <Route exact path="/" component={welcome} />
       <Route exact path="/taskView" component={taskView} />
     </div>

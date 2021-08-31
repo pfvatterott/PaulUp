@@ -50,7 +50,7 @@ return (
         <GoogleLogin
         className="loginBtn"
         clientId={googleClientId}
-        buttonText="Get Swapp'n!"
+        buttonText="Log in"
         onSuccess={googleSuccess}
         onFailure={googleFailure}
         cookiePolicy={"single_host_origin"}
