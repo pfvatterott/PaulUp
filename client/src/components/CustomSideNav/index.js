@@ -37,9 +37,11 @@ export default function CustomSideNav() {
     
 
   function handleCreateSpace() {
-    console.log(userWorkspaceData.data[0])
-    if (userWorkspaceData.data[0].spaces) {
-      console.log('this needs work')
+    if (userWorkspaceData.data) {
+      if (userWorkspaceData.data[0].spaces) {
+        console.log(userWorkspaceData.data[0])
+        console.log('this needs work')
+      }
     }
     else {
       let updatedSpacesData = {

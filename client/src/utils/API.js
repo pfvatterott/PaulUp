@@ -24,4 +24,10 @@ export default {
   updateUserSpaces: function(spaceId, spaceData) {
     return axios.put("/api/spaces/" + spaceId, spaceData)
   },
+  getUser: function(id) {
+    return axios.get("/api/users/" + id);
+  },
+  saveUser: function(userData) {
+    return axios.post("/api/users", userData);
+  }
 };
