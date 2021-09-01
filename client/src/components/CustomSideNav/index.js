@@ -6,26 +6,48 @@ import TreeMenu from 'react-simple-tree-menu';
 import '../../../node_modules/react-simple-tree-menu/dist/main.css';
 
 export default function CustomSideNav() {
-  const [userWorkspaceData, setUserWorkspaceData] = useState([])
+  const [workspaceData, setWorkspaceData] = useState([])
   const [openCreateSpaceModal, setOpenCreateSpaceModal] = useState(false)
+  const [openCreateWorkspaceModal, setOpenCreateWorkspaceModal] = useState(false)
   const [userData, setUserData] = useState([])
   const [treeData, setTreeData] = useState({})
+  const [ workspaceName, setWorkspaceName ] = useState('')
   const location = useLocation()
   const userID = location.state
 
 
   useEffect(() => {
-    handleGetSpaces()
+    handleGetWorkspaces()
     handleGetUser()
   }, [])
 
+  function handleWorkspaceNameChange(event) {
+    const name = event.target.value;
+    setWorkspaceName(name)
+  }
 
-  function handleGetSpaces() {
-    API.getUserSpaces(userID).then((getUserSpacesResponse) => {
-      console.log(getUserSpacesResponse.data)
-      setUserWorkspaceData(getUserSpacesResponse)
-      if (getUserSpacesResponse.data.length !== 0) {
-        handleTreeRefresh(getUserSpacesResponse)
+  function handleCreateWorkspace() {
+    setOpenCreateWorkspaceModal(false)
+    const newWorkspace = {
+      workspace_name: workspaceName,
+      owner_id: userID
+    }
+    API.saveWorkspace(newWorkspace).then((createWorkspaceResponse) => {
+      setWorkspaceData(createWorkspaceResponse.data)
+    })
+  }
+
+  function handleGetWorkspaces() {
+    API.getUserWorkspaces(userID).then((getUserWorkspacesResponse) => {
+      setWorkspaceData(getUserWorkspacesResponse)
+      if (getUserWorkspacesResponse.data.length === 0) {
+        setOpenCreateWorkspaceModal(true)
+      }
+      else if (getUserWorkspacesResponse.data.length === 1) {
+        setWorkspaceData(getUserWorkspacesResponse.data[0])
+      }
+      else {
+        
       }
     })
   }
@@ -38,34 +60,36 @@ export default function CustomSideNav() {
 
   function handleTreeRefresh(data) {
     console.log(data)
-    let newTreeData = {}
-    // for (let i = 0; i < data.data.length; i++) {
-    //   const element = array[i];
+    if (data.data[0].spaces.length !== 0) {
+      let newTreeData = {}
+      // for (let i = 0; i < data.data.length; i++) {
+      //   const element = array[i];
 
-    // }
-    setTreeData([
-      {
-        key: data.data[0].spaces.space_id,
-        label: data.data[0].spaces.space_name,
-        nodes: [
-          {
-            key: data.data[0].spaces.lists.list_id,
-            label: data.data[0].spaces.lists.list_name,
-            nodes: [
-              {
-                key: 'third-level-node-1',
-                label: 'Last node of the branch',
-                nodes: [] // you can remove the nodes property or leave it as an empty array
-              },
-            ],
-          },
-        ],
-      },
-      {
-        key: 'first-level-node-2',
-        label: 'Node 2 at the first level',
-      },
-    ])
+      // }
+      setTreeData([
+        {
+          key: data.data[0].spaces.space_id,
+          label: data.data[0].spaces.space_name,
+          nodes: [
+            {
+              key: data.data[0].spaces.lists.list_id,
+              label: data.data[0].spaces.lists.list_name,
+              nodes: [
+                {
+                  key: 'third-level-node-1',
+                  label: 'Last node of the branch',
+                  nodes: [] // you can remove the nodes property or leave it as an empty array
+                },
+              ],
+            },
+          ],
+        },
+        {
+          key: 'first-level-node-2',
+          label: 'Node 2 at the first level',
+        },
+      ])
+    }
   }
 
   function resetCreateSpaceModal() {
@@ -79,19 +103,12 @@ export default function CustomSideNav() {
 
 
   function handleCreateSpace() {
-    if (userWorkspaceData.data.length === 0) {
+    if (workspaceData.data.length === 0) {
       let spaceData = {
-        workspace_name: 'WorkSpace Name!',
-        workspace_owner: userData.firstName + " " + userData.lastName,
-        workspace_ownerId: userID,
-        spaces: {
-          space_name: 'testing',
-          space_id: '123',
-          lists: {
-            list_name: 'List',
-            list_id: '123',
-          }
-        }
+        space_name: 'testing',
+        owner_id: userID,
+        workspace_id: '123',
+        order_index: { type: Number }
       }
       API.saveSpace(spaceData).then((saveSpaceResponse) => {
         console.log(saveSpaceResponse.data._id)
@@ -102,7 +119,7 @@ export default function CustomSideNav() {
           console.log(oldUserData)
           API.updateUser(userID, oldUserData).then((updateUserResponse) => {
             console.log(updateUserResponse)
-            handleGetSpaces()
+            // handleGetSpaces()
           })
         }
       })
@@ -117,7 +134,7 @@ export default function CustomSideNav() {
           space_id: '1234'
         }
       }
-      API.updateUserSpaces(userWorkspaceData.data[0]._id, updatedSpacesData)
+      API.updateUserSpaces(workspaceData.data[0]._id, updatedSpacesData)
 
     }
 
@@ -131,6 +148,11 @@ export default function CustomSideNav() {
         <Row>
           <Col s={12}>
             <h3 className="left">PaulUp</h3>
+          </Col>
+        </Row>
+        <Row>
+          <Col s={12}>
+            <p className="left">Workspace: {workspaceData.workspace_name}</p>
           </Col>
         </Row>
         <Row>
@@ -164,6 +186,24 @@ export default function CustomSideNav() {
         <a><Button id="modalBtn" modal="close" onClick={handleCreateSpace}>Create Space</Button></a>
         <br></br><br></br>
         <a><Button id="modalBtn" modal="close" onClick={resetCreateSpaceModal}>Cancel</Button></a>
+      </Modal>
+      <Modal
+        open={openCreateWorkspaceModal}
+        className='center-align'
+        actions={[]}
+        options={{
+          dismissible: false
+        }}>
+        <h3>Name your Workspace:</h3>
+        <br></br>
+        <TextInput
+          onChange={handleWorkspaceNameChange}
+          id="workspace_name_form"
+          placeholder="Workspace Name"
+        />
+        <br></br>
+        <br></br><br></br>
+        <a><Button id="modalBtn" modal="close" onClick={handleCreateWorkspace}>Create Workspace</Button></a>
       </Modal>
     </div>
 

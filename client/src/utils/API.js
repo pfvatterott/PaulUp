@@ -18,8 +18,8 @@ export default {
     return axios.post("/api/spaces", spaceData);
   },
   //get a space with given user id
-  getUserSpaces: function(id) {
-    return axios.get("/api/spaces/user/" + id)
+  getUserWorkspaces: function(id) {
+    return axios.get("/api/workspaces/user/" + id)
   },
   updateUserSpaces: function(spaceId, spaceData) {
     return axios.put("/api/spaces/" + spaceId, spaceData)
@@ -27,10 +27,16 @@ export default {
   getUser: function(id) {
     return axios.get("/api/users/" + id);
   },
+  getUserByGoogleId: function(id) {
+    return axios.get("/api/users/google/" + id);
+  },
   saveUser: function(userData) {
     return axios.post("/api/users", userData);
   },
   updateUser: function(userId, userData) {
     return axios.put("/api/users/" + userId, userData)
-  }
+  },
+  saveWorkspace: function(spaceData) {
+    return axios.post("/api/workspaces", spaceData);
+  },
 };

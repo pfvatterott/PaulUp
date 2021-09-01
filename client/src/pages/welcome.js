@@ -15,7 +15,7 @@ const [userID, setUserID] = useState('')
 const googleSuccess = async (response) => {
     console.log(response)
     const userObj = response.profileObj
-    setUserID(userObj.googleId)
+    
     const user = {
         email: userObj.email,
         firstName: userObj.givenName,
@@ -24,7 +24,8 @@ const googleSuccess = async (response) => {
         googleId: userObj.googleId,
         listedItems: []
     }
-    API.getUser(userObj.googleId).then(res => {
+    API.getUserByGoogleId(userObj.googleId).then(res => {
+        setUserID(res.data[0]._id)
         if (res.data.length > 0) {
             setRedirect(true)
         }
