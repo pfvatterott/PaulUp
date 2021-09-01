@@ -41,5 +41,11 @@ export default {
   },
   updateWorkspace: function(workSpaceId, workspaceData) {
     return axios.put("/api/workspaces/" + workSpaceId, workspaceData)
-  }
+  },
+  getWorkspace: function(id) {
+    return axios.get("/api/workspaces/" + id);
+  },
+  getWorkspaceSpaces: function(id) {
+    return axios.get("/api/spaces/workspace/" + id);
+  },
 };

@@ -46,16 +46,15 @@ export default function CustomSideNav() {
 
   function handleGetWorkspaces() {
     API.getUserWorkspaces(userID).then((getUserWorkspacesResponse) => {
-      setWorkspaceData(getUserWorkspacesResponse)
       if (getUserWorkspacesResponse.data.length === 0) {
         setOpenCreateWorkspaceModal(true)
       }
       else if (getUserWorkspacesResponse.data.length === 1) {
         setWorkspaceData(getUserWorkspacesResponse.data[0])
-        console.log(getUserWorkspacesResponse.data[0])
+        handleTreeRefresh(getUserWorkspacesResponse.data[0]._id)
       }
       else {
-        
+        console.log('need to set up a way to switch workspaces')
       }
     })
   }
@@ -66,38 +65,20 @@ export default function CustomSideNav() {
     })
   }
 
-  function handleTreeRefresh(data) {
-    console.log(data)
-    if (data.data[0].spaces.length !== 0) {
-      let newTreeData = {}
-      // for (let i = 0; i < data.data.length; i++) {
-      //   const element = array[i];
-
-      // }
-      setTreeData([
-        {
-          key: data.data[0].spaces.space_id,
-          label: data.data[0].spaces.space_name,
-          nodes: [
-            {
-              key: data.data[0].spaces.lists.list_id,
-              label: data.data[0].spaces.lists.list_name,
-              nodes: [
-                {
-                  key: 'third-level-node-1',
-                  label: 'Last node of the branch',
-                  nodes: [] // you can remove the nodes property or leave it as an empty array
-                },
-              ],
-            },
-          ],
-        },
-        {
-          key: 'first-level-node-2',
-          label: 'Node 2 at the first level',
-        },
-      ])
-    }
+  function handleTreeRefresh(workspace_id) {
+    API.getWorkspaceSpaces(workspace_id).then((workspaceSpacesResponse) => {
+      const spacesArray = workspaceSpacesResponse.data
+      console.log(spacesArray)
+      let newTreeData = []
+      for (let i = 0; i < spacesArray.length; i++) {
+        let spaceTreeData = {
+          key: spacesArray[i]._id,
+          label: spacesArray[i].space_name
+        }
+        newTreeData.push(spaceTreeData)
+      }
+      setTreeData(newTreeData)
+    })
   }
 
   function resetCreateSpaceModal() {

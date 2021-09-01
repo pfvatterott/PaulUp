@@ -41,5 +41,13 @@ module.exports = {
       })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
-  }
+  },
+  findByWorkspaceId: function(req, res) {
+    db.Space
+      .find({
+          workspace_id: req.params.id
+      })
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
 };

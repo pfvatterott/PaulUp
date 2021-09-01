@@ -17,4 +17,8 @@ router
   .route("/user/:id")
   .get(spacesController.findByUserId)
 
+router
+  .route("/workspace/:id")
+  .get(spacesController.findByWorkspaceId)
+
 module.exports = router;
