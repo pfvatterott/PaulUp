@@ -12,6 +12,7 @@ export default function CustomSideNav() {
   const [userData, setUserData] = useState([])
   const [treeData, setTreeData] = useState({})
   const [ workspaceName, setWorkspaceName ] = useState('')
+  const [ newSpaceName, setNewSpaceName ] = useState('')
   const location = useLocation()
   const userID = location.state
 
@@ -26,6 +27,11 @@ export default function CustomSideNav() {
     setWorkspaceName(name)
   }
 
+  function handleSpaceNameChange(event) {
+    const name = event.target.value;
+    setNewSpaceName(name)
+  }
+
   function handleCreateWorkspace() {
     setOpenCreateWorkspaceModal(false)
     const newWorkspace = {
@@ -34,6 +40,7 @@ export default function CustomSideNav() {
     }
     API.saveWorkspace(newWorkspace).then((createWorkspaceResponse) => {
       setWorkspaceData(createWorkspaceResponse.data)
+      handleGetUser()
     })
   }
 
@@ -45,6 +52,7 @@ export default function CustomSideNav() {
       }
       else if (getUserWorkspacesResponse.data.length === 1) {
         setWorkspaceData(getUserWorkspacesResponse.data[0])
+        console.log(getUserWorkspacesResponse.data[0])
       }
       else {
         
@@ -103,40 +111,24 @@ export default function CustomSideNav() {
 
 
   function handleCreateSpace() {
-    if (workspaceData.data.length === 0) {
-      let spaceData = {
-        space_name: 'testing',
-        owner_id: userID,
-        workspace_id: '123',
-        order_index: { type: Number }
+    setOpenCreateSpaceModal(false)
+    let spaceData = {
+      space_name: newSpaceName,
+      owner_id: userID,
+      workspace_id: workspaceData._id,
+      order_index: workspaceData.spaces.length
+    }
+    API.saveSpace(spaceData).then((saveSpaceResponse) => {
+      let spacesArray = workspaceData.spaces
+      spacesArray.push(saveSpaceResponse.data._id)
+      let newSpaceData = {
+        spaces: spacesArray
       }
-      API.saveSpace(spaceData).then((saveSpaceResponse) => {
-        console.log(saveSpaceResponse.data._id)
-        let oldUserData = userData
-        console.log(oldUserData)
-        if (oldUserData.workspaces.length === 0) {
-          oldUserData.workspaces = [saveSpaceResponse.data._id]
-          console.log(oldUserData)
-          API.updateUser(userID, oldUserData).then((updateUserResponse) => {
-            console.log(updateUserResponse)
-            // handleGetSpaces()
-          })
-        }
+      API.updateWorkspace(workspaceData._id, newSpaceData).then((updateWorkspaceResponse) => {
+        handleGetWorkspaces()
       })
-    }
-    else {
-      let updatedSpacesData = {
-        workspace_name: 'WorkSpace Name!',
-        workspace_owner: userData.firstName + " " + userData.lastName,
-        workspace_ownerId: userID,
-        spaces: {
-          space_name: 'space name!',
-          space_id: '1234'
-        }
-      }
-      API.updateUserSpaces(workspaceData.data[0]._id, updatedSpacesData)
+    })
 
-    }
 
 
   }
@@ -168,6 +160,8 @@ export default function CustomSideNav() {
           </Col>
         </Row>
       </SideNav>
+
+      {/* Create Space Modal */}
       <Modal
         open={openCreateSpaceModal}
         className='center-align'
@@ -178,6 +172,7 @@ export default function CustomSideNav() {
         <h3>Name your Space:</h3>
         <br></br>
         <TextInput
+          onChange={handleSpaceNameChange}
           id="space_name"
           placeholder="Space Name"
         />
@@ -187,6 +182,8 @@ export default function CustomSideNav() {
         <br></br><br></br>
         <a><Button id="modalBtn" modal="close" onClick={resetCreateSpaceModal}>Cancel</Button></a>
       </Modal>
+
+      {/* Create Workspace Modal */}
       <Modal
         open={openCreateWorkspaceModal}
         className='center-align'

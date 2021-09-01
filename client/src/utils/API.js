@@ -39,4 +39,7 @@ export default {
   saveWorkspace: function(spaceData) {
     return axios.post("/api/workspaces", spaceData);
   },
+  updateWorkspace: function(workSpaceId, workspaceData) {
+    return axios.put("/api/workspaces/" + workSpaceId, workspaceData)
+  }
 };
