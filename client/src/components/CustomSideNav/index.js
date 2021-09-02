@@ -75,10 +75,6 @@ export default function CustomSideNav() {
     })
   }
 
-  function clickNode() {
-    console.log('works')
-  }
-
   function handleTreeRefresh(workspace_id) {
     API.getWorkspaceSpaces(workspace_id).then((workspaceSpacesResponse) => {
       const spacesArray = workspaceSpacesResponse.data
@@ -121,7 +117,8 @@ export default function CustomSideNav() {
 
   function handleOpenCreateNewFolderOrListModal(key) {
     setOpenCreateNewFolderOrListModal(true)
-    setCurrentSpace(key)
+    let newKey = key.replace('/create_new', '')
+    setCurrentSpace(newKey)
   }
 
   function handleOpenCreateListModal() {
@@ -151,7 +148,27 @@ export default function CustomSideNav() {
   }
 
   function handleCreateList() {
-    console.log('works' + " " + listName)
+    console.log('works' + " " + listName + " " + currentSpace)
+    API.getSpace(currentSpace).then((spaceResponse) => {
+      console.log(spaceResponse.data)
+      let newList = {
+        list_name: listName,
+        owner_id: userID,
+        space_id: spaceResponse.data._id,
+        order_index: spaceResponse.data.lists.length
+      }
+      API.saveList(newList).then((saveListResponse) => {
+        console.log(saveListResponse.data)
+        let updatedListArray = spaceResponse.data.lists
+        updatedListArray.push(saveListResponse.data._id)
+        let newSpaceData = {
+          lists: updatedListArray
+        }
+        API.updateSpace(spaceResponse.data._id, newSpaceData).then((updateSpaceResponse) => {
+          console.log(updateSpaceResponse)
+        })
+      })
+    })
   }
 
 

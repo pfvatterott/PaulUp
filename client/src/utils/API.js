@@ -48,4 +48,10 @@ export default {
   getWorkspaceSpaces: function(id) {
     return axios.get("/api/spaces/workspace/" + id);
   },
+  saveList: function(listData) {
+    return axios.post("/api/lists", listData);
+  },
+  updateSpace: function(spaceId, spaceData) {
+    return axios.put("/api/spaces/" + spaceId, spaceData)
+  },
 };
