@@ -9,10 +9,14 @@ export default function CustomSideNav() {
   const [workspaceData, setWorkspaceData] = useState([])
   const [openCreateSpaceModal, setOpenCreateSpaceModal] = useState(false)
   const [openCreateWorkspaceModal, setOpenCreateWorkspaceModal] = useState(false)
+  const [openCreateNewFolderOrListModal, setOpenCreateNewFolderOrListModal] = useState(false)
+  const [openCreateListModal, setOpenCreateListModal] = useState(false)
+  const [currentSpace, setCurrentSpace] = useState('')
   const [userData, setUserData] = useState([])
   const [treeData, setTreeData] = useState({})
   const [ workspaceName, setWorkspaceName ] = useState('')
   const [ newSpaceName, setNewSpaceName ] = useState('')
+  const [ listName, setListName ] = useState('')
   const location = useLocation()
   const userID = location.state
 
@@ -25,6 +29,12 @@ export default function CustomSideNav() {
   function handleWorkspaceNameChange(event) {
     const name = event.target.value;
     setWorkspaceName(name)
+  }
+
+  function handleListNameChange(event) {
+    const name = event.target.value;
+    setListName(name)
+
   }
 
   function handleSpaceNameChange(event) {
@@ -65,6 +75,10 @@ export default function CustomSideNav() {
     })
   }
 
+  function clickNode() {
+    console.log('works')
+  }
+
   function handleTreeRefresh(workspace_id) {
     API.getWorkspaceSpaces(workspace_id).then((workspaceSpacesResponse) => {
       const spacesArray = workspaceSpacesResponse.data
@@ -73,7 +87,15 @@ export default function CustomSideNav() {
       for (let i = 0; i < spacesArray.length; i++) {
         let spaceTreeData = {
           key: spacesArray[i]._id,
-          label: spacesArray[i].space_name
+          label: spacesArray[i].space_name,
+          onClickNode: '123',
+          nodes: [
+            {
+              key: 'create_new',
+              label: 'Create new Folder or List',
+              onClickNode: 'openCreateFolderList'
+            }
+          ]
         }
         newTreeData.push(spaceTreeData)
       }
@@ -85,9 +107,26 @@ export default function CustomSideNav() {
     setOpenCreateSpaceModal(false)
   }
 
+  function resetCreateFolderOrList() {
+    setOpenCreateNewFolderOrListModal(false)
+  }
+
+  function resetCreateListModal() {
+    setOpenCreateListModal(false)
+  }
+
   function handleOpenCreateSpaceModal() {
     setOpenCreateSpaceModal(true)
+  }
 
+  function handleOpenCreateNewFolderOrListModal(key) {
+    setOpenCreateNewFolderOrListModal(true)
+    setCurrentSpace(key)
+  }
+
+  function handleOpenCreateListModal() {
+    setOpenCreateNewFolderOrListModal(false)
+    setOpenCreateListModal(true)
   }
 
 
@@ -109,9 +148,10 @@ export default function CustomSideNav() {
         handleGetWorkspaces()
       })
     })
+  }
 
-
-
+  function handleCreateList() {
+    console.log('works' + " " + listName)
   }
 
 
@@ -137,7 +177,14 @@ export default function CustomSideNav() {
         </Row>
         <Row>
           <Col s={12}>
-            <TreeMenu data={treeData} />
+            <TreeMenu 
+              data={treeData}
+              onClickItem={({ onClickNode, key }) => {
+                if (onClickNode === 'openCreateFolderList') {
+                  handleOpenCreateNewFolderOrListModal(key)
+                }
+              }}
+            />
           </Col>
         </Row>
       </SideNav>
@@ -182,6 +229,45 @@ export default function CustomSideNav() {
         <br></br>
         <br></br><br></br>
         <a><Button id="modalBtn" modal="close" onClick={handleCreateWorkspace}>Create Workspace</Button></a>
+      </Modal>
+
+      {/* Create new Folder or List */}
+      <Modal
+        open={openCreateNewFolderOrListModal}
+        className='center-align'
+        actions={[]}
+        options={{
+          dismissible: false
+        }}>
+        <h3>New Folder or List?</h3>
+        <br></br><br></br>
+        <a><Button id="modalBtn" modal="close" onClick={handleCreateWorkspace}>Create new Folder</Button></a>
+        <br></br><br></br>
+        <a><Button id="modalBtn" modal="close" onClick={handleOpenCreateListModal}>Create new List</Button></a>
+        <br></br><br></br>
+        <a><Button id="modalBtn" modal="close" onClick={resetCreateFolderOrList}>Cancel</Button></a>
+      </Modal>
+
+      {/* Create new List */}
+      <Modal
+        open={openCreateListModal}
+        className='center-align'
+        actions={[]}
+        options={{
+          dismissible: false
+        }}>
+        <h3>Name your List:</h3>
+        <br></br>
+        <TextInput
+          onChange={handleListNameChange}
+          id="list_name_form"
+          placeholder="List Name"
+        />
+        <br></br>
+        <br></br><br></br>
+        <a><Button id="modalBtn" modal="close" onClick={handleCreateList}>Create List</Button></a>
+        <br></br><br></br>
+        <a><Button id="modalBtn" modal="close" onClick={resetCreateListModal}>Cancel</Button></a>
       </Modal>
     </div>
 
