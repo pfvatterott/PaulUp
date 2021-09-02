@@ -57,4 +57,7 @@ export default {
   getSpaceLists: function(id) {
     return axios.get("/api/lists/space/" + id);
   },
+  saveFolder: function(folderData) {
+    return axios.post("/api/folders", folderData);
+  },
 };

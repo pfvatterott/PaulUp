@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { SideNav, Button, Col, Row, Modal, TextInput } from 'react-materialize'
 import { useLocation } from "react-router-dom";
 import API from "../../utils/API"
-import TreeMenu from 'react-simple-tree-menu';
+import TreeMenu, { ItemComponent } from 'react-simple-tree-menu';
 import '../../../node_modules/react-simple-tree-menu/dist/main.css';
 
 export default function CustomSideNav() {
@@ -11,12 +11,14 @@ export default function CustomSideNav() {
   const [openCreateWorkspaceModal, setOpenCreateWorkspaceModal] = useState(false)
   const [openCreateNewFolderOrListModal, setOpenCreateNewFolderOrListModal] = useState(false)
   const [openCreateListModal, setOpenCreateListModal] = useState(false)
+  const [openCreateFolderModal, setOpenCreateFolderModal] = useState(false)
   const [currentSpace, setCurrentSpace] = useState('')
   const [userData, setUserData] = useState([])
   const [treeData, setTreeData] = useState({})
   const [ workspaceName, setWorkspaceName ] = useState('')
   const [ newSpaceName, setNewSpaceName ] = useState('')
   const [ listName, setListName ] = useState('')
+  const [ folderName, setFolderName ] = useState("")
   const location = useLocation()
   const userID = location.state
 
@@ -34,12 +36,16 @@ export default function CustomSideNav() {
   function handleListNameChange(event) {
     const name = event.target.value;
     setListName(name)
-
   }
 
   function handleSpaceNameChange(event) {
     const name = event.target.value;
     setNewSpaceName(name)
+  }
+
+  function handleFolderNameChange(event) {
+    const name = event.target.value;
+    setFolderName(name)
   }
 
   function handleCreateWorkspace() {
@@ -90,13 +96,15 @@ export default function CustomSideNav() {
               let taskObj = {
                 key: getSpaceListsResponse.data[g]._id,
                 label: getSpaceListsResponse.data[g].list_name,
+                order_index: getSpaceListsResponse.data[g].order_index,
               }
               nodeArray.push(taskObj)
             }
             nodeArray.push({
               key: 'create_new',
               label: 'Create new Folder or List',
-              onClickNode: 'openCreateFolderList'
+              onClickNode: 'openCreateFolderList',
+              id: '123'
             })
           }
           else {
@@ -110,12 +118,14 @@ export default function CustomSideNav() {
             key: spacesArray[i]._id,
             label: spacesArray[i].space_name,
             onClickNode: '123',
+            order_index: spacesArray[i].order_index,
             nodes: nodeArray
           }
           newTreeData.push(spaceTreeData)
         })
       }
       setInterval(function () {
+        newTreeData.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
         setTreeData(newTreeData)
       }, 1000)
     })
@@ -133,8 +143,16 @@ export default function CustomSideNav() {
     setOpenCreateListModal(false)
   }
 
+  function resetCreateFolderModal() {
+    setOpenCreateFolderModal(false)
+  }
+
   function handleOpenCreateSpaceModal() {
     setOpenCreateSpaceModal(true)
+  }
+
+  function handleOpenCreateFolderModal() {
+    setOpenCreateFolderModal(true)
   }
 
   function handleOpenCreateNewFolderOrListModal(key) {
@@ -170,9 +188,7 @@ export default function CustomSideNav() {
   }
 
   function handleCreateList() {
-    console.log('works' + " " + listName + " " + currentSpace)
     API.getSpace(currentSpace).then((spaceResponse) => {
-      console.log(spaceResponse.data)
       let newList = {
         list_name: listName,
         owner_id: userID,
@@ -180,11 +196,32 @@ export default function CustomSideNav() {
         order_index: spaceResponse.data.lists.length
       }
       API.saveList(newList).then((saveListResponse) => {
-        console.log(saveListResponse.data)
         let updatedListArray = spaceResponse.data.lists
         updatedListArray.push(saveListResponse.data._id)
         let newSpaceData = {
           lists: updatedListArray
+        }
+        API.updateSpace(spaceResponse.data._id, newSpaceData).then((updateSpaceResponse) => {
+          handleTreeRefresh()
+        })
+      })
+    })
+  }
+
+  function handleCreateFolder() {
+    API.getSpace(currentSpace).then((spaceResponse) => {
+      let newFolder = {
+        folder_name: folderName,
+        owner_id: userID,
+        space_id: spaceResponse.data._id,
+        order_index: spaceResponse.data.folders.length
+      }
+      API.saveFolder(newFolder).then((saveFolderResponse) => {
+        console.log(saveFolderResponse.data)
+        let updatedFolderArray = spaceResponse.data.folders
+        updatedFolderArray.push(saveFolderResponse.data._id)
+        let newSpaceData = {
+          folders: updatedFolderArray
         }
         API.updateSpace(spaceResponse.data._id, newSpaceData).then((updateSpaceResponse) => {
           handleTreeRefresh()
@@ -223,7 +260,8 @@ export default function CustomSideNav() {
                   handleOpenCreateNewFolderOrListModal(key)
                 }
               }}
-            />
+            >
+            </TreeMenu>
           </Col>
         </Row>
       </SideNav>
@@ -280,7 +318,7 @@ export default function CustomSideNav() {
         }}>
         <h3>New Folder or List?</h3>
         <br></br><br></br>
-        <a><Button id="modalBtn" modal="close" onClick={handleCreateWorkspace}>Create new Folder</Button></a>
+        <a><Button id="modalBtn" modal="close" onClick={handleOpenCreateFolderModal}>Create new Folder</Button></a>
         <br></br><br></br>
         <a><Button id="modalBtn" modal="close" onClick={handleOpenCreateListModal}>Create new List</Button></a>
         <br></br><br></br>
@@ -307,6 +345,28 @@ export default function CustomSideNav() {
         <a><Button id="modalBtn" modal="close" onClick={handleCreateList}>Create List</Button></a>
         <br></br><br></br>
         <a><Button id="modalBtn" modal="close" onClick={resetCreateListModal}>Cancel</Button></a>
+      </Modal>
+
+      {/* Create new List */}
+      <Modal
+        open={openCreateFolderModal}
+        className='center-align'
+        actions={[]}
+        options={{
+          dismissible: false
+        }}>
+        <h3>Name your Folder:</h3>
+        <br></br>
+        <TextInput
+          onChange={handleFolderNameChange}
+          id="folder_name_form"
+          placeholder="Folder Name"
+        />
+        <br></br>
+        <br></br><br></br>
+        <a><Button id="modalBtn" modal="close" onClick={handleCreateFolder}>Create Folder</Button></a>
+        <br></br><br></br>
+        <a><Button id="modalBtn" modal="close" onClick={resetCreateFolderModal}>Cancel</Button></a>
       </Modal>
     </div>
 
