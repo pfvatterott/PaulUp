@@ -55,6 +55,7 @@ export default function CustomSideNav() {
   }
 
   function handleGetWorkspaces() {
+    console.log('its this')
     API.getUserWorkspaces(userID).then((getUserWorkspacesResponse) => {
       if (getUserWorkspacesResponse.data.length === 0) {
         setOpenCreateWorkspaceModal(true)
@@ -81,21 +82,42 @@ export default function CustomSideNav() {
       console.log(spacesArray)
       let newTreeData = []
       for (let i = 0; i < spacesArray.length; i++) {
-        let spaceTreeData = {
-          key: spacesArray[i]._id,
-          label: spacesArray[i].space_name,
-          onClickNode: '123',
-          nodes: [
-            {
+        API.getSpaceLists(spacesArray[i]._id).then((getSpaceListsResponse) => {
+          console.log(getSpaceListsResponse)
+          let nodeArray = []
+          if (getSpaceListsResponse.data.length !== 0) {
+            for (let g = 0; g < getSpaceListsResponse.data.length; g++) {
+              let taskObj = {
+                key: getSpaceListsResponse.data[g]._id,
+                label: getSpaceListsResponse.data[g].list_name,
+              }
+              nodeArray.push(taskObj)
+            }
+            nodeArray.push({
               key: 'create_new',
               label: 'Create new Folder or List',
               onClickNode: 'openCreateFolderList'
-            }
-          ]
-        }
-        newTreeData.push(spaceTreeData)
+            })
+          }
+          else {
+            nodeArray = [{
+              key: 'create_new',
+              label: 'Create new Folder or List',
+              onClickNode: 'openCreateFolderList'
+            }]
+          }
+          let spaceTreeData = {
+            key: spacesArray[i]._id,
+            label: spacesArray[i].space_name,
+            onClickNode: '123',
+            nodes: nodeArray
+          }
+          newTreeData.push(spaceTreeData)
+        })
       }
-      setTreeData(newTreeData)
+      setInterval(function () {
+        setTreeData(newTreeData)
+      }, 1000)
     })
   }
 
@@ -165,7 +187,7 @@ export default function CustomSideNav() {
           lists: updatedListArray
         }
         API.updateSpace(spaceResponse.data._id, newSpaceData).then((updateSpaceResponse) => {
-          console.log(updateSpaceResponse)
+          handleTreeRefresh()
         })
       })
     })

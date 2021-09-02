@@ -17,4 +17,8 @@ router
   .route("/user/:id")
   .get(listController.findByUserId)
 
+router
+  .route("/space/:id")
+  .get(listController.findBySpaceId)
+
 module.exports = router;

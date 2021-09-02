@@ -54,4 +54,7 @@ export default {
   updateSpace: function(spaceId, spaceData) {
     return axios.put("/api/spaces/" + spaceId, spaceData)
   },
+  getSpaceLists: function(id) {
+    return axios.get("/api/lists/space/" + id);
+  },
 };
