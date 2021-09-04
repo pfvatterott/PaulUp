@@ -56,12 +56,21 @@ export default function CustomSideNav() {
     }
     API.saveWorkspace(newWorkspace).then((createWorkspaceResponse) => {
       setWorkspaceData(createWorkspaceResponse.data)
-      handleGetUser()
+      API.getUser(userID).then((getUserResponse) => {
+        let workSpacesArray =getUserResponse.data.workspaces
+        workSpacesArray.push(createWorkspaceResponse.data._id)
+        let newWorkspaceData = {
+          workspaces: workSpacesArray
+        }
+        API.updateUser(userID, newWorkspaceData).then((updateUserResponse) => {
+          handleGetWorkspaces()
+          handleGetUser()
+        })
+      })
     })
   }
 
   function handleGetWorkspaces() {
-    console.log('its this')
     API.getUserWorkspaces(userID).then((getUserWorkspacesResponse) => {
       if (getUserWorkspacesResponse.data.length === 0) {
         setOpenCreateWorkspaceModal(true)
@@ -260,6 +269,7 @@ export default function CustomSideNav() {
                   handleOpenCreateNewFolderOrListModal(key)
                 }
               }}
+              debounceTime={75}
             >
             </TreeMenu>
           </Col>

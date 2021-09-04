@@ -13,7 +13,6 @@ const [redirect, setRedirect] = useState(false);
 const [userID, setUserID] = useState('')
 
 const googleSuccess = async (response) => {
-    console.log(response)
     const userObj = response.profileObj
     
     const user = {
@@ -25,13 +24,15 @@ const googleSuccess = async (response) => {
         listedItems: []
     }
     API.getUserByGoogleId(userObj.googleId).then(res => {
-        setUserID(res.data[0]._id)
         if (res.data.length > 0) {
+            setUserID(res.data[0]._id)
             setRedirect(true)
         }
         else {
-            API.saveUser(user)
-            setRedirect(true)
+            API.saveUser(user).then(saveUserRes => {
+                setUserID(saveUserRes.data._id)
+                setRedirect(true)
+            })
         }
     }).catch(error => console.log(error))
 
