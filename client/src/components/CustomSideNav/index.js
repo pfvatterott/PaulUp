@@ -94,20 +94,19 @@ export default function CustomSideNav() {
   function handleTreeRefresh(workspace_id) {
     API.getWorkspaceSpaces(workspace_id).then((workspaceSpacesResponse) => {
       const spacesArray = workspaceSpacesResponse.data
-      console.log(spacesArray)
       let newTreeData = []
       for (let i = 0; i < spacesArray.length; i++) {
+        let nodeArray = []
+        // Creating nodes for folder-less Lists
         API.getSpaceLists(spacesArray[i]._id).then((getSpaceListsResponse) => {
-          console.log(getSpaceListsResponse)
-          let nodeArray = []
           if (getSpaceListsResponse.data.length !== 0) {
             for (let g = 0; g < getSpaceListsResponse.data.length; g++) {
-              let taskObj = {
+              let listObj = {
                 key: getSpaceListsResponse.data[g]._id,
                 label: getSpaceListsResponse.data[g].list_name,
                 order_index: getSpaceListsResponse.data[g].order_index,
               }
-              nodeArray.push(taskObj)
+              nodeArray.push(listObj)
             }
             nodeArray.push({
               key: 'create_new',
@@ -132,10 +131,27 @@ export default function CustomSideNav() {
           }
           newTreeData.push(spaceTreeData)
         })
+        // Creating nodes for Folders
+        API.getSpaceFolders(spacesArray[i]._id).then((getSpaceFolderResponse) => {
+          console.log(getSpaceFolderResponse)
+          if (getSpaceFolderResponse.data.length !== 0) {
+            for (let q = 0; q < getSpaceFolderResponse.data.length; q++) {
+              let folderObj = {
+                key: getSpaceFolderResponse.data[q]._id,
+                label: getSpaceFolderResponse.data[q].folder_name,
+                order_index: getSpaceFolderResponse.data[q].order_index
+              }
+              nodeArray.push(folderObj)
+            }
+          }
+        })
       }
+
       setInterval(function () {
         newTreeData.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
+        console.log(newTreeData)
         setTreeData(newTreeData)
+        console.log('this is whats repeating')
       }, 1000)
     })
   }

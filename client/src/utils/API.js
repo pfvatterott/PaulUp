@@ -60,4 +60,7 @@ export default {
   saveFolder: function(folderData) {
     return axios.post("/api/folders", folderData);
   },
+  getSpaceFolders: function(id) {
+    return axios.get("/api/folders/space/" + id);
+  },
 };
