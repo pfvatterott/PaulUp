@@ -70,7 +70,7 @@ export default function CustomSideNav() {
     })
   }
 
-  function handleGetWorkspaces() {
+  function handleGetWorkspaces() {  
     API.getUserWorkspaces(userID).then((getUserWorkspacesResponse) => {
       if (getUserWorkspacesResponse.data.length === 0) {
         setOpenCreateWorkspaceModal(true)
@@ -104,7 +104,7 @@ export default function CustomSideNav() {
               let listObj = {
                 key: getSpaceListsResponse.data[g]._id,
                 label: getSpaceListsResponse.data[g].list_name,
-                order_index: getSpaceListsResponse.data[g].order_index,
+                order_index: (getSpaceListsResponse.data[g].order_index + spacesArray[i].folders.length),
               }
               nodeArray.push(listObj)
             }
@@ -133,7 +133,6 @@ export default function CustomSideNav() {
         })
         // Creating nodes for Folders
         API.getSpaceFolders(spacesArray[i]._id).then((getSpaceFolderResponse) => {
-          console.log(getSpaceFolderResponse)
           if (getSpaceFolderResponse.data.length !== 0) {
             for (let q = 0; q < getSpaceFolderResponse.data.length; q++) {
               let folderObj = {
@@ -141,17 +140,17 @@ export default function CustomSideNav() {
                 label: getSpaceFolderResponse.data[q].folder_name,
                 order_index: getSpaceFolderResponse.data[q].order_index
               }
-              nodeArray.push(folderObj)
+              nodeArray.unshift(folderObj)
+              nodeArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
+              console.log(nodeArray)
             }
           }
         })
       }
 
-      setInterval(function () {
+      setTimeout(function () {
         newTreeData.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
-        console.log(newTreeData)
         setTreeData(newTreeData)
-        console.log('this is whats repeating')
       }, 1000)
     })
   }
@@ -208,6 +207,7 @@ export default function CustomSideNav() {
       }
       API.updateWorkspace(workspaceData._id, newSpaceData).then((updateWorkspaceResponse) => {
         handleGetWorkspaces()
+        handleGetUser()
       })
     })
   }
@@ -227,7 +227,8 @@ export default function CustomSideNav() {
           lists: updatedListArray
         }
         API.updateSpace(spaceResponse.data._id, newSpaceData).then((updateSpaceResponse) => {
-          handleTreeRefresh()
+          handleGetWorkspaces()
+          handleGetUser()
         })
       })
     })
@@ -249,7 +250,8 @@ export default function CustomSideNav() {
           folders: updatedFolderArray
         }
         API.updateSpace(spaceResponse.data._id, newSpaceData).then((updateSpaceResponse) => {
-          handleTreeRefresh()
+          handleGetWorkspaces()
+          handleGetUser()
         })
       })
     })
