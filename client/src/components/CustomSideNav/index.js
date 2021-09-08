@@ -12,7 +12,9 @@ export default function CustomSideNav() {
   const [openCreateNewFolderOrListModal, setOpenCreateNewFolderOrListModal] = useState(false)
   const [openCreateListModal, setOpenCreateListModal] = useState(false)
   const [openCreateFolderModal, setOpenCreateFolderModal] = useState(false)
+  const [openCreateNewListForFolderModal, setOpenCreateNewListForFolderModal] = useState(false)
   const [currentSpace, setCurrentSpace] = useState('')
+  const [currentFolder, setCurrentFolder] = useState('')
   const [userData, setUserData] = useState([])
   const [treeData, setTreeData] = useState({})
   const [ workspaceName, setWorkspaceName ] = useState('')
@@ -133,16 +135,25 @@ export default function CustomSideNav() {
         })
         // Creating nodes for Folders
         API.getSpaceFolders(spacesArray[i]._id).then((getSpaceFolderResponse) => {
-          if (getSpaceFolderResponse.data.length !== 0) {
-            for (let q = 0; q < getSpaceFolderResponse.data.length; q++) {
-              let folderObj = {
-                key: getSpaceFolderResponse.data[q]._id,
-                label: getSpaceFolderResponse.data[q].folder_name,
-                order_index: getSpaceFolderResponse.data[q].order_index
+          let listArray = []
+          for (let j = 0; j < getSpaceFolderResponse.data.length; j++) {
+            if (getSpaceFolderResponse.data[j].lists.length === 0 ) {
+                listArray.push({
+                key: 'create_new',
+                label: 'Create new List',
+                onClickNode: 'openCreateListForFolder',
+                id: '123'
+              })
+              for (let q = 0; q < getSpaceFolderResponse.data.length; q++) {
+                let folderObj = {
+                  key: getSpaceFolderResponse.data[q]._id,
+                  label: getSpaceFolderResponse.data[q].folder_name,
+                  order_index: getSpaceFolderResponse.data[q].order_index,
+                  nodes: listArray
+                }
+                nodeArray.unshift(folderObj)
+                nodeArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
               }
-              nodeArray.unshift(folderObj)
-              nodeArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
-              console.log(nodeArray)
             }
           }
         })
@@ -171,6 +182,10 @@ export default function CustomSideNav() {
     setOpenCreateFolderModal(false)
   }
 
+  function resetCreateNewListForFolderModal() {
+    setOpenCreateNewListForFolderModal(false)
+  }
+
   function handleOpenCreateSpaceModal() {
     setOpenCreateSpaceModal(true)
   }
@@ -183,6 +198,13 @@ export default function CustomSideNav() {
     setOpenCreateNewFolderOrListModal(true)
     let newKey = key.replace('/create_new', '')
     setCurrentSpace(newKey)
+  }
+
+  function handleOpenCreateListForFolder(key) {
+    setOpenCreateNewListForFolderModal(true)
+    let newKey = key.replace('/create_new', '')
+    newKey = newKey.substring(newKey.indexOf("/") + 1);
+    setCurrentFolder(newKey)
   }
 
   function handleOpenCreateListModal() {
@@ -257,6 +279,28 @@ export default function CustomSideNav() {
     })
   }
 
+  function handleCreateListForFolder() {
+    API.getFolder(currentFolder).then((getFolderResponse) => {
+      let newList = {
+        list_name: listName,
+        owner_id: userID,
+        folder_id: getFolderResponse.data._id,
+        order_index: getFolderResponse.data.lists.length
+      }
+      API.saveList(newList).then((saveListResponse) => {
+        let updatedListArray = getFolderResponse.data.lists
+        updatedListArray.push(saveListResponse.data._id)
+        let newFolderData = {
+          lists: updatedListArray
+        }
+        API.updateFolder(getFolderResponse.data._id, newFolderData).then((updateFolderResponse) => {
+          handleGetWorkspaces()
+          handleGetUser()
+        })
+      })
+    })
+  }
+
 
   return (
     <div>
@@ -285,6 +329,9 @@ export default function CustomSideNav() {
               onClickItem={({ onClickNode, key }) => {
                 if (onClickNode === 'openCreateFolderList') {
                   handleOpenCreateNewFolderOrListModal(key)
+                }
+                else if (onClickNode === 'openCreateListForFolder') {
+                  handleOpenCreateListForFolder(key)
                 }
               }}
               debounceTime={75}
@@ -375,7 +422,7 @@ export default function CustomSideNav() {
         <a><Button id="modalBtn" modal="close" onClick={resetCreateListModal}>Cancel</Button></a>
       </Modal>
 
-      {/* Create new List */}
+      {/* Create new Folder */}
       <Modal
         open={openCreateFolderModal}
         className='center-align'
@@ -396,7 +443,31 @@ export default function CustomSideNav() {
         <br></br><br></br>
         <a><Button id="modalBtn" modal="close" onClick={resetCreateFolderModal}>Cancel</Button></a>
       </Modal>
+
+       {/* Create new List for Folder*/}
+       <Modal
+        open={openCreateNewListForFolderModal}
+        className='center-align'
+        actions={[]}
+        options={{
+          dismissible: false
+        }}>
+        <h3>Name your List:</h3>
+        <br></br>
+        <TextInput
+          onChange={handleListNameChange}
+          id="list_name_form"
+          placeholder="List Name"
+        />
+        <br></br>
+        <br></br><br></br>
+        <a><Button id="modalBtn" modal="close" onClick={handleCreateListForFolder}>Create List</Button></a>
+        <br></br><br></br>
+        <a><Button id="modalBtn" modal="close" onClick={resetCreateNewListForFolderModal}>Cancel</Button></a>
+      </Modal>
+
     </div>
+
 
   )
 }

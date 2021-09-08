@@ -63,4 +63,10 @@ export default {
   getSpaceFolders: function(id) {
     return axios.get("/api/folders/space/" + id);
   },
+  getFolder: function(id) {
+    return axios.get("/api/folders/" + id);
+  },
+  updateFolder: function(folderId, folderData) {
+    return axios.put("/api/folders/" + folderId, folderData)
+  },
 };
