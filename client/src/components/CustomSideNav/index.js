@@ -135,8 +135,8 @@ export default function CustomSideNav() {
         })
         // Creating nodes for Folders
         API.getSpaceFolders(spacesArray[i]._id).then((getSpaceFolderResponse) => {
-          let listArray = []
           for (let j = 0; j < getSpaceFolderResponse.data.length; j++) {
+            let listArray = []
             if (getSpaceFolderResponse.data[j].lists.length === 0 ) {
                 listArray.push({
                 key: 'create_new',
@@ -144,16 +144,42 @@ export default function CustomSideNav() {
                 onClickNode: 'openCreateListForFolder',
                 id: '123'
               })
-              for (let q = 0; q < getSpaceFolderResponse.data.length; q++) {
-                let folderObj = {
-                  key: getSpaceFolderResponse.data[q]._id,
-                  label: getSpaceFolderResponse.data[q].folder_name,
-                  order_index: getSpaceFolderResponse.data[q].order_index,
-                  nodes: listArray
-                }
-                nodeArray.unshift(folderObj)
-                nodeArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
+              let folderObj = {
+                key: getSpaceFolderResponse.data[j]._id,
+                label: getSpaceFolderResponse.data[j].folder_name,
+                order_index: getSpaceFolderResponse.data[j].order_index,
+                nodes: listArray
               }
+              nodeArray.unshift(folderObj)
+              nodeArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
+            }
+            else {
+              API.getFolderLists(getSpaceFolderResponse.data[j]._id).then((getFolderListsResponse) => {
+                  for (let o = 0; o < getFolderListsResponse.data.length; o++) {
+                    let listObj = {
+                      key: getFolderListsResponse.data[o]._id,
+                      label: getFolderListsResponse.data[o].list_name,
+                      order_index: getFolderListsResponse.data[o].order_index
+                    }
+                    listArray.push(listObj)
+                  }
+                  listArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
+                  listArray.push({
+                    key: 'create_new',
+                    label: 'Create new List',
+                    onClickNode: 'openCreateListForFolder',
+                    id: '123'
+                  })
+                  let folderObj = {
+                    key: getSpaceFolderResponse.data[j]._id,
+                    label: getSpaceFolderResponse.data[j].folder_name,
+                    order_index: getSpaceFolderResponse.data[j].order_index,
+                    nodes: listArray
+                  }
+                  nodeArray.unshift(folderObj)
+                  nodeArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
+                
+              })
             }
           }
         })
@@ -192,6 +218,7 @@ export default function CustomSideNav() {
 
   function handleOpenCreateFolderModal() {
     setOpenCreateFolderModal(true)
+    resetCreateFolderOrList()
   }
 
   function handleOpenCreateNewFolderOrListModal(key) {
@@ -235,6 +262,7 @@ export default function CustomSideNav() {
   }
 
   function handleCreateList() {
+    setOpenCreateListModal(false)
     API.getSpace(currentSpace).then((spaceResponse) => {
       let newList = {
         list_name: listName,
@@ -257,6 +285,7 @@ export default function CustomSideNav() {
   }
 
   function handleCreateFolder() {
+    setOpenCreateFolderModal(false)
     API.getSpace(currentSpace).then((spaceResponse) => {
       let newFolder = {
         folder_name: folderName,
@@ -280,6 +309,7 @@ export default function CustomSideNav() {
   }
 
   function handleCreateListForFolder() {
+    setOpenCreateNewListForFolderModal(false)
     API.getFolder(currentFolder).then((getFolderResponse) => {
       let newList = {
         list_name: listName,

@@ -69,4 +69,7 @@ export default {
   updateFolder: function(folderId, folderData) {
     return axios.put("/api/folders/" + folderId, folderData)
   },
+  getFolderLists: function(id) {
+    return axios.get("/api/lists/folder/" + id);
+  },
 };

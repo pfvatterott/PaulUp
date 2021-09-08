@@ -21,4 +21,8 @@ router
   .route("/space/:id")
   .get(listController.findBySpaceId)
 
+router
+  .route("/folder/:id")
+  .get(listController.findByFolderId)
+
 module.exports = router;
