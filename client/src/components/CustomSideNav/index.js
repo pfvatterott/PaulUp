@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { SideNav, Button, Col, Row, Modal, TextInput } from 'react-materialize'
-import { useLocation } from "react-router-dom";
+import { useLocation, Redirect } from "react-router-dom";
 import API from "../../utils/API"
 import TreeMenu, { ItemComponent } from 'react-simple-tree-menu';
 import '../../../node_modules/react-simple-tree-menu/dist/main.css';
@@ -13,8 +13,10 @@ export default function CustomSideNav() {
   const [openCreateListModal, setOpenCreateListModal] = useState(false)
   const [openCreateFolderModal, setOpenCreateFolderModal] = useState(false)
   const [openCreateNewListForFolderModal, setOpenCreateNewListForFolderModal] = useState(false)
+  const [redirectToList, setRedirectToList] = useState(false)
   const [currentSpace, setCurrentSpace] = useState('')
   const [currentFolder, setCurrentFolder] = useState('')
+  const [currentList, setCurrentList] = useState('')
   const [userData, setUserData] = useState([])
   const [treeData, setTreeData] = useState({})
   const [ workspaceName, setWorkspaceName ] = useState('')
@@ -107,6 +109,7 @@ export default function CustomSideNav() {
                 key: getSpaceListsResponse.data[g]._id,
                 label: getSpaceListsResponse.data[g].list_name,
                 order_index: (getSpaceListsResponse.data[g].order_index + spacesArray[i].folders.length),
+                onClickNode: 'openList'
               }
               nodeArray.push(listObj)
             }
@@ -331,9 +334,16 @@ export default function CustomSideNav() {
     })
   }
 
+  function handleOpenList(key) {
+    let newKey = key.substring(key.indexOf("/") + 1);
+    setCurrentList(newKey)
+    setRedirectToList(true)
+  }
+
 
   return (
     <div>
+      { redirectToList ? (<Redirect push to={"/taskview/" + currentList}/>) : null }
       <SideNav>
         <Row>
           <Col s={12}>
@@ -362,6 +372,9 @@ export default function CustomSideNav() {
                 }
                 else if (onClickNode === 'openCreateListForFolder') {
                   handleOpenCreateListForFolder(key)
+                }
+                else if (onClickNode === 'openList') {
+                  handleOpenList(key)
                 }
               }}
               debounceTime={75}
