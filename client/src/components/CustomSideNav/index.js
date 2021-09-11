@@ -45,10 +45,8 @@ export default function CustomSideNav() {
     }
   }, [])
 
-
   const googleSuccess = async (response) => {
     const userObj = response.profileObj
-    
     const user = {
         email: userObj.email,
         firstName: userObj.givenName,
@@ -71,12 +69,12 @@ export default function CustomSideNav() {
         }
     }).catch(error => console.log(error))
 
-}
+  }
 
-const googleFailure = (response) => {
-  console.log("please enable cookies to access this app");
-  alert("please enable cookies to access this app");
-  console.log(response);
+  const googleFailure = (response) => {
+    console.log("please enable cookies to access this app");
+    alert("please enable cookies to access this app");
+    console.log(response);
   };  
 
   function handleWorkspaceNameChange(event) {
@@ -209,7 +207,8 @@ const googleFailure = (response) => {
                     let listObj = {
                       key: getFolderListsResponse.data[o]._id,
                       label: getFolderListsResponse.data[o].list_name,
-                      order_index: getFolderListsResponse.data[o].order_index
+                      order_index: getFolderListsResponse.data[o].order_index,
+                      onClickNode: 'openFolderList'
                     }
                     listArray.push(listObj)
                   }
@@ -387,6 +386,13 @@ const googleFailure = (response) => {
     setRedirectToList(true)
   }
 
+  function handleOpenFolderList(key) {
+    let newKey = key.substring(key.indexOf("/") + 1);
+    newKey = newKey.substring(newKey.indexOf("/") + 1)
+    setCurrentList(newKey)
+    setRedirectToList(true)
+  }
+
 
   return (
     <div>
@@ -433,6 +439,9 @@ const googleFailure = (response) => {
                 }
                 else if (onClickNode === 'openList') {
                   handleOpenList(key)
+                }
+                else if (onClickNode === 'openFolderList') {
+                  handleOpenFolderList(key)
                 }
               }}
               debounceTime={75}
