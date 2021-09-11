@@ -72,4 +72,7 @@ export default {
   getFolderLists: function(id) {
     return axios.get("/api/lists/folder/" + id);
   },
+  getList: function(id) {
+    return axios.get("/api/lists/" + id);
+  },
 };

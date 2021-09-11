@@ -22,9 +22,10 @@ function App() {
 
   return (
     <div className="App">
-      { sidebar ? (<CustomSideNav></CustomSideNav>) : null }
+      {/* { sidebar ? (<CustomSideNav></CustomSideNav>) : null } */}
       <Route exact path="/" component={welcome} />
       <Route exact path="/taskView" component={taskView} />
+      <Route exact path="/taskView/:id" component={taskView} />
     </div>
   );
 }

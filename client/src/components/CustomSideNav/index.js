@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { SideNav, Button, Col, Row, Modal, TextInput } from 'react-materialize'
 import { useLocation, Redirect } from "react-router-dom";
 import API from "../../utils/API"
+import "./style.css"
 import TreeMenu, { ItemComponent } from 'react-simple-tree-menu';
+import GoogleLogin from "react-google-login";
 import '../../../node_modules/react-simple-tree-menu/dist/main.css';
 
 export default function CustomSideNav() {
@@ -23,14 +25,59 @@ export default function CustomSideNav() {
   const [ newSpaceName, setNewSpaceName ] = useState('')
   const [ listName, setListName ] = useState('')
   const [ folderName, setFolderName ] = useState("")
-  const location = useLocation()
-  const userID = location.state
+  const [redirect, setRedirect] = useState(false);
+  const [userID, setUserID] = useState('')
+  const [location, setLocation] = useState(useLocation())
+  const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  let userIdVariable = location.state
 
 
   useEffect(() => {
-    handleGetWorkspaces()
-    handleGetUser()
+    if (!userIdVariable) {
+      setTimeout(function () {
+        handleGetWorkspaces()
+        handleGetUser()
+      }, 700)
+    }
+    else {
+      handleGetWorkspaces()
+      handleGetUser()
+    }
   }, [])
+
+
+  const googleSuccess = async (response) => {
+    const userObj = response.profileObj
+    
+    const user = {
+        email: userObj.email,
+        firstName: userObj.givenName,
+        lastName: userObj.familyName,
+        image: userObj.imageUrl,
+        googleId: userObj.googleId,
+        listedItems: []
+    }
+    API.getUserByGoogleId(userObj.googleId).then(res => {
+        if (res.data.length > 0) {
+            setUserID(res.data[0]._id)
+            userIdVariable = res.data[0]._id
+            setRedirect(true)
+        }
+        else {
+            API.saveUser(user).then(saveUserRes => {
+                setUserID(saveUserRes.data._id)
+                setRedirect(true)
+            })
+        }
+    }).catch(error => console.log(error))
+
+}
+
+const googleFailure = (response) => {
+  console.log("please enable cookies to access this app");
+  alert("please enable cookies to access this app");
+  console.log(response);
+  };  
 
   function handleWorkspaceNameChange(event) {
     const name = event.target.value;
@@ -56,17 +103,17 @@ export default function CustomSideNav() {
     setOpenCreateWorkspaceModal(false)
     const newWorkspace = {
       workspace_name: workspaceName,
-      owner_id: userID
+      owner_id: userIdVariable
     }
     API.saveWorkspace(newWorkspace).then((createWorkspaceResponse) => {
       setWorkspaceData(createWorkspaceResponse.data)
-      API.getUser(userID).then((getUserResponse) => {
+      API.getUser(userIdVariable).then((getUserResponse) => {
         let workSpacesArray =getUserResponse.data.workspaces
         workSpacesArray.push(createWorkspaceResponse.data._id)
         let newWorkspaceData = {
           workspaces: workSpacesArray
         }
-        API.updateUser(userID, newWorkspaceData).then((updateUserResponse) => {
+        API.updateUser(userIdVariable, newWorkspaceData).then((updateUserResponse) => {
           handleGetWorkspaces()
           handleGetUser()
         })
@@ -75,7 +122,7 @@ export default function CustomSideNav() {
   }
 
   function handleGetWorkspaces() {  
-    API.getUserWorkspaces(userID).then((getUserWorkspacesResponse) => {
+    API.getUserWorkspaces(userIdVariable).then((getUserWorkspacesResponse) => {
       if (getUserWorkspacesResponse.data.length === 0) {
         setOpenCreateWorkspaceModal(true)
       }
@@ -90,7 +137,7 @@ export default function CustomSideNav() {
   }
 
   function handleGetUser() {
-    API.getUser(userID).then((getUserResponse) => {
+    API.getUser(userIdVariable).then((getUserResponse) => {
       setUserData(getUserResponse.data[0])
     })
   }
@@ -247,7 +294,7 @@ export default function CustomSideNav() {
     setOpenCreateSpaceModal(false)
     let spaceData = {
       space_name: newSpaceName,
-      owner_id: userID,
+      owner_id: userIdVariable,
       workspace_id: workspaceData._id,
       order_index: workspaceData.spaces.length
     }
@@ -269,7 +316,7 @@ export default function CustomSideNav() {
     API.getSpace(currentSpace).then((spaceResponse) => {
       let newList = {
         list_name: listName,
-        owner_id: userID,
+        owner_id: userIdVariable,
         space_id: spaceResponse.data._id,
         order_index: spaceResponse.data.lists.length
       }
@@ -292,7 +339,7 @@ export default function CustomSideNav() {
     API.getSpace(currentSpace).then((spaceResponse) => {
       let newFolder = {
         folder_name: folderName,
-        owner_id: userID,
+        owner_id: userIdVariable,
         space_id: spaceResponse.data._id,
         order_index: spaceResponse.data.folders.length
       }
@@ -316,7 +363,7 @@ export default function CustomSideNav() {
     API.getFolder(currentFolder).then((getFolderResponse) => {
       let newList = {
         list_name: listName,
-        owner_id: userID,
+        owner_id: userIdVariable,
         folder_id: getFolderResponse.data._id,
         order_index: getFolderResponse.data.lists.length
       }
@@ -344,6 +391,17 @@ export default function CustomSideNav() {
   return (
     <div>
       { redirectToList ? (<Redirect push to={"/taskview/" + currentList}/>) : null }
+      <GoogleLogin
+        className="loginBtn"
+        clientId={googleClientId}
+        buttonText="Log in"
+        onSuccess={googleSuccess}
+        onFailure={googleFailure}
+        cookiePolicy={"single_host_origin"}
+        isSignedIn={true}
+  
+        
+        />
       <SideNav>
         <Row>
           <Col s={12}>
