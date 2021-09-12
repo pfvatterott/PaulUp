@@ -4,6 +4,7 @@ import { Col, Row, TextInput, Button, Collection, CollectionItem } from "react-m
 import CustomSideNav from "../components/CustomSideNav";
 import "./styles/taskViewStyle.css"
 import API from "../utils/API";
+import StatusBox from "../components/StatusBox";
 
 function taskView() {
     const location = useLocation()
@@ -19,7 +20,6 @@ function taskView() {
             API.getList(newLocation).then((getListResponse) => {
                 setCurrentList(getListResponse.data)
                 currentListVar = getListResponse.data._id
-                console.log(getListResponse.data)
                 handleGetListTasks(currentListVar)
             })
         }
@@ -38,6 +38,7 @@ function taskView() {
             task_name: newTaskName,
             owner_id: userIdVariable,
             list_id: currentList._id,
+            task_status: 'open',
             order_index: currentList.tasks.length
         }
         API.saveTask(newTask).then((saveTaskResponse) => {
@@ -48,7 +49,6 @@ function taskView() {
             }
             API.updateList(currentList._id, newTaskData).then((updateListResponse) => {
                 API.getList(currentList._id).then((getListResponse) => {
-                    console.log(getListResponse.data)
                     setCurrentList(getListResponse.data)
                     handleGetListTasks(currentList._id)
                 })
@@ -58,7 +58,6 @@ function taskView() {
 
     function handleGetListTasks(id) {
         API.getListTasks(id).then((getListTasksRes) => {
-            console.log(getListTasksRes.data)
             setListTasks(getListTasksRes.data)
         })
     }
@@ -77,13 +76,16 @@ function taskView() {
                     </Row>
                     <Row>
                         <Col s={12}>
-                            <ul class="collection left-align">
+                            <ul className="collection left-align">
                                 {listTasks.map(item => (
-                                    <li class="collection-item">{item.task_name}</li>
+                                    <li className="collection-item" key={item._id}>
+                                        <StatusBox id={item._id} status={item.task_status}/>
+                                        {item.task_name}
+                                    </li>
                                 ))}
-                                <li class="collection-item">
-                                    <div class="input-field">
-                                        <input placeholder="Create New Task" id="first_name" type="text" class="validate" onChange={handleNewTaskNameChange} value={newTaskName}
+                                <li className="collection-item">
+                                    <div className="input-field">
+                                        <input placeholder="Create New Task" id="first_name" type="text" className="validate" onChange={handleNewTaskNameChange} value={newTaskName}
                                         onKeyPress={event => {
                                             if (event.key === 'Enter') {
                                               handleCreateNewTask()
@@ -91,9 +93,6 @@ function taskView() {
                                           }}/>
                                     </div>
                                 </li>
-                                {/* <li class="collection-item">Alvin</li>
-                                <li class="collection-item">Alvin</li>
-                                <li class="collection-item">Alvin</li> */}
                             </ul>
                         </Col>
                     </Row>
