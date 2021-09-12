@@ -17,4 +17,8 @@ router
   .route("/user/:id")
   .get(taskController.findByUserId)
 
+router
+  .route("/list/:id")
+  .get(taskController.findByListId)
+
 module.exports = router;

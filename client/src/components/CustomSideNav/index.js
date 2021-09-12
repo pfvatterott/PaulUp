@@ -396,7 +396,7 @@ export default function CustomSideNav() {
 
   return (
     <div>
-      { redirectToList ? (<Redirect push to={"/taskview/" + currentList}/>) : null }
+      { redirectToList ? (<Redirect push to={{pathname: '/taskview/' + currentList, state: userID}}/>) : null }
       <GoogleLogin
         className="loginBtn"
         clientId={googleClientId}
