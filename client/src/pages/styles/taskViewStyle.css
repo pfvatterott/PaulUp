@@ -1,3 +1,17 @@
 .taskViewCollection {
     min-height: 500px;
+    border: none !important;
 }
+
+.collection-item {
+    border-top: 1px solid lightgray !important;
+    border-left: 1px solid lightgray !important;
+    border-right: 1px solid lightgray !important;
+    border-bottom: none !important;
+}
+
+.create_task_collection_item {
+    border-bottom: 1px solid lightgray !important;
+}
+
+

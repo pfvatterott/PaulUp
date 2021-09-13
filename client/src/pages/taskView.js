@@ -65,17 +65,17 @@ function taskView() {
     return (
         <div>
             <Row>
-                <Col s={4}>
+                <Col s={0} l={4}>
                     <CustomSideNav></CustomSideNav>
                 </Col>
-                <Col s={7} className="container">
+                <Col s={12} l={7} className="container">
                     <Row>
                         <Col s={12}>
                         <h2>{currentList.list_name}</h2>
                         </Col>
                     </Row>
                     <Row>
-                        <Col s={12} className="taskViewCollection">
+                        <Col s={12}>
                             <ul className="collection left-align taskViewCollection">
                                 {listTasks.map(item => (
                                     <li className="collection-item" key={item._id}>
@@ -83,7 +83,7 @@ function taskView() {
                                         {item.task_name}
                                     </li>
                                 ))}
-                                <li className="collection-item">
+                                <li className="collection-item create_task_collection_item">
                                     <div className="input-field">
                                         <input placeholder="Create New Task" id="first_name" type="text" className="validate" onChange={handleNewTaskNameChange} value={newTaskName}
                                         onKeyPress={event => {

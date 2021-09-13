@@ -411,12 +411,12 @@ export default function CustomSideNav() {
       <SideNav>
         <Row>
           <Col s={12}>
-            <h3 className="left">PaulUp</h3>
+            <h3 className="left padding-left">PaulUp</h3>
           </Col>
         </Row>
         <Row>
           <Col s={12}>
-            <p className="left">Workspace: {workspaceData.workspace_name}</p>
+            <p className="left padding-left">Workspace: {workspaceData.workspace_name}</p>
           </Col>
         </Row>
         <Row>
@@ -428,7 +428,7 @@ export default function CustomSideNav() {
         </Row>
         <Row>
           <Col s={12}>
-            <TreeMenu 
+            <TreeMenu
               data={treeData}
               onClickItem={({ onClickNode, key }) => {
                 if (onClickNode === 'openCreateFolderList') {

@@ -5,18 +5,41 @@ import "./style.css"
 
 export default function StatusBox(props) {
     const [currentTask, setCurrentTask] = useState('')
+    const [currentStatus, setCurrentStatus] = useState('')
+    const [currentColor, setCurrentColor] = useState('')
 
     useEffect(() => {
-        console.log(props)
-        setCurrentTask(props._id)
+        setCurrentTask(props.id)
+        setCurrentStatus(props.status)
+        if (props.status === 'open') {
+            setCurrentColor("#D3D3D3")
+        }
+        else if (props.status === 'in progress') {
+            setCurrentColor("#A875FF")
+        }
+        else if (props.status === 'closed') {
+            setCurrentColor("#6BC950")
+        }
     }, [])
+
+    useEffect(() => {
+        if (currentStatus === 'open') {
+            setCurrentColor("#D3D3D3")
+        }
+        else if (currentStatus === 'in progress') {
+            setCurrentColor("#A875FF")
+        }
+        else if (currentStatus === 'closed') {
+            setCurrentColor("#6BC950")
+        }
+    }, [currentStatus])
 
     function handleStatusChange(status) {
         let newTaskData = {
             task_status: status
         }
         API.updateTask(props.id, newTaskData).then((updateTaskRes) => {
-            console.log(updateTaskRes)
+            setCurrentStatus(status)
         })
     }
     
@@ -24,6 +47,7 @@ export default function StatusBox(props) {
         <div>
             <Dropdown
                 id={props.id}
+                className="dropdownMenu"
                 options={{
                     alignment: 'left',
                     autoTrigger: true,
@@ -39,7 +63,7 @@ export default function StatusBox(props) {
                     onOpenStart: null,
                     outDuration: 250
                 }}
-                trigger={<div className='status_box left' key={props.id}></div>}
+                trigger={<div className='status_box left' key={props.id} style={{backgroundColor: currentColor}}></div>}
                 >
                 <a onClick={() => handleStatusChange('open')}>
                     Open

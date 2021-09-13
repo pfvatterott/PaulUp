@@ -1,3 +1,7 @@
 .loginBtn {
     visibility: hidden;
 }
+
+.padding-left {
+    padding-left: 20px !important;
+}
