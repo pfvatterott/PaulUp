@@ -84,4 +84,7 @@ export default {
   getListTasks: function(id) {
     return axios.get("/api/tasks/list/" + id);
   },
+  updateTask: function(taskId, taskData) {
+    return axios.put("/api/tasks/" + taskId, taskData)
+  },
 };

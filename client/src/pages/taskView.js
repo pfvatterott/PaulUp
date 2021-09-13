@@ -75,8 +75,8 @@ function taskView() {
                         </Col>
                     </Row>
                     <Row>
-                        <Col s={12}>
-                            <ul className="collection left-align">
+                        <Col s={12} className="taskViewCollection">
+                            <ul className="collection left-align taskViewCollection">
                                 {listTasks.map(item => (
                                     <li className="collection-item" key={item._id}>
                                         <StatusBox id={item._id} status={item.task_status}/>
