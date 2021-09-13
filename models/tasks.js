@@ -6,12 +6,14 @@ const taskSchema = new mongoose.Schema({
   owner_id: { type: String },
   list_id: { type: String },
   task_description: { type: String },
-  task_status_type: { type: String },
-  task_status: { type: String },
   task_assignee: { type: String },
   start_date: { type: Date },
   due_date: { type: Date },
-  order_index: { type: Number }
+  order_index: { type: Number },
+  task_status: {
+    type: { type: String },
+    status: { type: String }
+  }
 });
 
 const Task = mongoose.model("Task", taskSchema);
