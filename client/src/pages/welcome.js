@@ -48,7 +48,7 @@ return (
   
 
     <div className="row login">
-        {redirect ? <Redirect push to={{pathname: `/taskview`, state: userID}} /> : null}
+        {redirect ? <Redirect push to={{pathname: `/workspace`, state: userID}} /> : null}
         <GoogleLogin
         className="loginBtn"
         clientId={googleClientId}

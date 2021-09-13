@@ -7,7 +7,14 @@ const spaceSchema = new mongoose.Schema({
   workspace_id: { type: String },
   folders: [ String ],
   lists: [ String ],
-  order_index: { type: Number }
+  order_index: { type: Number },
+  statuses: {
+    open: [String],
+    progress: [String],
+    done: [String],
+    closed: [String]
+
+  }
 });
 
 const Space = mongoose.model("Space", spaceSchema);

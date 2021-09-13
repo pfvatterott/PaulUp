@@ -6,7 +6,13 @@ const folderSchema = new mongoose.Schema({
   owner_id: { type: String },
   space_id: { type: String },
   lists: [ String ],
-  order_index: { type: Number }
+  order_index: { type: Number },
+  statuses: {
+    open: [String],
+    progress: [String],
+    done: [String],
+    closed: [String]
+  }
 });
 
 const Folder = mongoose.model("Folder", folderSchema);

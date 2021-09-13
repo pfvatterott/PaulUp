@@ -7,7 +7,13 @@ const listSchema = new mongoose.Schema({
   space_id: { type: String },
   folder_id: { type: String },
   tasks: [ String ],
-  order_index: { type: Number }
+  order_index: { type: Number },
+  statuses: {
+    open: [String],
+    progress: [String],
+    done: [String],
+    closed: [String]
+  }
 });
 
 const List = mongoose.model("List", listSchema);

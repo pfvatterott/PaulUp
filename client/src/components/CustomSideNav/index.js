@@ -295,7 +295,13 @@ export default function CustomSideNav() {
       space_name: newSpaceName,
       owner_id: userIdVariable,
       workspace_id: workspaceData._id,
-      order_index: workspaceData.spaces.length
+      order_index: workspaceData.spaces.length,
+      statuses: {
+        open: 'OPEN',
+        progress: 'IN PROGRESS',
+        done: 'DONE',
+        closed: 'CLOSED'
+      }
     }
     API.saveSpace(spaceData).then((saveSpaceResponse) => {
       let spacesArray = workspaceData.spaces
@@ -317,7 +323,8 @@ export default function CustomSideNav() {
         list_name: listName,
         owner_id: userIdVariable,
         space_id: spaceResponse.data._id,
-        order_index: spaceResponse.data.lists.length
+        order_index: spaceResponse.data.lists.length,
+        statuses: spaceResponse.data.statuses
       }
       API.saveList(newList).then((saveListResponse) => {
         let updatedListArray = spaceResponse.data.lists
@@ -340,7 +347,8 @@ export default function CustomSideNav() {
         folder_name: folderName,
         owner_id: userIdVariable,
         space_id: spaceResponse.data._id,
-        order_index: spaceResponse.data.folders.length
+        order_index: spaceResponse.data.folders.length,
+        statuses: spaceResponse.data.statuses
       }
       API.saveFolder(newFolder).then((saveFolderResponse) => {
         console.log(saveFolderResponse.data)
@@ -364,7 +372,8 @@ export default function CustomSideNav() {
         list_name: listName,
         owner_id: userIdVariable,
         folder_id: getFolderResponse.data._id,
-        order_index: getFolderResponse.data.lists.length
+        order_index: getFolderResponse.data.lists.length,
+        statuses: getFolderResponse.data.statuses
       }
       API.saveList(newList).then((saveListResponse) => {
         let updatedListArray = getFolderResponse.data.lists

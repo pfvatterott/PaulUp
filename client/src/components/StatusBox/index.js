@@ -20,6 +20,7 @@ export default function StatusBox(props) {
         else if (props.status === 'closed') {
             setCurrentColor("#6BC950")
         }
+        console.log(props)
     }, [])
 
     useEffect(() => {

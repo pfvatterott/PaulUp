@@ -38,6 +38,7 @@ function taskView() {
             task_name: newTaskName,
             owner_id: userIdVariable,
             list_id: currentList._id,
+            task_status_type: 'OPEN',
             task_status: 'open',
             order_index: currentList.tasks.length
         }
@@ -81,7 +82,7 @@ function taskView() {
                                 {listTasks.map(item => {
                                     if(item.task_status === 'open')
                                         return <li className="collection-item" key={item._id}>
-                                        <StatusBox id={item._id} status={item.task_status} updateLists={(a) => handleGetListTasks(a)}/>
+                                        <StatusBox id={item._id} status={item.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/>
                                         {item.task_name}
                                     </li>
                                     
@@ -105,7 +106,7 @@ function taskView() {
                                 {listTasks.map(item => {
                                     if(item.task_status === 'in progress')
                                         return <li className="collection-item" key={item._id}>
-                                        <StatusBox id={item._id} status={item.task_status} updateLists={(a) => handleGetListTasks(a)}/>
+                                        <StatusBox id={item._id} status={item.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/>
                                         {item.task_name}
                                     </li>
                                     
@@ -129,7 +130,7 @@ function taskView() {
                                 {listTasks.map(item => {
                                     if(item.task_status === 'closed')
                                         return <li className="collection-item" key={item._id}>
-                                        <StatusBox id={item._id} status={item.task_status} updateLists={(a) => handleGetListTasks(a)}/>
+                                        <StatusBox id={item._id} status={item.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/>
                                         {item.task_name}
                                     </li>
                                     
