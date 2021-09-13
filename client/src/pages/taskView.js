@@ -76,13 +76,64 @@ function taskView() {
                     </Row>
                     <Row>
                         <Col s={12}>
+                            <h3>Open</h3>
                             <ul className="collection left-align taskViewCollection">
-                                {listTasks.map(item => (
-                                    <li className="collection-item" key={item._id}>
-                                        <StatusBox id={item._id} status={item.task_status}/>
+                                {listTasks.map(item => {
+                                    if(item.task_status === 'open')
+                                        return <li className="collection-item" key={item._id}>
+                                        <StatusBox id={item._id} status={item.task_status} updateLists={(a) => handleGetListTasks(a)}/>
                                         {item.task_name}
                                     </li>
-                                ))}
+                                    
+                                })}
+                                <li className="collection-item create_task_collection_item">
+                                    <div className="input-field">
+                                        <input placeholder="Create New Task" id="first_name" type="text" className="validate" onChange={handleNewTaskNameChange} value={newTaskName}
+                                        onKeyPress={event => {
+                                            if (event.key === 'Enter') {
+                                              handleCreateNewTask()
+                                            }
+                                          }}/>
+                                    </div>
+                                </li>
+                            </ul>
+                        </Col>
+
+                        <Col s={12}>
+                            <h3>In Progress</h3>
+                            <ul className="collection left-align taskViewCollection">
+                                {listTasks.map(item => {
+                                    if(item.task_status === 'in progress')
+                                        return <li className="collection-item" key={item._id}>
+                                        <StatusBox id={item._id} status={item.task_status} updateLists={(a) => handleGetListTasks(a)}/>
+                                        {item.task_name}
+                                    </li>
+                                    
+                                })}
+                                <li className="collection-item create_task_collection_item">
+                                    <div className="input-field">
+                                        <input placeholder="Create New Task" id="first_name" type="text" className="validate" onChange={handleNewTaskNameChange} value={newTaskName}
+                                        onKeyPress={event => {
+                                            if (event.key === 'Enter') {
+                                              handleCreateNewTask()
+                                            }
+                                          }}/>
+                                    </div>
+                                </li>
+                            </ul>
+                        </Col>
+
+                        <Col s={12}>
+                            <h3>Closed</h3>
+                            <ul className="collection left-align taskViewCollection">
+                                {listTasks.map(item => {
+                                    if(item.task_status === 'closed')
+                                        return <li className="collection-item" key={item._id}>
+                                        <StatusBox id={item._id} status={item.task_status} updateLists={(a) => handleGetListTasks(a)}/>
+                                        {item.task_name}
+                                    </li>
+                                    
+                                })}
                                 <li className="collection-item create_task_collection_item">
                                     <div className="input-field">
                                         <input placeholder="Create New Task" id="first_name" type="text" className="validate" onChange={handleNewTaskNameChange} value={newTaskName}

@@ -40,6 +40,7 @@ export default function StatusBox(props) {
         }
         API.updateTask(props.id, newTaskData).then((updateTaskRes) => {
             setCurrentStatus(status)
+            props.updateLists(updateTaskRes.data.list_id)
         })
     }
     
