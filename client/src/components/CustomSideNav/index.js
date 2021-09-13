@@ -296,12 +296,12 @@ export default function CustomSideNav() {
       owner_id: userIdVariable,
       workspace_id: workspaceData._id,
       order_index: workspaceData.spaces.length,
-      statuses: {
-        open: 'OPEN',
-        progress: 'IN PROGRESS',
-        done: 'DONE',
-        closed: 'CLOSED'
-      }
+      statuses: [
+        {open: 'OPEN'},
+        {progress: 'IN PROGRESS'},
+        {done: 'DONE'},
+        {closed: 'CLOSED'}
+      ]
     }
     API.saveSpace(spaceData).then((saveSpaceResponse) => {
       let spacesArray = workspaceData.spaces

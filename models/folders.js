@@ -7,12 +7,12 @@ const folderSchema = new mongoose.Schema({
   space_id: { type: String },
   lists: [ String ],
   order_index: { type: Number },
-  statuses: {
-    open: [String],
-    progress: [String],
-    done: [String],
-    closed: [String]
-  }
+  statuses: [
+    {open: [String]},
+    {progress: [String]},
+    {done: [String]},
+    {closed: [String]}
+  ]
 });
 
 const Folder = mongoose.model("Folder", folderSchema);

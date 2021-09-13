@@ -8,13 +8,12 @@ const spaceSchema = new mongoose.Schema({
   folders: [ String ],
   lists: [ String ],
   order_index: { type: Number },
-  statuses: {
-    open: [String],
-    progress: [String],
-    done: [String],
-    closed: [String]
-
-  }
+  statuses: [
+    {open: [String]},
+    {progress: [String]},
+    {done: [String]},
+    {closed: [String]}
+  ]
 });
 
 const Space = mongoose.model("Space", spaceSchema);

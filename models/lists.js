@@ -8,12 +8,12 @@ const listSchema = new mongoose.Schema({
   folder_id: { type: String },
   tasks: [ String ],
   order_index: { type: Number },
-  statuses: {
-    open: [String],
-    progress: [String],
-    done: [String],
-    closed: [String]
-  }
+  statuses: [
+    {open: [String]},
+    {progress: [String]},
+    {done: [String]},
+    {closed: [String]}
+  ]
 });
 
 const List = mongoose.model("List", listSchema);

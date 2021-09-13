@@ -8,7 +8,7 @@ import StatusBox from "../components/StatusBox";
 
 function taskView() {
     const location = useLocation()
-    const [currentList, setCurrentList] = useState({})
+    const [currentList, setCurrentList] = useState([])
     const [newTaskName, setNewTaskName] = useState('')
     const [listTasks, setListTasks] = useState([])
     let userIdVariable = location.state
@@ -18,6 +18,7 @@ function taskView() {
             let currentListVar
             let newLocation = location.pathname.replace('/taskview/', '')
             API.getList(newLocation).then((getListResponse) => {
+                console.log(getListResponse.data)
                 setCurrentList(getListResponse.data)
                 currentListVar = getListResponse.data._id
                 handleGetListTasks(currentListVar)
@@ -38,8 +39,10 @@ function taskView() {
             task_name: newTaskName,
             owner_id: userIdVariable,
             list_id: currentList._id,
-            task_status_type: 'OPEN',
-            task_status: 'open',
+            task_status: {
+                type: 'open',
+                status: currentList.statuses[0].open[0]
+            },
             order_index: currentList.tasks.length
         }
         API.saveTask(newTask).then((saveTaskResponse) => {
@@ -75,12 +78,20 @@ function taskView() {
                         <h2>{currentList.list_name}</h2>
                         </Col>
                     </Row>
+
+                    {/* starting something new here */}
+                    {/* {currentList.statuses.map(item => {
+                        <Row>
+                            <h2>{item}</h2>
+                        </Row>
+                    })} */}
+
                     <Row>
                         <Col s={12}>
                             <h3>Open</h3>
                             <ul className="collection left-align taskViewCollection">
                                 {listTasks.map(item => {
-                                    if(item.task_status === 'open')
+                                    if(item.task_status.status === 'OPEN')
                                         return <li className="collection-item" key={item._id}>
                                         <StatusBox id={item._id} status={item.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/>
                                         {item.task_name}
@@ -99,7 +110,8 @@ function taskView() {
                                 </li>
                             </ul>
                         </Col>
-
+                    </Row>
+                    <Row>
                         <Col s={12}>
                             <h3>In Progress</h3>
                             <ul className="collection left-align taskViewCollection">
@@ -123,7 +135,8 @@ function taskView() {
                                 </li>
                             </ul>
                         </Col>
-
+                    </Row>
+                    <Row>
                         <Col s={12}>
                             <h3>Closed</h3>
                             <ul className="collection left-align taskViewCollection">
