@@ -9,18 +9,14 @@ export default function StatusBox(props) {
     const [currentColor, setCurrentColor] = useState('')
 
     useEffect(() => {
+        console.log(props   )
         setCurrentTask(props.id)
         setCurrentStatus(props.status)
-        if (props.status === 'open') {
-            setCurrentColor("#D3D3D3")
+        for (let i = 0; i < props.list_statuses.length; i++) {
+            if (props.list_statuses[i].name === props.status.status) {
+                setCurrentColor(props.list_statuses[i].color)
+            }    
         }
-        else if (props.status === 'in progress') {
-            setCurrentColor("#A875FF")
-        }
-        else if (props.status === 'closed') {
-            setCurrentColor("#6BC950")
-        }
-        console.log(props)
     }, [])
 
     useEffect(() => {
