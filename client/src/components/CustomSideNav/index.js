@@ -297,10 +297,24 @@ export default function CustomSideNav() {
       workspace_id: workspaceData._id,
       order_index: workspaceData.spaces.length,
       statuses: [
-        {open: 'OPEN'},
-        {progress: 'IN PROGRESS'},
-        {done: 'DONE'},
-        {closed: 'CLOSED'}
+        {
+          name: 'OPEN',
+          type: 'open',
+          color: "#D3D3D3",
+          order_index: 0
+        },
+        {
+          name: 'IN PROGRESS',
+          type: 'in progress',
+          color: "#A875FF",
+          order_index: 1
+        },
+        {
+          name: 'CLOSED',
+          type: 'closed',
+          color: "#6BC950",
+          order_index: 2
+        }
       ]
     }
     API.saveSpace(spaceData).then((saveSpaceResponse) => {

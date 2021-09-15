@@ -9,10 +9,12 @@ const spaceSchema = new mongoose.Schema({
   lists: [ String ],
   order_index: { type: Number },
   statuses: [
-    {open: [String]},
-    {progress: [String]},
-    {done: [String]},
-    {closed: [String]}
+    {
+      name: {type: String},
+      type: {type: String},
+      color: {type: String},
+      order_index: {type: Number}
+    }
   ]
 });
 
