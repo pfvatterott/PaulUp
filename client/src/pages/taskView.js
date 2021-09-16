@@ -12,6 +12,7 @@ function taskView() {
     const [listStatuses, setListStatuses] = useState([])
     const [newTaskName, setNewTaskName] = useState('')
     const [listTasks, setListTasks] = useState([])
+    const [value, setValue] = useState(0);
     let userIdVariable = location.state
 
     useEffect(() => {
@@ -19,15 +20,23 @@ function taskView() {
             let currentListVar
             let newLocation = location.pathname.replace('/taskview/', '')
             API.getList(newLocation).then((getListResponse) => {
-                console.log(getListResponse.data)
+                for (let j = 0; j < getListResponse.data.statuses.length; j++) {
+                    getListResponse.data.statuses[j].showing = false
+                }
                 setListStatuses(getListResponse.data.statuses)
+                console.log(getListResponse.data.statuses)
                 setCurrentList(getListResponse.data)
                 currentListVar = getListResponse.data._id
                 handleGetListTasks(currentListVar)
-            })
+            })            
         }
     }, [location])
 
+    // forces re-render of DOM
+    function useForceUpdate() {
+        let newValue = value + 1
+        setValue(newValue)
+    }
 
 
     function handleNewTaskNameChange(event) {
@@ -35,15 +44,15 @@ function taskView() {
         setNewTaskName(name)
     }
 
-    function handleCreateNewTask() {
+    function handleCreateNewTask(name, type) {
         setNewTaskName('')
         let newTask = {
             task_name: newTaskName,
             owner_id: userIdVariable,
             list_id: currentList._id,
             task_status: {
-                type: 'open',
-                status: currentList.statuses[0].name
+                type: type,
+                status: name
             },
             order_index: currentList.tasks.length
         }
@@ -58,7 +67,7 @@ function taskView() {
                     setCurrentList(getListResponse.data)
                     handleGetListTasks(currentList._id)
                 })
-            })
+                })
         })
     }
 
@@ -66,6 +75,23 @@ function taskView() {
         API.getListTasks(id).then((getListTasksRes) => {
             setListTasks(getListTasksRes.data)
         })
+    }
+
+    function handleOpenCreateTaskInput(id) {
+        console.log(id)
+        let newStatusArray = listStatuses
+        for (let i = 0; i < newStatusArray.length; i++) {
+            if (newStatusArray[i]._id === id) {
+                newStatusArray[i].showing = true
+            }
+            else {
+                newStatusArray[i].showing = false
+            }
+        }
+        console.log(newStatusArray)
+        setListStatuses(newStatusArray)
+        setNewTaskName('')
+        const forceUpdate = useForceUpdate();
     }
 
     return (
@@ -81,9 +107,8 @@ function taskView() {
                         </Col>
                     </Row>
 
-                    {/* starting something new here */}
                     {listStatuses ? listStatuses.map(item => (
-                        <Row>
+                        <Row key={item._id}>
                             <Col s={12}>
                                 <h3>{item.name}</h3>
                                 <ul className="collection left-align taskViewCollection">
@@ -94,17 +119,20 @@ function taskView() {
                                             {task.task_name}
                                         </li> 
                                     })}
-                                    <li className="collection-item create_task_collection_item">
-                                        <div className="input-field">
-                                            <input placeholder="Create New Task" id="first_name" type="text" className="validate" onChange={handleNewTaskNameChange} value={newTaskName}
-                                            onKeyPress={event => {
-                                                if (event.key === 'Enter') {
-                                                handleCreateNewTask()
-                                                }
-                                            }}/>
-                                        </div>
-                                    </li>
-                                </ul>
+                                    
+                                    { item.showing ? (
+                                         <li className="collection-item create_task_collection_item">
+                                         <div className="input-field">
+                                             <input placeholder="Create New Task" id="first_name" type="text" className="validate" onChange={handleNewTaskNameChange} value={newTaskName}
+                                             onKeyPress={event => {
+                                                 if (event.key === 'Enter') {
+                                                 handleCreateNewTask(item.name, item.type)
+                                                 }
+                                             }}/>
+                                         </div>
+                                     </li>
+                                    ) : <Button flat node="button" waves="light" onClick={() => handleOpenCreateTaskInput(item._id)}>+ Task</Button>}
+                                </ul>   
                             </Col>
                         </Row>
                     )): null }

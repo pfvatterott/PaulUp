@@ -4,13 +4,10 @@ import API from "../../utils/API"
 import "./style.css"
 
 export default function StatusBox(props) {
-    const [currentTask, setCurrentTask] = useState('')
     const [currentStatus, setCurrentStatus] = useState('')
     const [currentColor, setCurrentColor] = useState('')
 
     useEffect(() => {
-        console.log(props   )
-        setCurrentTask(props.id)
         setCurrentStatus(props.status)
         for (let i = 0; i < props.list_statuses.length; i++) {
             if (props.list_statuses[i].name === props.status.status) {
@@ -20,20 +17,19 @@ export default function StatusBox(props) {
     }, [])
 
     useEffect(() => {
-        if (currentStatus === 'open') {
-            setCurrentColor("#D3D3D3")
-        }
-        else if (currentStatus === 'in progress') {
-            setCurrentColor("#A875FF")
-        }
-        else if (currentStatus === 'closed') {
-            setCurrentColor("#6BC950")
+        for (let i = 0; i < props.list_statuses.length; i++) {
+            if (props.list_statuses[i].name === currentStatus) {
+                setCurrentColor(props.list_statuses[i].color)
+            }    
         }
     }, [currentStatus])
 
-    function handleStatusChange(status) {
+    function handleStatusChange(status, status_type) {
         let newTaskData = {
-            task_status: status
+            task_status: {
+                type: status_type,
+                status: status
+            }
         }
         API.updateTask(props.id, newTaskData).then((updateTaskRes) => {
             setCurrentStatus(status)
@@ -50,7 +46,7 @@ export default function StatusBox(props) {
                     alignment: 'left',
                     autoTrigger: true,
                     closeOnClick: true,
-                    constrainWidth: true,
+                    constrainWidth: false,
                     container: null,
                     coverTrigger: false,
                     hover: false,
@@ -63,17 +59,12 @@ export default function StatusBox(props) {
                 }}
                 trigger={<div className='status_box left' key={props.id} style={{backgroundColor: currentColor}}></div>}
                 >
-                <a onClick={() => handleStatusChange('open')}>
-                    Open
-                </a>
-                <Divider />
-                <a onClick={() => {handleStatusChange('in progress')}}>
-                    In Progress
-                </a>
-                <Divider />
-                <a onClick={() => {handleStatusChange('closed')}}>
-                    Closed
-                </a>
+                   {props.list_statuses.map(item => (
+                        <a key={item._id} onClick={() => handleStatusChange(item.name, item.type)}>
+                            <div className='status_box left' key={props.id} style={{backgroundColor: item.color}}></div>
+                        {item.name}
+                        </a>
+                   ))}
             </Dropdown>
         </div>
     )

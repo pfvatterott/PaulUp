@@ -1,13 +1,15 @@
 .taskViewCollection {
-    padding-bottom: 50px;
+    padding-bottom: 120px !important;
+    padding-top: 0px !important;
     border: none !important;
+    margin-bottom: 0px !important;
 }
 
 .collection-item {
     border-top: 1px solid lightgray !important;
     border-left: 1px solid lightgray !important;
     border-right: 1px solid lightgray !important;
-    border-bottom: none !important;
+    border-bottom: 1px solid lightgray !important;
 }
 
 .create_task_collection_item {
