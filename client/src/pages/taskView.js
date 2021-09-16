@@ -24,7 +24,6 @@ function taskView() {
                     getListResponse.data.statuses[j].showing = false
                 }
                 setListStatuses(getListResponse.data.statuses)
-                console.log(getListResponse.data.statuses)
                 setCurrentList(getListResponse.data)
                 currentListVar = getListResponse.data._id
                 handleGetListTasks(currentListVar)
@@ -46,6 +45,12 @@ function taskView() {
 
     function handleCreateNewTask(name, type) {
         setNewTaskName('')
+        let statusArray = listStatuses
+        for (let i = 0; i < statusArray.length; i++) {
+            if (statusArray[i].showing === true) {
+                statusArray[i].showing = false
+            }
+        }
         let newTask = {
             task_name: newTaskName,
             owner_id: userIdVariable,
@@ -78,7 +83,6 @@ function taskView() {
     }
 
     function handleOpenCreateTaskInput(id) {
-        console.log(id)
         let newStatusArray = listStatuses
         for (let i = 0; i < newStatusArray.length; i++) {
             if (newStatusArray[i]._id === id) {
@@ -88,7 +92,6 @@ function taskView() {
                 newStatusArray[i].showing = false
             }
         }
-        console.log(newStatusArray)
         setListStatuses(newStatusArray)
         setNewTaskName('')
         const forceUpdate = useForceUpdate();
