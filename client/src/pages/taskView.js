@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Redirect, useParams, BrowserRouter as Router, useLocation } from "react-router-dom";
-import { Col, Row, Button, Icon } from "react-materialize";
+import { Col, Row, Button, Icon, Dropdown } from "react-materialize";
 import CustomSideNav from "../components/CustomSideNav";
 import "./styles/taskViewStyle.css"
 import API from "../utils/API";
 import StatusBox from "../components/StatusBox";
+import DateSelector from "../components/DateSelector";
+
+
 
 function taskView() {
     const location = useLocation()
@@ -97,10 +100,6 @@ function taskView() {
         const forceUpdate = useForceUpdate();
     }
 
-    function handleDateChange(task_id) {
-        console.log(task_id)
-    }
-
     return (
         <div>
             <Row>
@@ -124,7 +123,7 @@ function taskView() {
                                             return <li className="collection-item" key={task._id}>
                                             <StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/>
                                             {task.task_name}
-                                            <Icon className="right" style={{cursor: 'pointer'}} onClick={() => handleDateChange(task._id)}>date_range</Icon>
+                                            <DateSelector id={task._id}/>
                                         </li> 
                                     })}
                                     
