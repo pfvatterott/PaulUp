@@ -1,5 +1,4 @@
 .taskViewCollection {
-    padding-bottom: 235px !important;
     padding-top: 0px !important;
     border: none !important;
     margin-bottom: 0px !important;
@@ -11,6 +10,7 @@
     border-right: 1px solid lightgray !important;
     border-bottom: 1px solid lightgray !important;
     height: 50px !important;
+    z-index: 5;
 
 }
 
