@@ -7,8 +7,8 @@ const taskSchema = new mongoose.Schema({
   list_id: { type: String },
   task_description: { type: String },
   task_assignee: { type: String },
-  start_date: { type: Date },
-  due_date: { type: Date },
+  start_date: { type: String },
+  due_date: { type: String },
   order_index: { type: Number },
   task_status: {
     type: { type: String },

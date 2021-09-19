@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Redirect, useParams, BrowserRouter as Router, useLocation } from "react-router-dom";
-import { Col, Row, Button, Icon } from "react-materialize";
+import { Col, Row, Button, Icon, Dropdown } from "react-materialize";
 import CustomSideNav from "../components/CustomSideNav";
 import "./styles/taskViewStyle.css"
 import API from "../utils/API";
 import StatusBox from "../components/StatusBox";
+import DateSelector from "../components/DateSelector";
+
+
 
 function taskView() {
     const location = useLocation()
@@ -97,17 +100,13 @@ function taskView() {
         const forceUpdate = useForceUpdate();
     }
 
-    function handleDateChange(task_id) {
-        console.log(task_id)
-    }
-
     return (
         <div>
             <Row>
-                <Col s={0} l={4}>
+                <Col s={0} l={3}>
                     <CustomSideNav></CustomSideNav>
                 </Col>
-                <Col s={12} l={7} className="container">
+                <Col s={12} l={8} className="container">
                     <Row>
                         <Col s={12}>
                         <h2>{currentList.list_name}</h2>
@@ -118,20 +117,46 @@ function taskView() {
                         <Row key={item._id}>
                             <Col s={12}>
                                 <h3>{item.name}</h3>
-                                <ul className="collection left-align taskViewCollection">
+                                 <table>
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th className="right">Start &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                                        Due&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
                                     {listTasks.map(task => {
+                                        if(task.task_status.status === item.name)
+                                            return <tr className="collection-item" key={task._id}>
+                                            <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
+                                            <td>{task.task_name}</td>
+                                            <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}/>
+                                            <td></td>
+                                        </tr> 
+                                    })}
+                                   
+                                    </tbody>
+                                </table>
+
+
+                                <ul className="collection left-align taskViewCollection">
+                                    {/* {listTasks.map(task => {
                                         if(task.task_status.status === item.name)
                                             return <li className="collection-item" key={task._id}>
                                             <StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/>
                                             {task.task_name}
-                                            <Icon className="right" style={{cursor: 'pointer'}} onClick={() => handleDateChange(task._id)}>date_range</Icon>
+                                            <DateSelector id={task._id}/>
                                         </li> 
-                                    })}
+                                    })} */}
                                     
                                     { item.showing ? (
                                          <li className="collection-item create_task_collection_item">
                                          <div className="input-field">
-                                             <input placeholder="Create New Task" id="first_name" type="text" className="validate" onChange={handleNewTaskNameChange} value={newTaskName}
+                                             <input autoFocus placeholder="Create New Task" id="first_name" type="text" className="validate" onChange={handleNewTaskNameChange} value={newTaskName}
                                              onKeyPress={event => {
                                                  if (event.key === 'Enter') {
                                                  handleCreateNewTask(item.name, item.type)

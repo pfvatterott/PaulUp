@@ -1,5 +1,5 @@
 .taskViewCollection {
-    padding-bottom: 120px !important;
+    padding-bottom: 235px !important;
     padding-top: 0px !important;
     border: none !important;
     margin-bottom: 0px !important;
@@ -10,10 +10,28 @@
     border-left: 1px solid lightgray !important;
     border-right: 1px solid lightgray !important;
     border-bottom: 1px solid lightgray !important;
+    height: 50px !important;
+
 }
 
 .create_task_collection_item {
-    border-bottom: 1px solid lightgray !important;
+    border: none !important;
+    margin-top: -30px !important;
 }
 
+.start_date {
+    float: right !important;
+}
 
+.due_date {
+    float: right !important;
+}
+
+td {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+.status_box {
+    width: 10px;
+}
