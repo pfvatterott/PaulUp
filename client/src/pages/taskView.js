@@ -131,9 +131,9 @@ function taskView() {
                                     {listTasks.map(task => {
                                         if(task.task_status.status === item.name)
                                             return <tr className="collection-item" key={task._id}>
-                                            <td><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
+                                            <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
                                             <td>{task.task_name}</td>
-                                            <DateSelector id={task._id}/>
+                                            <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}/>
                                             <td></td>
                                         </tr> 
                                     })}

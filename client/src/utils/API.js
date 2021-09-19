@@ -87,4 +87,7 @@ export default {
   updateTask: function(taskId, taskData) {
     return axios.put("/api/tasks/" + taskId, taskData)
   },
+  getTask: function(id) {
+    return axios.get("/api/tasks/" + id);
+  },
 };

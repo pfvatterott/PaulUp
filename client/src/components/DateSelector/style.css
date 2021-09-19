@@ -41,9 +41,10 @@
     height: 40px;
     float: right;
     margin-top: -8px;
+   
   }
 
-  input {
+  .DayPickerInput {
     height: 40px !important;
-    max-width: 80px !important;
+    max-width: 90px !important;
   }
