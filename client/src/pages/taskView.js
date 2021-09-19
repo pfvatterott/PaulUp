@@ -122,7 +122,8 @@ function taskView() {
                                     <tr>
                                         <th></th>
                                         <th></th>
-                                        <th className="right">Start &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Due&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                        <th className="right">Start &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                                        Due&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -155,7 +156,7 @@ function taskView() {
                                     { item.showing ? (
                                          <li className="collection-item create_task_collection_item">
                                          <div className="input-field">
-                                             <input placeholder="Create New Task" id="first_name" type="text" className="validate" onChange={handleNewTaskNameChange} value={newTaskName}
+                                             <input autoFocus placeholder="Create New Task" id="first_name" type="text" className="validate" onChange={handleNewTaskNameChange} value={newTaskName}
                                              onKeyPress={event => {
                                                  if (event.key === 'Enter') {
                                                  handleCreateNewTask(item.name, item.type)
