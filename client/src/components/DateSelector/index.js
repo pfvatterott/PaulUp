@@ -15,10 +15,11 @@ export default function DateSelector(props) {
 
     useEffect(() => {
       if (props.startDate) {
-        setFrom(props.startDate)
+        console.log(moment(props.startDate)._d)
+        setFrom(moment(props.startDate)._d)
       }
       if (props.dueDate) {
-        setTo(props.dueDate)
+        setTo(moment(props.dueDate)._d)
       }
     }, [])
 
