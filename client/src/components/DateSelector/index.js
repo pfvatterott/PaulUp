@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, Icon } from 'react-materialize'
-import { useLocation, Redirect } from "react-router-dom";
 import API from "../../utils/API"
-import DayPicker, { DateUtils } from 'react-day-picker';
-import Helmet from 'react-helmet';
 import 'react-day-picker/lib/style.css';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import { formatDate, parseDate } from 'react-day-picker/moment';
 import "./style.css"
 
 export default function DateSelector(props) {
@@ -16,66 +13,66 @@ export default function DateSelector(props) {
 
 
     function handleDayClicked(day) {
-        if (!from) {
+        if (!from && !to) {
             setFrom(day)
         }
         else if (from && !to) {
             setTo(day)
         }
-        const range = DateUtils.addDayToRange(day, setDay);
-        setSetDay(range)
-        console.log(range)
+        else {
+          setFrom(day)
+          setTo('')
+        }
     }
 
- 
+    function handleResetClick() {
+      setTo('')
+      setFrom('')
+    }
+
 
     return (
-            <Dropdown
-                id={props._id}
-                options={{
-                    alignment: 'left',
-                    autoTrigger: true,
-                    closeOnClick: true,
-                    constrainWidth: false,
-                    container: null,
-                    coverTrigger: true,
-                    hover: false,
-                    inDuration: 150,
-                    onCloseEnd: null,
-                    onCloseStart: null,
-                    onOpenEnd: null,
-                    onOpenStart: null,
-                    outDuration: 250
-                }}
-                trigger={<Icon className="right" style={{cursor: 'pointer'}}>date_range</Icon>}
-                >
-                <DayPicker
-                    className="Selectable" 
-                    selectedDays={[from, { from, to }]}
-                    modifiers={modifiers}
-                    onDayClick={(a) => handleDayClicked(a)}>
-                </DayPicker>
-                <Helmet>
-                    <style>
-                    {`
-  .Selectable .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
-    background-color: #f0f8ff !important;
-    color: #4a90e2;
-  }
-  .Selectable .DayPicker-Day {
-    border-radius: 0 !important;
-  }
-  .Selectable .DayPicker-Day--start {
-    border-top-left-radius: 50% !important;
-    border-bottom-left-radius: 50% !important;
-  }
-  .Selectable .DayPicker-Day--end {
-    border-top-right-radius: 50% !important;
-    border-bottom-right-radius: 50% !important;
-  }
-`}
-                    </style>
-                </Helmet>
-            </Dropdown>
+
+        <td className="InputFromTo">
+        <DayPickerInput
+          value={from}
+          placeholder=""
+          format="MM/DD/YYYY"
+          formatDate={formatDate}
+          parseDate={parseDate}
+          dayPickerProps={{
+            selectedDays: [from, { from, to }],
+            disabledDays: { after: to },
+            toMonth: to,
+            modifiers,
+            numberOfMonths: 1,
+            // onDayClick: (a) => handleDayClicked(a),
+          }}
+          onDayChange={(a) => setFrom(a)}
+        />{' '}
+        —{' '}
+        <span className="InputFromTo-to">
+        <DayPickerInput
+            // ref={el => (this.to = el)}
+            value={to}
+            placeholder=""
+            format="MM/DD/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            dayPickerProps={{
+              selectedDays: [from, { from, to }],
+              disabledDays: { before: from },
+              modifiers,
+              month: from,
+              fromMonth: from,
+              numberOfMonths: 1,
+            }}
+            onDayChange={(a) => setTo(a)}
+          />
+          
+        </span>
+        </td>
+
+        
     )
 }

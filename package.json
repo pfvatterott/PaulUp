@@ -24,6 +24,7 @@
     "express": "^4.16.3",
     "if-env": "^1.0.4",
     "materialize-css": "^1.0.0",
+    "moment": "^2.29.1",
     "mongoose": "^6.0.2",
     "react-day-picker": "^7.4.10",
     "react-helmet": "^6.1.0",
