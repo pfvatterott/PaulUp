@@ -12,9 +12,16 @@ export default function DateSelector(props) {
     const [from, setFrom] = useState('')
     const [to, setTo] = useState('')
     const [setDay, setSetDay] = useState('')
+    const modifiers = { start: from, end: to };
+
 
     function handleDayClicked(day) {
-        console.log(day)
+        if (!from) {
+            setFrom(day)
+        }
+        else if (from && !to) {
+            setTo(day)
+        }
         const range = DateUtils.addDayToRange(day, setDay);
         setSetDay(range)
         console.log(range)
@@ -45,6 +52,7 @@ export default function DateSelector(props) {
                 <DayPicker
                     className="Selectable" 
                     selectedDays={[from, { from, to }]}
+                    modifiers={modifiers}
                     onDayClick={(a) => handleDayClicked(a)}>
                 </DayPicker>
                 <Helmet>
