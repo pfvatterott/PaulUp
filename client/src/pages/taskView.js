@@ -105,12 +105,19 @@ function taskView() {
         console.log('working')
         if (taskNameLabel === 'Task Name') {
             setTaskNameLabel("↓ Task Name")
+            let listArray = listTasks
+            listArray.sort((a, b) => a.task_name.localeCompare(b.task_name))
+            setListTasks(listArray)
         }
         else if (taskNameLabel === "↓ Task Name") {
             setTaskNameLabel("↑ Task Name")
+            let listArray = listTasks
+            listArray.sort((a, b) => b.task_name.localeCompare(a.task_name))
+            setListTasks(listArray)
         }
         else {
             setTaskNameLabel('Task Name')
+            handleGetListTasks(currentList._id)
         }
     }
 
