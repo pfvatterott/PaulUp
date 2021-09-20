@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Redirect, useParams, BrowserRouter as Router, useLocation } from "react-router-dom";
-import { Col, Row, Button, Icon, Dropdown } from "react-materialize";
+import { Col, Row, Button, Icon, Dropdown, Divider } from "react-materialize";
 import CustomSideNav from "../components/CustomSideNav";
 import "./styles/taskViewStyle.css"
 import API from "../utils/API";
@@ -15,6 +15,7 @@ function taskView() {
     const [listStatuses, setListStatuses] = useState([])
     const [newTaskName, setNewTaskName] = useState('')
     const [listTasks, setListTasks] = useState([])
+    const [taskNameLabel, setTaskNameLabel]= useState('Task Name')
     const [value, setValue] = useState(0);
     let userIdVariable = location.state
 
@@ -100,6 +101,19 @@ function taskView() {
         const forceUpdate = useForceUpdate();
     }
 
+    function handleSortByTaskName() {
+        console.log('working')
+        if (taskNameLabel === 'Task Name') {
+            setTaskNameLabel("↓ Task Name")
+        }
+        else if (taskNameLabel === "↓ Task Name") {
+            setTaskNameLabel("↑ Task Name")
+        }
+        else {
+            setTaskNameLabel('Task Name')
+        }
+    }
+
     return (
         <div>
             <Row>
@@ -108,22 +122,28 @@ function taskView() {
                 </Col>
                 <Col s={12} l={8} className="container">
                     <Row>
-                        <Col s={12}>
-                        <h2>{currentList.list_name}</h2>
+                        <Col s={3}>
+                            <h3 className="left">{currentList.list_name}</h3>
                         </Col>
+                        <Col s={9}></Col>
                     </Row>
 
                     {listStatuses ? listStatuses.map(item => (
                         <Row key={item._id}>
                             <Col s={12}>
-                                <h3>{item.name}</h3>
+                                <Row>
+                                    <Col s={3}>
+                                        <h5 className="left">{item.name}</h5>
+                                    </Col>
+                                </Row>
                                  <table>
                                     <thead>
                                     <tr>
                                         <th></th>
-                                        <th></th>
+                                        <th onClick={() => handleSortByTaskName()} className='task_name'>{taskNameLabel}</th>
                                         <th className="right">Start &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                                         Due&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                        <th></th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -144,15 +164,6 @@ function taskView() {
 
 
                                 <ul className="collection left-align taskViewCollection">
-                                    {/* {listTasks.map(task => {
-                                        if(task.task_status.status === item.name)
-                                            return <li className="collection-item" key={task._id}>
-                                            <StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/>
-                                            {task.task_name}
-                                            <DateSelector id={task._id}/>
-                                        </li> 
-                                    })} */}
-                                    
                                     { item.showing ? (
                                          <li className="collection-item create_task_collection_item">
                                          <div className="input-field">

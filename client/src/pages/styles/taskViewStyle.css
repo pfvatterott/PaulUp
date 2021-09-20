@@ -35,3 +35,8 @@ td {
 .status_box {
     width: 10px;
 }
+
+.task_name {
+    cursor: pointer;
+    width: 100px;
+}
