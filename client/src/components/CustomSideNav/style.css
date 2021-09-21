@@ -5,3 +5,19 @@
 .padding-left {
     padding-left: 20px !important;
 }
+
+.rstm-search {
+    width: 250px !important;
+}
+
+#space_name {
+    max-width: 400px;
+}
+
+#list_name_form {
+    max-width: 400px;
+}
+
+#folder_name_form {
+    max-width: 400px;
+}
