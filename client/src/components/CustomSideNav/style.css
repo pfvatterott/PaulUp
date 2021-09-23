@@ -37,10 +37,19 @@
 
 .list_item {
     font-weight: normal;
+    border-bottom: none !important;
 }
 
 .tree_element {
     text-align: left !important;
 }
+
+.rstm-tree-item {
+    border-bottom: none !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+
 
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useLocation } from 'react-router-dom'
-import taskView from "./pages/taskView";
+import listView from "./pages/listView";
 import welcome from "./pages/welcome"
 import workspace from "./pages/workspace";
 import CustomSideNav from "./components/CustomSideNav";
@@ -26,8 +26,8 @@ function App() {
       {/* { sidebar ? (<CustomSideNav></CustomSideNav>) : null } */}
       <Route exact path="/" component={welcome} />
       <Route exact path="/workspace" component={workspace} />
-      <Route exact path="/taskView" component={taskView} />
-      <Route exact path="/taskView/:id" component={taskView} />
+      <Route exact path="/listView" component={listView} />
+      <Route exact path="/listView/:id" component={listView} />
     </div>
   );
 }

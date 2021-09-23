@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Redirect, useParams, BrowserRouter as Router, useLocation } from "react-router-dom";
 import { Col, Row, Button, Icon, Dropdown, Divider } from "react-materialize";
 import CustomSideNav from "../components/CustomSideNav";
+import TaskView from "../components/TaskView"
 import "./styles/taskViewStyle.css"
 import API from "../utils/API";
 import StatusBox from "../components/StatusBox";
@@ -16,13 +17,15 @@ function taskView() {
     const [newTaskName, setNewTaskName] = useState('')
     const [listTasks, setListTasks] = useState([])
     const [taskNameLabel, setTaskNameLabel]= useState('Task Name')
+    const [openTaskView, setOpenTaskView] = useState(false)
+    const [taskViewTask, setTaskViewTask] = useState('')
     const [value, setValue] = useState(0);
     let userIdVariable = location.state
 
     useEffect(() => {
         if (location.pathname.length > 30) {
             let currentListVar
-            let newLocation = location.pathname.replace('/taskview/', '')
+            let newLocation = location.pathname.replace('/listview/', '')
             API.getList(newLocation).then((getListResponse) => {
                 for (let j = 0; j < getListResponse.data.statuses.length; j++) {
                     getListResponse.data.statuses[j].showing = false
@@ -121,6 +124,15 @@ function taskView() {
         }
     }
 
+    function handleOpenTaskView(task_id) {
+        setTaskViewTask(task_id)
+        setOpenTaskView(true)
+    }
+
+    function handleTaskViewClose() {
+        setOpenTaskView(false)
+    }
+
     return (
         <div>
             <Row>
@@ -160,7 +172,7 @@ function taskView() {
                                         if(task.task_status.status === item.name)
                                             return <tr className="collection-item" key={task._id}>
                                             <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
-                                            <td>{task.task_name}</td>
+                                            <td onClick={() => handleOpenTaskView(task._id)} className="task_title">{task.task_name}</td>
                                             <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}/>
                                             <td></td>
                                         </tr> 
@@ -189,6 +201,7 @@ function taskView() {
                     )): null }
                 </Col>
             </Row>
+            <TaskView open={openTaskView} task={taskViewTask} close={() => handleTaskViewClose()}/>
         </div>
        
     )

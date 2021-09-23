@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SideNav, Button, Col, Row, Modal, TextInput } from 'react-materialize'
+import { SideNav, Button, Col, Row, Modal, TextInput, CardPanel } from 'react-materialize'
 import classnames from 'classnames';
 import { useLocation, Redirect } from "react-router-dom";
 import API from "../../utils/API"
@@ -432,7 +432,7 @@ export default function CustomSideNav() {
 
   return (
     <div>
-      { redirectToList ? (<Redirect push to={{pathname: '/taskview/' + currentList, state: userID}}/>) : null }
+      { redirectToList ? (<Redirect push to={{pathname: '/listview/' + currentList, state: userID}}/>) : null }
       <GoogleLogin
         className="loginBtn"
         clientId={googleClientId}
@@ -484,14 +484,22 @@ export default function CustomSideNav() {
             >
               {({ search, items }) => (
                 <div>
-                <TextInput onChange={e => search(e.target.value)} placeholder="Type and search"/>
-                <ul className="tree_element">
-                    {items.map(({key, ...props}) => (
-                      <div className={props.class}>
-                      <ItemComponent key={key} {...props} />
-                      </div>
-                    ))}
-                </ul>
+                  <Row>
+                    <Col s={12}>
+                      <TextInput className='sidebar_search' onChange={e => search(e.target.value)} placeholder="Type and search"/>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col s={12}>
+                      <ul className="tree_element">
+                          {items.map(({key, ...props}) => (
+                            <div className={props.class}>
+                            <ItemComponent key={key} {...props} />
+                            </div>
+                          ))}
+                      </ul>
+                    </Col>
+                  </Row>
                 </div>  
               )}
             </TreeMenu>

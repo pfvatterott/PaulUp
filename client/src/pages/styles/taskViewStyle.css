@@ -41,3 +41,7 @@ td {
     cursor: pointer;
     width: 100px;
 }
+
+.task_title {
+    cursor: pointer;
+}
