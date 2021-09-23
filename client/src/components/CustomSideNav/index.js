@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { SideNav, Button, Col, Row, Modal, TextInput } from 'react-materialize'
+import classnames from 'classnames';
 import { useLocation, Redirect } from "react-router-dom";
 import API from "../../utils/API"
 import "./style.css"
-import TreeMenu, { ItemComponent } from 'react-simple-tree-menu';
+import TreeMenu, { ItemComponent, defaultChildren } from 'react-simple-tree-menu';
 import GoogleLogin from "react-google-login";
 import '../../../node_modules/react-simple-tree-menu/dist/main.css';
 
@@ -43,7 +44,10 @@ export default function CustomSideNav() {
       handleGetWorkspaces()
       handleGetUser()
     }
+    
+    var x = document.getElementsByClassName("rstm-tree-item-level0")
   }, [])
+
 
   const googleSuccess = async (response) => {
     const userObj = response.profileObj
@@ -154,13 +158,15 @@ export default function CustomSideNav() {
                 key: getSpaceListsResponse.data[g]._id,
                 label: getSpaceListsResponse.data[g].list_name,
                 order_index: (getSpaceListsResponse.data[g].order_index + spacesArray[i].folders.length),
-                onClickNode: 'openList'
+                onClickNode: 'openList',
+                class: 'list_item'
               }
               nodeArray.push(listObj)
             }
             nodeArray.push({
               key: 'create_new',
               label: 'Create new Folder or List',
+              class: 'create_new',
               onClickNode: 'openCreateFolderList',
               id: '123'
             })
@@ -168,6 +174,7 @@ export default function CustomSideNav() {
           else {
             nodeArray = [{
               key: 'create_new',
+              class: 'create_new',
               label: 'Create new Folder or List',
               onClickNode: 'openCreateFolderList'
             }]
@@ -177,7 +184,8 @@ export default function CustomSideNav() {
             label: spacesArray[i].space_name,
             onClickNode: '123',
             order_index: spacesArray[i].order_index,
-            nodes: nodeArray
+            nodes: nodeArray,
+            class: 'space_item',
           }
           newTreeData.push(spaceTreeData)
         })
@@ -190,12 +198,14 @@ export default function CustomSideNav() {
                 key: 'create_new',
                 label: 'Create new List',
                 onClickNode: 'openCreateListForFolder',
+                class: 'create_new',
                 id: '123'
               })
               let folderObj = {
                 key: getSpaceFolderResponse.data[j]._id,
                 label: getSpaceFolderResponse.data[j].folder_name,
                 order_index: getSpaceFolderResponse.data[j].order_index,
+                class: 'folder_item',
                 nodes: listArray
               }
               nodeArray.unshift(folderObj)
@@ -208,7 +218,8 @@ export default function CustomSideNav() {
                       key: getFolderListsResponse.data[o]._id,
                       label: getFolderListsResponse.data[o].list_name,
                       order_index: getFolderListsResponse.data[o].order_index,
-                      onClickNode: 'openFolderList'
+                      onClickNode: 'openFolderList',
+                      class: 'list_item',
                     }
                     listArray.push(listObj)
                   }
@@ -217,13 +228,15 @@ export default function CustomSideNav() {
                     key: 'create_new',
                     label: 'Create new List',
                     onClickNode: 'openCreateListForFolder',
+                    class: 'create_new',
                     id: '123'
                   })
                   let folderObj = {
                     key: getSpaceFolderResponse.data[j]._id,
                     label: getSpaceFolderResponse.data[j].folder_name,
                     order_index: getSpaceFolderResponse.data[j].order_index,
-                    nodes: listArray
+                    nodes: listArray,
+                    class: 'folder_item',
                   }
                   nodeArray.unshift(folderObj)
                   nodeArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
@@ -469,6 +482,18 @@ export default function CustomSideNav() {
               }}
               debounceTime={75}
             >
+              {({ search, items }) => (
+                <div>
+                <TextInput onChange={e => search(e.target.value)} placeholder="Type and search"/>
+                <ul className="tree_element">
+                    {items.map(({key, ...props}) => (
+                      <div className={props.class}>
+                      <ItemComponent key={key} {...props} />
+                      </div>
+                    ))}
+                </ul>
+                </div>  
+              )}
             </TreeMenu>
           </Col>
         </Row>

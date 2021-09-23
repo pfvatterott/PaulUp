@@ -21,3 +21,26 @@
 #folder_name_form {
     max-width: 400px;
 }
+
+.space_item{
+    font-size: large;
+}
+
+.create_new {
+    font-weight: normal;
+}
+
+.folder_item {
+
+    font-size: medium;
+}
+
+.list_item {
+    font-weight: normal;
+}
+
+.tree_element {
+    text-align: left !important;
+}
+
+

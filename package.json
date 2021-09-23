@@ -21,6 +21,7 @@
   "dependencies": {
     "@material-ui/icons": "^4.11.2",
     "axios": "^0.21.1",
+    "classnames": "^2.3.1",
     "express": "^4.16.3",
     "if-env": "^1.0.4",
     "materialize-css": "^1.0.0",
