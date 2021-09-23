@@ -8,20 +8,18 @@ import "./style.css"
 export default function DateSelector(props) {
     const [from, setFrom] = useState('')
     const [to, setTo] = useState('')
-    const [startPlaceHolder, setStartPlaceHolder] = useState('')
-    const [duePlaceHolder, setDuePlaceHolder] = useState('')
     const modifiers = { start: from, end: to };
     var moment = require('moment'); 
 
     useEffect(() => {
       if (props.startDate) {
-        console.log(moment(props.startDate)._d)
         setFrom(moment(props.startDate)._d)
       }
       if (props.dueDate) {
         setTo(moment(props.dueDate)._d)
       }
-    }, [])
+    }, [props.startDate, props.dueDate])
+
 
     function handleFromChange(date) {
       console.log(date)

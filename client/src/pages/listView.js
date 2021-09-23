@@ -36,7 +36,7 @@ function taskView() {
                 handleGetListTasks(currentListVar)
             })            
         }
-    }, [location])
+    }, [location, openTaskView])
 
     // forces re-render of DOM
     function useForceUpdate() {
@@ -207,4 +207,4 @@ function taskView() {
     )
 }
 
-export default taskView;
+export default taskView;    
