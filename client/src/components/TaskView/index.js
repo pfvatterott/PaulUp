@@ -25,7 +25,6 @@ export default function TaskView(props) {
                 }
                 
             })
-
         }
     }, [props.open])
 
@@ -48,6 +47,7 @@ export default function TaskView(props) {
     return (
         <Modal
             open={props.open}
+            id={props.task}
             className='task_view_modal'
             actions={[]}
             options={{
@@ -66,7 +66,7 @@ export default function TaskView(props) {
                 </Row>
                 <Row>
                     <Col s={8}>
-                        <Textarea className="descriptionBox" onChange={handleDescriptionChange} defaultValue={description}/>
+                        <Textarea key={props.task} className="descriptionBox" onChange={handleDescriptionChange} defaultValue={description}/>
                     </Col>
                 </Row>
           
