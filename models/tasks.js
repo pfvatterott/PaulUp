@@ -5,7 +5,7 @@ const taskSchema = new mongoose.Schema({
   task_name: { type: String },
   owner_id: { type: String },
   list_id: { type: String },
-  task_description: { type: String },
+  task_description: { text: {type: String }},
   task_assignee: { type: String },
   start_date: { type: String },
   due_date: { type: String },

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button , Row, Col, Textarea} from "react-materialize";
+import ReactQuill from 'react-quill'; // ES6
+import 'react-quill/dist/quill.snow.css'; // ES6
 import DateSelector from "../DateSelector"
 import API from "../../utils/API"
 import "./style.css"
@@ -8,7 +10,7 @@ export default function TaskView(props) {
     const [taskName, setTaskName] = useState('')
     const [dueDate, setDueDate] = useState('')
     const [startDate, setStartDate] = useState('')
-    const [description, setDescription] = useState('')
+    const [description, setDescription] = useState({text: ''})
 
 
     useEffect(() => {
@@ -21,7 +23,7 @@ export default function TaskView(props) {
                     setDescription(getTaskRes.data.task_description)
                 }
                 else {
-                    setDescription('')
+                    setDescription({text: ''})
                 }
                 
             })
@@ -29,8 +31,7 @@ export default function TaskView(props) {
     }, [props.open])
 
     function handleDescriptionChange(event) {
-        const name = event.target.value;
-        setDescription(name)
+        setDescription({text: event})
     }
 
     function closeModal() {
@@ -38,7 +39,7 @@ export default function TaskView(props) {
             task_description: description
         }
         API.updateTask(props.task, newDescription).then((res) => {
-            setDescription('')
+            setDescription({text: ''})
             props.close()
         })
     }
@@ -54,10 +55,10 @@ export default function TaskView(props) {
             dismissible: false
             }}>
                 <Row>
-                    <Col s={8}>
+                    <Col s={6}>
                         <h4>{taskName}</h4>
                     </Col>
-                    <Col s={3}>
+                    <Col s={5}>
                         <DateSelector id={props.task} startDate={startDate} dueDate={dueDate}/>
                     </Col>
                     <Col s={1}>
@@ -65,8 +66,8 @@ export default function TaskView(props) {
                     </Col>
                 </Row>
                 <Row>
-                    <Col s={8}>
-                        <Textarea key={props.task} className="descriptionBox" onChange={handleDescriptionChange} defaultValue={description}/>
+                    <Col s={7}>
+                        <ReactQuill key={props.task} className="descriptionBox"  value={description.text} onChange={handleDescriptionChange}/>
                     </Col>
                 </Row>
           
