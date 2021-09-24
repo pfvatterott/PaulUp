@@ -133,6 +133,10 @@ function taskView() {
         setOpenTaskView(false)
     }
 
+    function handleTaskNameEdit(id, name) {
+        console.log(name)
+    }
+
     return (
         <div>
             <Row>
@@ -172,8 +176,8 @@ function taskView() {
                                         if(task.task_status.status === item.name)
                                             return <tr className="collection-item" key={task._id}>
                                             <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
-                                            <td onClick={() => handleOpenTaskView(task._id)} className="task_title">{task.task_name}</td>
-                                            <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}/>
+                                            <td onClick={() => handleOpenTaskView(task._id)} className="task_title">{task.task_name}</td><Icon className='edit_button left' onClick={() => handleTaskNameEdit(task._id, task.task_name)}>edit</Icon>
+                                            <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>
                                             <td></td>
                                         </tr> 
                                     })}

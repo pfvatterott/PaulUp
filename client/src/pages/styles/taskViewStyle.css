@@ -45,3 +45,21 @@ td {
 .task_title {
     cursor: pointer;
 }
+
+.edit_button {
+    padding-top: 15px;
+    margin-left: -30px;
+    color: gray;
+    font-size: medium;
+    display: none;
+}
+
+.edit_button:hover {
+    display: block;
+    cursor: pointer;
+}
+
+.task_title:hover + .edit_button {
+    display: block;
+    cursor: pointer;
+}
