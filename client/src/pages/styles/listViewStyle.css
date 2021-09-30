@@ -10,7 +10,7 @@
     border-left: 1px solid lightgray !important;
     border-right: 1px solid lightgray !important;
     border-bottom: 1px solid lightgray !important;
-    height: 50px !important;
+    height: 38px !important;
     z-index: 5;
 
 }
@@ -44,14 +44,18 @@ td {
 
 .task_title {
     cursor: pointer;
+    height: 30px !important;
+    padding: 0px !important;
 }
 
 .edit_button {
+    position: absolute !important;
     padding-top: 15px;
-    margin-left: -30px;
+    padding-left: 5px !important;
     color: gray;
     font-size: medium;
     display: none;
+    z-index: 10 !important;
 }
 
 .edit_button:hover {
@@ -62,4 +66,8 @@ td {
 .task_title:hover + .edit_button {
     display: block;
     cursor: pointer;
+}
+
+.create_new_task_input {
+    margin-top: 20px !important;
 }

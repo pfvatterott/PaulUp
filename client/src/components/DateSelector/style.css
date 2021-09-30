@@ -25,13 +25,31 @@
 }
 
 .InputFromTo {
-  height: 40px;
+  height: 30px !important;
   float: right;
-  margin-top: -8px;
+  margin-top: -10px;
   
 }
 
 .DayPickerInput {
   height: 40px !important;
   max-width: 90px !important;
+}
+
+.DayPickerInput input {
+  font-size: 14px !important;
+  border: none !important;
+  cursor: pointer;
+}
+
+.from_icon {
+  cursor: pointer;
+  float: left;
+  margin-left: -130px !important;
+}
+
+.to_icon {
+  cursor: pointer;
+  float: left;
+  margin-left: -80px !important;
 }

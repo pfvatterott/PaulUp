@@ -3,7 +3,7 @@ import { Redirect, useParams, BrowserRouter as Router, useLocation } from "react
 import { Col, Row, Button, Icon, Dropdown, Divider } from "react-materialize";
 import CustomSideNav from "../components/CustomSideNav";
 import TaskView from "../components/TaskView"
-import "./styles/taskViewStyle.css"
+import "./styles/listViewStyle.css"
 import API from "../utils/API";
 import StatusBox from "../components/StatusBox";
 import DateSelector from "../components/DateSelector";
@@ -176,7 +176,7 @@ function taskView() {
                                         if(task.task_status.status === item.name)
                                             return <tr className="collection-item" key={task._id}>
                                             <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
-                                            <td onClick={() => handleOpenTaskView(task._id)} className="task_title">{task.task_name}</td><Icon className='edit_button left' onClick={() => handleTaskNameEdit(task._id, task.task_name)}>edit</Icon>
+                                            <td onClick={() => handleOpenTaskView(task._id)} className="task_title" style={{minWidth: `${task.task_name.length * 8}px`}}><span style={{minWidth: `${task.task_name.length * 8}px`}} contentEditable={false}>{task.task_name}</span></td><Icon className='edit_button left' style={{marginLeft: `${task.task_name.length / -1.5}px`}} onClick={() => handleTaskNameEdit(task._id, task.task_name)}>edit</Icon>
                                             <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>
                                             <td></td>
                                         </tr> 
