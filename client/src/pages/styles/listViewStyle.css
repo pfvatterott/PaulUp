@@ -37,37 +37,6 @@ td {
     width: 10px;
 }
 
-.task_name {
-    cursor: pointer;
-    width: 100px;
-}
-
-.task_title {
-    cursor: pointer;
-    height: 30px !important;
-    padding: 0px !important;
-}
-
-.edit_button {
-    position: absolute !important;
-    padding-top: 15px;
-    padding-left: 5px !important;
-    color: gray;
-    font-size: medium;
-    display: none;
-    z-index: 10 !important;
-}
-
-.edit_button:hover {
-    display: block;
-    cursor: pointer;
-}
-
-.task_title:hover + .edit_button {
-    display: block;
-    cursor: pointer;
-}
-
 .create_new_task_input {
     margin-top: 20px !important;
 }

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Redirect, useParams, BrowserRouter as Router, useLocation } from "react-router-dom";
 import { Col, Row, Button, Icon, Dropdown, Divider } from "react-materialize";
+import ListViewTaskTitle from "../components/ListViewTaskTitle";
 import CustomSideNav from "../components/CustomSideNav";
 import TaskView from "../components/TaskView"
 import "./styles/listViewStyle.css"
 import API from "../utils/API";
 import StatusBox from "../components/StatusBox";
 import DateSelector from "../components/DateSelector";
+// import { List } from "@material-ui/icons";
 
 
 
@@ -20,6 +22,7 @@ function taskView() {
     const [openTaskView, setOpenTaskView] = useState(false)
     const [taskViewTask, setTaskViewTask] = useState('')
     const [value, setValue] = useState(0);
+    const [taskNameEdit, setTaskNameEdit] = useState(false)
     let userIdVariable = location.state
 
     useEffect(() => {
@@ -124,18 +127,21 @@ function taskView() {
         }
     }
 
+    function handleTaskNameEdit(id, name) { 
+        console.log(name)
+        setTaskNameEdit(true)
+    }
+
     function handleOpenTaskView(task_id) {
         setTaskViewTask(task_id)
         setOpenTaskView(true)
     }
+    
 
     function handleTaskViewClose() {
         setOpenTaskView(false)
     }
 
-    function handleTaskNameEdit(id, name) {
-        console.log(name)
-    }
 
     return (
         <div>
@@ -176,7 +182,7 @@ function taskView() {
                                         if(task.task_status.status === item.name)
                                             return <tr className="collection-item" key={task._id}>
                                             <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
-                                            <td onClick={() => handleOpenTaskView(task._id)} className="task_title" style={{minWidth: `${task.task_name.length * 8}px`}}><span style={{minWidth: `${task.task_name.length * 8}px`}} contentEditable={false}>{task.task_name}</span></td><Icon className='edit_button left' style={{marginLeft: `${task.task_name.length / -1.5}px`}} onClick={() => handleTaskNameEdit(task._id, task.task_name)}>edit</Icon>
+                                            <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>   
                                             <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>
                                             <td></td>
                                         </tr> 

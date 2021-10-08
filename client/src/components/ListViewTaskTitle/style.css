@@ -1,0 +1,31 @@
+.task_title_col {
+    z-index: -3 !important;
+    height: 38px !important;
+}
+
+.task_title {
+    cursor: pointer;
+    height: 30px !important;
+    padding: 0px !important;
+}
+
+.edit_button {
+    margin-left: 10px !important;
+    color: gray;
+    font-size: medium;
+    opacity: 0%;
+    z-index: 5 !important;
+}
+
+.edit_button:hover {
+   
+    opacity: 100%;
+    cursor: pointer;
+    z-index: 5 !important;
+}
+
+.task_title:hover + .edit_button {
+    opacity: 100%;
+    cursor: pointer;
+    z-index: 5 !important;
+}
