@@ -18,7 +18,6 @@
 }
 
 .edit_button:hover {
-   
     opacity: 100%;
     cursor: pointer;
     z-index: 5 !important;

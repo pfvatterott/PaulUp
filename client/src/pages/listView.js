@@ -4,6 +4,7 @@ import { Col, Row, Button, Icon, Dropdown, Divider } from "react-materialize";
 import ListViewTaskTitle from "../components/ListViewTaskTitle";
 import CustomSideNav from "../components/CustomSideNav";
 import TaskView from "../components/TaskView"
+import TaskOptionsDropdown from "../components/TaskOptionsDropdown";
 import "./styles/listViewStyle.css"
 import API from "../utils/API";
 import StatusBox from "../components/StatusBox";
@@ -185,9 +186,9 @@ function taskView() {
                                             <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>   
                                             <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>
                                             <td></td>
-                                        </tr> 
-                                    })}
-                                   
+                                            <TaskOptionsDropdown id={task._id}/>
+                                        </tr>
+                                    })}         
                                     </tbody>
                                 </table>
 

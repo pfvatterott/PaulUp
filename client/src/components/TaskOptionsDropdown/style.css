@@ -1,0 +1,10 @@
+.listViewEllipses {
+    color: gray;
+    opacity: 0%;
+}
+
+.listViewEllipses:hover {
+    opacity: 100%;
+    cursor: pointer;
+    z-index: 5 !important;
+}
