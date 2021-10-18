@@ -7,6 +7,31 @@ export default function TaskOptionsDropdown(props) {
 
     function handleDeleteTask(id) {
         console.log(props.id)
+        API.getList(props.list).then((getListResponse) => {
+            console.log(getListResponse.data)
+            let newTasksArray = getListResponse.data.tasks
+            let otherTasksArray = []
+            for (let i = 0; i < newTasksArray.length; i++) {
+                if (newTasksArray[i] === props.id) {
+                    newTasksArray.splice(i, 1)
+                }
+                else {
+                    otherTasksArray.push(newTasksArray[i])
+                }
+            }
+            let updatedList = {
+                tasks: newTasksArray
+            }
+            console.log(otherTasksArray)
+            for (let p = 0; p < otherTasksArray.length; p++) {
+                API.getTask(otherTasksArray[p]).then((getTaskRes) => {
+                    console.log(getTaskRes.data.order_index)
+                })
+                
+            }
+            // API.updateList(props.list._id, updatedList)
+
+        })
     }
 
 
