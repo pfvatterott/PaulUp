@@ -26,11 +26,23 @@ export default function TaskOptionsDropdown(props) {
             for (let p = 0; p < otherTasksArray.length; p++) {
                 API.getTask(otherTasksArray[p]).then((getTaskRes) => {
                     console.log(getTaskRes.data.order_index)
+                    let newOrderIndex
+                    if (getTaskRes.data.order_index > props.orderIndex) {
+                        newOrderIndex = (getTaskRes.data.order_index - 1)
+                        let newTaskData = {
+                            order_index: newOrderIndex
+                        }
+                        API.updateTask(otherTasksArray[p], newTaskData).then((res1) => {
+                            console.log(res1)
+                        })
+                    }
                 })
                 
             }
-            // API.updateList(props.list._id, updatedList)
-
+            API.updateList(props.list, updatedList).then((res) => {
+                console.log(res)
+            })
+            API.deleteTask(props.id)
         })
     }
 

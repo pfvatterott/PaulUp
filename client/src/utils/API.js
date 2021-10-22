@@ -90,4 +90,7 @@ export default {
   getTask: function(id) {
     return axios.get("/api/tasks/" + id);
   },
+  deleteTask: function(id) {
+    return axios.delete("/api/tasks/" + id);
+  },
 };
