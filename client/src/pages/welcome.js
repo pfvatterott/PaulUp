@@ -41,6 +41,8 @@ const googleSuccess = async (response) => {
 const googleFailure = (response) => {
 console.log("please enable cookies to access this app");
 alert("please enable cookies to access this app");
+setUserID("6143d714eb26b4148c4c9879")
+setRedirect(true)
 console.log(response);
 };
 

@@ -6,9 +6,7 @@ import "./style.css"
 export default function TaskOptionsDropdown(props) {
 
     function handleDeleteTask(id) {
-        console.log(props.id)
         API.getList(props.list).then((getListResponse) => {
-            console.log(getListResponse.data)
             let newTasksArray = getListResponse.data.tasks
             let otherTasksArray = []
             for (let i = 0; i < newTasksArray.length; i++) {
@@ -25,7 +23,6 @@ export default function TaskOptionsDropdown(props) {
             console.log(otherTasksArray)
             for (let p = 0; p < otherTasksArray.length; p++) {
                 API.getTask(otherTasksArray[p]).then((getTaskRes) => {
-                    console.log(getTaskRes.data.order_index)
                     let newOrderIndex
                     if (getTaskRes.data.order_index > props.orderIndex) {
                         newOrderIndex = (getTaskRes.data.order_index - 1)
@@ -33,16 +30,16 @@ export default function TaskOptionsDropdown(props) {
                             order_index: newOrderIndex
                         }
                         API.updateTask(otherTasksArray[p], newTaskData).then((res1) => {
-                            console.log(res1)
                         })
                     }
                 })
                 
             }
             API.updateList(props.list, updatedList).then((res) => {
-                console.log(res)
             })
-            API.deleteTask(props.id)
+            API.deleteTask(props.id).then((deleteRes) => {
+                props.handleGetListTasks(deleteRes.data.list_id);
+            })
         })
     }
 

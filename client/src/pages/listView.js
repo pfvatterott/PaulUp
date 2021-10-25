@@ -185,7 +185,7 @@ function taskView() {
                                             <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
                                             <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>   
                                             <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>
-                                            <TaskOptionsDropdown id={task._id} list={task.list_id} orderIndex={task.order_index}/>
+                                            <TaskOptionsDropdown id={task._id} list={task.list_id} orderIndex={task.order_index} handleGetListTasks={(a) => handleGetListTasks(a)}/>
                                         </tr>
                                     })}         
                                     </tbody>
