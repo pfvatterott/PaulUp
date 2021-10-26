@@ -109,7 +109,6 @@ function taskView() {
     }
 
     function handleSortByTaskName() {
-        console.log('working')
         if (taskNameLabel === 'Task Name') {
             setTaskNameLabel("↓ Task Name")
             let listArray = listTasks
