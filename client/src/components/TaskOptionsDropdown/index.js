@@ -72,7 +72,11 @@ export default function TaskOptionsDropdown(props) {
                         </div>
                     Delete
                     </a>
-                    <a>Rename</a>
+                    <a>
+                        <div>
+                            <Icon className="left">edit</Icon>
+                        </div>
+                    Rename</a>
                     <a>Add to Favorites</a>
                    
             </Dropdown>
