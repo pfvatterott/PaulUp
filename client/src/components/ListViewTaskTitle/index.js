@@ -6,22 +6,48 @@ import "./style.css"
 export default function ListViewTaskTitle(props) {
     const [taskNameEdit, setTaskNameEdit] = useState(false)
     const [newTaskName, setNewTaskName] = useState('')
+    let editing = false
 
     useEffect(() => {
+        document.addEventListener('mousedown', handleMouseDownEvent)
+    }, [])
+
+    function handleMouseDownEvent(e) {
+        e.preventDefault()
+        if (editing === true && !document.getElementById(props.taskID + 'title').contains(e.target)) {
+            setTaskNameEdit(false)
+            editing = false
+            document.getElementById(props.taskID + 'title').textContent = props.taskName
+        }
+        else {
+            setTaskNameEdit(false)
+            editing = false
+        }
+    }
+
+    useEffect(() => {
+        // focuses on task name element
+        // adjusts cursor to be at end of task name
         if (taskNameEdit === true) {
             var el = document.getElementById(props.taskID + 'title');
             var range = document.createRange();
             var sel = window.getSelection();
-            range.setStart(el.childNodes[0], el.textContent.length);
-            range.collapse(true);
-            sel.removeAllRanges();
-            sel.addRange(range);
-            el.focus();
+            if (el.textContent.length > 0) {
+                range.setStart(el.childNodes[0], el.textContent.length);
+                range.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(range);
+                el.focus();
+            }
+            else {
+                el.focus()
+            }
         }
     }, [taskNameEdit])
 
-    function handleTaskNameEdit(id, name) { 
+    function handleTaskNameEdit() { 
         setTaskNameEdit(true)
+        editing = true
     }
 
     function handleTaskNameChange(event) {
@@ -31,8 +57,9 @@ export default function ListViewTaskTitle(props) {
 
     function handleSaveTaskName(event) {
         if (event.key === 'Enter') {
-            console.log(newTaskName)
+            console.log(newTaskName)    
             setTaskNameEdit(false)
+            editing = false
             let taskName = {
                 task_name: newTaskName
             }
