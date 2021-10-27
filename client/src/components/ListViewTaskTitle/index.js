@@ -19,9 +19,10 @@ export default function ListViewTaskTitle(props) {
             editing = false
             document.getElementById(props.taskID + 'title').textContent = props.taskName
         }
-        else {
+        else if (editing === false && !document.getElementById(props.taskID + 'title').contains(e.target)){
             setTaskNameEdit(false)
             editing = false
+            document.getElementById(props.taskID + 'title').textContent = props.taskName
         }
     }
 
@@ -56,8 +57,7 @@ export default function ListViewTaskTitle(props) {
     }
 
     function handleSaveTaskName(event) {
-        if (event.key === 'Enter') {
-            console.log(newTaskName)    
+        if (event.key === 'Enter') {  
             setTaskNameEdit(false)
             editing = false
             let taskName = {
