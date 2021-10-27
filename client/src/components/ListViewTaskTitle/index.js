@@ -7,22 +7,19 @@ export default function ListViewTaskTitle(props) {
     const [taskNameEdit, setTaskNameEdit] = useState(false)
     const [newTaskName, setNewTaskName] = useState('')
     let editing = false
-
-    useEffect(() => {
-        document.addEventListener('mousedown', handleMouseDownEvent)
-    }, [])
+    let currentName
 
     function handleMouseDownEvent(e) {
         e.preventDefault()
         if (editing === true && !document.getElementById(props.taskID + 'title').contains(e.target)) {
             setTaskNameEdit(false)
             editing = false
-            document.getElementById(props.taskID + 'title').textContent = props.taskName
+            document.getElementById(props.taskID + 'title').textContent = currentName
         }
         else if (editing === false && !document.getElementById(props.taskID + 'title').contains(e.target)){
             setTaskNameEdit(false)
             editing = false
-            document.getElementById(props.taskID + 'title').textContent = props.taskName
+            document.getElementById(props.taskID + 'title').textContent = currentName
         }
     }
 
@@ -44,6 +41,11 @@ export default function ListViewTaskTitle(props) {
                 el.focus()
             }
         }
+        API.getTask(props.taskID).then((getTaskRes) => {
+            currentName = getTaskRes.data.task_name
+            document.addEventListener('mousedown', handleMouseDownEvent)
+            console.log(currentName)
+        })
     }, [taskNameEdit])
 
     function handleTaskNameEdit() { 
@@ -60,6 +62,7 @@ export default function ListViewTaskTitle(props) {
         if (event.key === 'Enter') {  
             setTaskNameEdit(false)
             editing = false
+            currentName = newTaskName
             let taskName = {
                 task_name: newTaskName
             }
