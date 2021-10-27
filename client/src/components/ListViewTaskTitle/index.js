@@ -41,11 +41,6 @@ export default function ListViewTaskTitle(props) {
                 el.focus()
             }
         }
-        API.getTask(props.taskID).then((getTaskRes) => {
-            currentName = getTaskRes.data.task_name
-            document.addEventListener('mousedown', handleMouseDownEvent)
-            console.log(currentName)
-        })
     }, [taskNameEdit])
 
     function handleTaskNameEdit() { 
@@ -67,6 +62,7 @@ export default function ListViewTaskTitle(props) {
                 task_name: newTaskName
             }
             API.updateTask(props.taskID, taskName)
+            document.addEventListener('mousedown', handleMouseDownEvent)
         }
     }
 
