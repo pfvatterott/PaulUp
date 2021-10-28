@@ -115,7 +115,11 @@ export default function TaskOptionsDropdown(props) {
                             <Icon className="left">edit</Icon>
                         </div>
                     Rename</a>
-                    <a>Add to Favorites</a>
+                    <a>
+                        <div>
+                            <Icon className="left">add</Icon>
+                        </div> 
+                    Add to Favorites</a>
                    
             </Dropdown>
 
