@@ -11,19 +11,16 @@ import StatusBox from "../components/StatusBox";
 import DateSelector from "../components/DateSelector";
 // import { List } from "@material-ui/icons";
 
-
-
 function taskView() {
     const location = useLocation()
     const [currentList, setCurrentList] = useState([])
     const [listStatuses, setListStatuses] = useState([])
     const [newTaskName, setNewTaskName] = useState('')
-    const [listTasks, setListTasks] = useState([])
+    const [listTasks, setListTasks] = useState([])  
     const [taskNameLabel, setTaskNameLabel]= useState('Task Name')
     const [openTaskView, setOpenTaskView] = useState(false)
     const [taskViewTask, setTaskViewTask] = useState('')
     const [value, setValue] = useState(0);
-    const [taskNameEdit, setTaskNameEdit] = useState(false)
     let userIdVariable = location.state
 
     useEffect(() => {
@@ -127,11 +124,6 @@ function taskView() {
         }
     }
 
-    function handleTaskNameEdit(id, name) { 
-        console.log(name)
-        setTaskNameEdit(true)
-    }
-
     function handleOpenTaskView(task_id) {
         setTaskViewTask(task_id)
         setOpenTaskView(true)
@@ -141,6 +133,16 @@ function taskView() {
     function handleTaskViewClose() {
         setOpenTaskView(false)
     }
+
+    function updateTask(task_id, newTaskData) {
+        API.updateTask(task_id, newTaskData).then((updateTaskResponse) => {
+            API.getList(currentList._id).then((getListResponse) => {
+                setCurrentList(getListResponse.data)
+                handleGetListTasks(currentList._id)
+            })
+        })
+    }
+ 
 
 
     return (
@@ -184,7 +186,7 @@ function taskView() {
                                             <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
                                             <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>   
                                             <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>
-                                            <TaskOptionsDropdown id={task._id} list={task.list_id} orderIndex={task.order_index} handleGetListTasks={(a) => handleGetListTasks(a)}/>
+                                            <TaskOptionsDropdown id={task._id} list={task.list_id} orderIndex={task.order_index} handleGetListTasks={(a) => handleGetListTasks(a)} taskName={task.task_name} updateTask={(a, b) => updateTask(a, b)}/>
                                         </tr>
                                     })}         
                                     </tbody>

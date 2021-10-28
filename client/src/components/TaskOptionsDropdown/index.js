@@ -1,9 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, Button, Divider, Icon } from "react-materialize";
+import { Dropdown, Button, Divider, Icon, Modal, TextInput } from "react-materialize";
 import API from "../../utils/API"
 import "./style.css"
 
 export default function TaskOptionsDropdown(props) {
+    const [openEditTaskModal, setOpenEditTaskModal] = useState(false);
+    const [newTaskName, setNewTaskName] = useState("");
+
+    useEffect(() => {
+        if (openEditTaskModal) {
+            document.addEventListener('mousedown', handleMouseDownEvent)
+            document.getElementById(props.id + "rename_task_form").focus()
+        }
+    }, [openEditTaskModal])
+
+    function handleMouseDownEvent(e) {
+        if (openEditTaskModal && !document.getElementById(props.id + 'editTaskModal').contains(e.target)) {
+            document.removeEventListener('mousedown', handleMouseDownEvent)
+            setOpenEditTaskModal(false);
+            setNewTaskName("");
+        }
+    }
 
     function handleDeleteTask(id) {
         API.getList(props.list).then((getListResponse) => {
@@ -43,6 +60,27 @@ export default function TaskOptionsDropdown(props) {
         })
     }
 
+    function handleOpenEditTaskModal() {
+        setOpenEditTaskModal(true);
+    }
+
+    function handleTaskNameChange(event) {
+        const name = event.target.value;
+        setNewTaskName(name);
+    }
+
+    function handleSaveTaskName(event) {
+        if (event.key === 'Enter') {  
+            setNewTaskName(false)
+            let taskName = {
+                task_name: newTaskName
+            }
+            props.updateTask(props.id, taskName)
+            document.removeEventListener('mousedown', handleMouseDownEvent)
+            setOpenEditTaskModal(false);
+        }
+    }
+
 
     return (
         <td>
@@ -72,7 +110,7 @@ export default function TaskOptionsDropdown(props) {
                         </div>
                     Delete
                     </a>
-                    <a>
+                    <a onClick={() => handleOpenEditTaskModal()}>
                         <div>
                             <Icon className="left">edit</Icon>
                         </div>
@@ -80,6 +118,24 @@ export default function TaskOptionsDropdown(props) {
                     <a>Add to Favorites</a>
                    
             </Dropdown>
+
+            <Modal
+                open={openEditTaskModal}
+                id={props.id + 'editTaskModal'}
+                className='center-align'
+                actions={[]}
+                options={{
+                dismissible: true
+                }}>
+                <h3>Rename your list:</h3>
+                <br></br>
+                <TextInput
+                onChange={handleTaskNameChange}
+                id={props.id + "rename_task_form"}
+                defaultValue={props.taskName}
+                onKeyDown={handleSaveTaskName}
+                ></TextInput>
+            </Modal>
         </td>
     )
 }
