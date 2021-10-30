@@ -5,6 +5,7 @@
   "private": true,
   "proxy": "http://localhost:3001/",
   "dependencies": {
+    "@syncfusion/ej2-react-navigations": "^19.3.46",
     "axios": "^0.21.1",
     "google-oauth": "0.0.2",
     "materialize-css": "^1.0.0",

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { SideNav, Button, Col, Row, Modal, TextInput, CardPanel } from 'react-materialize'
-import classnames from 'classnames';
+import { SideNav, Button, Col, Row, Modal, TextInput, Icon } from 'react-materialize'
+import { TreeViewComponent } from '@syncfusion/ej2-react-navigations';
+import { enableRipple } from '@syncfusion/ej2-base';
 import { useLocation, Redirect } from "react-router-dom";
 import API from "../../utils/API"
 import "./style.css"
@@ -30,7 +31,9 @@ export default function CustomSideNav() {
   const [userID, setUserID] = useState('')
   const [location, setLocation] = useState(useLocation())
   const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const [newList, setNewList] = useState([])
   let userIdVariable = location.state
+  enableRipple(true);
 
 
   useEffect(() => {
@@ -44,6 +47,7 @@ export default function CustomSideNav() {
       handleGetWorkspaces()
       handleGetUser()
     }
+    setNewList(newData)
     
     var x = document.getElementsByClassName("rstm-tree-item-level0")
   }, [])
@@ -429,6 +433,107 @@ export default function CustomSideNav() {
     setRedirectToList(true)
   }
 
+  const fields =  [
+    { id: '01', name: 'Local Disk (C:)',
+        subChild: [
+            {
+                id: '01-01', name: 'Program Files',
+                subChild: [
+                    { id: '01-01-01', name: '7-Zip' },
+                    { id: '01-01-02', name: 'Git' },
+                    { id: '01-01-03', name: 'IIS Express' },
+                ]
+            },
+            {
+                id: '01-02', name: 'Users',
+                subChild: [
+                    { id: '01-02-01', name: 'Smith' },
+                    { id: '01-02-02', name: 'Public' },
+                    { id: '01-02-03', name: 'Admin' },
+                ]
+            },
+            {
+                id: '01-03', name: 'Windows',
+                subChild: [
+                    { id: '01-03-01', name: 'Boot' },
+                    { id: '01-03-02', name: 'FileManager' },
+                    { id: '01-03-03', name: 'System32' },
+                ]
+            },
+        ]
+    },
+    {
+        id: '02', name: 'Local Disk (D:)',
+        subChild: [
+            {
+                id: '02-01', name: 'Personals',
+                subChild: [
+                    { id: '02-01-01', name: 'My photo.png' },
+                    { id: '02-01-02', name: 'Rental document.docx' },
+                    { id: '02-01-03', name: 'Pay slip.pdf' },
+                ]
+            },
+            {
+                id: '02-02', name: 'Projects',
+                subChild: [
+                    { id: '02-02-01', name: 'ASP Application' },
+                    { id: '02-02-02', name: 'TypeScript Application' },
+                    { id: '02-02-03', name: 'React Application' },
+                ]
+            },
+            {
+                id: '02-03', name: 'Office',
+                subChild: [
+                    { id: '02-03-01', name: 'Work details.docx' },
+                    { id: '02-03-02', name: 'Weekly report.docx' },
+                    { id: '02-03-03', name: 'Wish list.csv' },
+                ]
+            },
+        ]
+    },
+    {
+        id: '03', name: 'Local Disk (E:)', icon: 'folder',
+        subChild: [
+            {
+                id: '03-01', name: 'Pictures',
+                subChild: [
+                    { id: '03-01-01', name: 'Wind.jpg' },
+                    { id: '03-01-02', name: 'Stone.jpg' },
+                    { id: '03-01-03', name: 'Home.jpg' },
+                ]
+            },
+            {
+                id: '03-02', name: 'Documents',
+                subChild: [
+                    { id: '03-02-01', name: 'Environment Pollution.docx' },
+                    { id: '03-02-02', name: 'Global Warming.ppt' },
+                    { id: '03-02-03', name: 'Social Network.pdf' },
+                ]
+            },
+            {
+                id: '03-03', name: 'Study Materials',
+                subChild: [
+                    { id: '03-03-01', name: 'UI-Guide.pdf' },
+                    { id: '03-03-02', name: 'Tutorials.zip' },
+                    { id: '03-03-03', name: 'TypeScript.7z' },
+                ]
+            },
+        ]
+    }
+];
+
+  const newData = {dataSource: fields,  id: 'id', text: 'name', child: 'subChild'}
+
+  function handleNodeClick(e) {
+    console.log(e)
+  }
+
+  function nodeTemplate(data) {
+    return (<div>
+    <Icon>add</Icon>
+    <div>{data.name}</div>
+  </div>);
+  }
 
   return (
     <div>
@@ -460,6 +565,11 @@ export default function CustomSideNav() {
             <Button
               onClick={handleOpenCreateSpaceModal}
             >New Space</Button>
+          </Col>
+        </Row>
+        <Row className="left-align">
+          <Col s={12} className="left-align">
+            <TreeViewComponent fields={newList} allowDragAndDrop={true} className="left-align" cssClass={"custom"} nodeClicked={(event) => handleNodeClick(event)} nodeTemplate={(newList) => nodeTemplate(newList)}/>
           </Col>
         </Row>
         <Row>
