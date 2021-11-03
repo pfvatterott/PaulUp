@@ -47,7 +47,7 @@ export default function CustomSideNav() {
       handleGetWorkspaces()
       handleGetUser()
     }
-    setNewList(newData)
+    // setNewList(newData)
     
     var x = document.getElementsByClassName("rstm-tree-item-level0")
   }, [])
@@ -134,7 +134,7 @@ export default function CustomSideNav() {
       }
       else if (getUserWorkspacesResponse.data.length === 1) {
         setWorkspaceData(getUserWorkspacesResponse.data[0])
-        handleTreeRefresh(getUserWorkspacesResponse.data[0]._id)
+        handleTreeRefreshNew(getUserWorkspacesResponse.data[0]._id)
       }
       else {
         console.log('need to set up a way to switch workspaces')
@@ -145,116 +145,6 @@ export default function CustomSideNav() {
   function handleGetUser() {
     API.getUser(userIdVariable).then((getUserResponse) => {
       setUserData(getUserResponse.data[0])
-    })
-  }
-
-  function handleTreeRefresh(workspace_id) {
-    API.getWorkspaceSpaces(workspace_id).then((workspaceSpacesResponse) => {
-      const spacesArray = workspaceSpacesResponse.data
-      let newTreeData = []
-      for (let i = 0; i < spacesArray.length; i++) {
-        let nodeArray = []
-        // Creating nodes for folder-less Lists
-        API.getSpaceLists(spacesArray[i]._id).then((getSpaceListsResponse) => {
-          if (getSpaceListsResponse.data.length !== 0) {
-            for (let g = 0; g < getSpaceListsResponse.data.length; g++) {
-              let listObj = {
-                key: getSpaceListsResponse.data[g]._id,
-                label: getSpaceListsResponse.data[g].list_name,
-                order_index: (getSpaceListsResponse.data[g].order_index + spacesArray[i].folders.length),
-                onClickNode: 'openList',
-                class: 'list_item'
-              }
-              nodeArray.push(listObj)
-            }
-            nodeArray.push({
-              key: 'create_new',
-              label: 'Create new Folder or List',
-              class: 'create_new',
-              onClickNode: 'openCreateFolderList',
-              id: '123'
-            })
-          }
-          else {
-            nodeArray = [{
-              key: 'create_new',
-              class: 'create_new',
-              label: 'Create new Folder or List',
-              onClickNode: 'openCreateFolderList'
-            }]
-          }
-          let spaceTreeData = {
-            key: spacesArray[i]._id,
-            label: spacesArray[i].space_name,
-            onClickNode: '123',
-            order_index: spacesArray[i].order_index,
-            nodes: nodeArray,
-            class: 'space_item',
-          }
-          newTreeData.push(spaceTreeData)
-        })
-        // Creating nodes for Folders
-        API.getSpaceFolders(spacesArray[i]._id).then((getSpaceFolderResponse) => {
-          for (let j = 0; j < getSpaceFolderResponse.data.length; j++) {
-            let listArray = []
-            if (getSpaceFolderResponse.data[j].lists.length === 0 ) {
-                listArray.push({
-                key: 'create_new',
-                label: 'Create new List',
-                onClickNode: 'openCreateListForFolder',
-                class: 'create_new',
-                id: '123'
-              })
-              let folderObj = {
-                key: getSpaceFolderResponse.data[j]._id,
-                label: getSpaceFolderResponse.data[j].folder_name,
-                order_index: getSpaceFolderResponse.data[j].order_index,
-                class: 'folder_item',
-                nodes: listArray
-              }
-              nodeArray.unshift(folderObj)
-              nodeArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
-            }
-            else {
-              API.getFolderLists(getSpaceFolderResponse.data[j]._id).then((getFolderListsResponse) => {
-                  for (let o = 0; o < getFolderListsResponse.data.length; o++) {
-                    let listObj = {
-                      key: getFolderListsResponse.data[o]._id,
-                      label: getFolderListsResponse.data[o].list_name,
-                      order_index: getFolderListsResponse.data[o].order_index,
-                      onClickNode: 'openFolderList',
-                      class: 'list_item',
-                    }
-                    listArray.push(listObj)
-                  }
-                  listArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
-                  listArray.push({
-                    key: 'create_new',
-                    label: 'Create new List',
-                    onClickNode: 'openCreateListForFolder',
-                    class: 'create_new',
-                    id: '123'
-                  })
-                  let folderObj = {
-                    key: getSpaceFolderResponse.data[j]._id,
-                    label: getSpaceFolderResponse.data[j].folder_name,
-                    order_index: getSpaceFolderResponse.data[j].order_index,
-                    nodes: listArray,
-                    class: 'folder_item',
-                  }
-                  nodeArray.unshift(folderObj)
-                  nodeArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
-                
-              })
-            }
-          }
-        })
-      }
-
-      setTimeout(function () {
-        newTreeData.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
-        setTreeData(newTreeData)
-      }, 1000)
     })
   }
 
@@ -288,16 +178,16 @@ export default function CustomSideNav() {
   }
 
   function handleOpenCreateNewFolderOrListModal(key) {
+    console.log(key)
     setOpenCreateNewFolderOrListModal(true)
     let newKey = key.replace('/create_new', '')
     setCurrentSpace(newKey)
   }
 
   function handleOpenCreateListForFolder(key) {
+    console.log(key)
     setOpenCreateNewListForFolderModal(true)
-    let newKey = key.replace('/create_new', '')
-    newKey = newKey.substring(newKey.indexOf("/") + 1);
-    setCurrentFolder(newKey)
+    setCurrentFolder(key)
   }
 
   function handleOpenCreateListModal() {
@@ -433,106 +323,140 @@ export default function CustomSideNav() {
     setRedirectToList(true)
   }
 
-  const fields =  [
-    { id: '01', name: 'Local Disk (C:)',
-        subChild: [
-            {
-                id: '01-01', name: 'Program Files',
-                subChild: [
-                    { id: '01-01-01', name: '7-Zip' },
-                    { id: '01-01-02', name: 'Git' },
-                    { id: '01-01-03', name: 'IIS Express' },
-                ]
-            },
-            {
-                id: '01-02', name: 'Users',
-                subChild: [
-                    { id: '01-02-01', name: 'Smith' },
-                    { id: '01-02-02', name: 'Public' },
-                    { id: '01-02-03', name: 'Admin' },
-                ]
-            },
-            {
-                id: '01-03', name: 'Windows',
-                subChild: [
-                    { id: '01-03-01', name: 'Boot' },
-                    { id: '01-03-02', name: 'FileManager' },
-                    { id: '01-03-03', name: 'System32' },
-                ]
-            },
-        ]
-    },
-    {
-        id: '02', name: 'Local Disk (D:)',
-        subChild: [
-            {
-                id: '02-01', name: 'Personals',
-                subChild: [
-                    { id: '02-01-01', name: 'My photo.png' },
-                    { id: '02-01-02', name: 'Rental document.docx' },
-                    { id: '02-01-03', name: 'Pay slip.pdf' },
-                ]
-            },
-            {
-                id: '02-02', name: 'Projects',
-                subChild: [
-                    { id: '02-02-01', name: 'ASP Application' },
-                    { id: '02-02-02', name: 'TypeScript Application' },
-                    { id: '02-02-03', name: 'React Application' },
-                ]
-            },
-            {
-                id: '02-03', name: 'Office',
-                subChild: [
-                    { id: '02-03-01', name: 'Work details.docx' },
-                    { id: '02-03-02', name: 'Weekly report.docx' },
-                    { id: '02-03-03', name: 'Wish list.csv' },
-                ]
-            },
-        ]
-    },
-    {
-        id: '03', name: 'Local Disk (E:)', icon: 'folder',
-        subChild: [
-            {
-                id: '03-01', name: 'Pictures',
-                subChild: [
-                    { id: '03-01-01', name: 'Wind.jpg' },
-                    { id: '03-01-02', name: 'Stone.jpg' },
-                    { id: '03-01-03', name: 'Home.jpg' },
-                ]
-            },
-            {
-                id: '03-02', name: 'Documents',
-                subChild: [
-                    { id: '03-02-01', name: 'Environment Pollution.docx' },
-                    { id: '03-02-02', name: 'Global Warming.ppt' },
-                    { id: '03-02-03', name: 'Social Network.pdf' },
-                ]
-            },
-            {
-                id: '03-03', name: 'Study Materials',
-                subChild: [
-                    { id: '03-03-01', name: 'UI-Guide.pdf' },
-                    { id: '03-03-02', name: 'Tutorials.zip' },
-                    { id: '03-03-03', name: 'TypeScript.7z' },
-                ]
-            },
-        ]
-    }
-];
+  function handleTreeRefreshNew(workspace_id) {
+    API.getWorkspaceSpaces(workspace_id).then((workspaceSpacesResponse) => {
+      const spacesArray = workspaceSpacesResponse.data
+      let newTreeData = []
+      for (let i = 0; i < spacesArray.length; i++) {
+        let nodeArray = []
+        // Creating nodes for folder-less Lists
+        API.getSpaceLists(spacesArray[i]._id).then((getSpaceListsResponse) => {
+          if (getSpaceListsResponse.data.length !== 0) {
+            for (let g = 0; g < getSpaceListsResponse.data.length; g++) {
+              let listObj = {
+                id: getSpaceListsResponse.data[g]._id,
+                name: getSpaceListsResponse.data[g].list_name,
+                order_index: (getSpaceListsResponse.data[g].order_index + spacesArray[i].folders.length),
+                onClickNode: 'openList',
+                class: 'list_item'
+              }
+              nodeArray.push(listObj)
+            }
+            nodeArray.push({
+              id: spacesArray[i]._id,
+              name: 'Create new Folder or List',
+              class: 'create_new',
+              onClickNode: 'openCreateFolderList',
+            })
+          }
+          else {
+            nodeArray = [{
+              id: spacesArray[i]._id,
+              class: 'create_new',
+              name: 'Create new Folder or List',
+              onClickNode: 'openCreateFolderList'
+            }]
+          }
+          let spaceTreeData = {
+            id: spacesArray[i]._id,
+            name: spacesArray[i].space_name,
+            onClickNode: '123',
+            order_index: spacesArray[i].order_index,
+            subChild: nodeArray,
+            class: 'space_item',
+          }
+          newTreeData.push(spaceTreeData)
+        })
+        // Creating nodes for Folders
+        API.getSpaceFolders(spacesArray[i]._id).then((getSpaceFolderResponse) => {
+          for (let j = 0; j < getSpaceFolderResponse.data.length; j++) {
+            let listArray = []
+            if (getSpaceFolderResponse.data[j].lists.length === 0 ) {
+                listArray.push({
+                name: 'Create new List',
+                onClickNode: 'openCreateListForFolder',
+                class: 'create_new_list_for_folder',
+                id: getSpaceFolderResponse.data[j]._id
+              })
+              let folderObj = {
+                id: getSpaceFolderResponse.data[j]._id,
+                name: getSpaceFolderResponse.data[j].folder_name,
+                order_index: getSpaceFolderResponse.data[j].order_index,
+                class: 'folder_item',
+                subChild: listArray
+              }
+              nodeArray.unshift(folderObj)
+              nodeArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
+            }
+            else {
+              API.getFolderLists(getSpaceFolderResponse.data[j]._id).then((getFolderListsResponse) => {
+                  for (let o = 0; o < getFolderListsResponse.data.length; o++) {
+                    let listObj = {
+                      id: getFolderListsResponse.data[o]._id,
+                      name: getFolderListsResponse.data[o].list_name,
+                      order_index: getFolderListsResponse.data[o].order_index,
+                      onClickNode: 'openFolderList',
+                      class: 'folder_list_item',
+                    }
+                    listArray.push(listObj)
+                  }
+                  listArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
+                  listArray.push({
+                    id: getSpaceFolderResponse.data[j]._id,
+                    name: 'Create new List',
+                    onClickNode: 'openCreateListForFolder',
+                    class: 'create_new_list_for_folder',
+                  })
+                  let folderObj = {
+                    id: getSpaceFolderResponse.data[j]._id,
+                    name: getSpaceFolderResponse.data[j].folder_name,
+                    order_index: getSpaceFolderResponse.data[j].order_index,
+                    subChild: listArray,
+                    class: 'folder_item',
+                  }
+                  nodeArray.unshift(folderObj)
+                  nodeArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
+                
+              })
+            }
+          }
+        })
+      }
 
-  const newData = {dataSource: fields,  id: 'id', text: 'name', child: 'subChild'}
-
-  function handleNodeClick(e) {
-    console.log(e)
+      setTimeout(function () {
+        newTreeData.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
+        const newData = {dataSource: newTreeData,  id: 'id', text: 'name', child: 'subChild'}
+        setTreeData(newData)
+      }, 1000)
+    })
   }
 
   function nodeTemplate(data) {
-    return (<div>
-    <Icon>add</Icon>
-    <div>{data.name}</div>
-  </div>);
+    if (data.class === 'space_item') { return (<div>
+      <Icon className="left">fiber_manual_record</Icon>
+      <p>{data.name}</p>
+      </div>)}
+    else if (data.class === 'folder_item') { return (<div>
+      <Icon className="left">folder</Icon>
+      <p>{data.name}</p>
+      </div>)}
+    else if (data.class === 'folder_list_item') { return (<div onClick={() => handleOpenFolderList(data.id)}>
+      <Icon className="left">format_list_bulleted</Icon>
+      <p>{data.name}</p>
+      </div>)}
+    else if (data.class === 'list_item') { return (<div onClick={() => handleOpenList(data.id)}>
+      <Icon className="left">format_list_bulleted</Icon>
+      <p>{data.name}</p>
+      </div>)}
+    else if (data.class === 'create_new_list_for_folder') { return (<div onClick={() => handleOpenCreateListForFolder(data.id)}>
+      <Icon className="left">add</Icon>
+      <p>{data.name}</p>
+      </div>)}
+    else {
+      return (<div onClick={() => handleOpenCreateNewFolderOrListModal(data.id)}>
+      <Icon className="left">add</Icon>
+      <p>{data.name}</p>
+    </div>)};
   }
 
   return (
@@ -569,50 +493,7 @@ export default function CustomSideNav() {
         </Row>
         <Row className="left-align">
           <Col s={12} className="left-align">
-            <TreeViewComponent fields={newList} allowDragAndDrop={true} className="left-align" cssClass={"custom"} nodeClicked={(event) => handleNodeClick(event)} nodeTemplate={(newList) => nodeTemplate(newList)}/>
-          </Col>
-        </Row>
-        <Row>
-          <Col s={12}>
-            <TreeMenu
-              data={treeData}
-              onClickItem={({ onClickNode, key }) => {
-                if (onClickNode === 'openCreateFolderList') {
-                  handleOpenCreateNewFolderOrListModal(key)
-                }
-                else if (onClickNode === 'openCreateListForFolder') {
-                  handleOpenCreateListForFolder(key)
-                }
-                else if (onClickNode === 'openList') {
-                  handleOpenList(key)
-                }
-                else if (onClickNode === 'openFolderList') {
-                  handleOpenFolderList(key)
-                }
-              }}
-              debounceTime={75}
-            >
-              {({ search, items }) => (
-                <div>
-                  <Row>
-                    <Col s={12}>
-                      <TextInput className='sidebar_search' onChange={e => search(e.target.value)} placeholder="Type and search"/>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col s={12}>
-                      <ul className="tree_element">
-                          {items.map(({key, ...props}) => (
-                            <div className={props.class}>
-                            <ItemComponent key={key} {...props} />
-                            </div>
-                          ))}
-                      </ul>
-                    </Col>
-                  </Row>
-                </div>  
-              )}
-            </TreeMenu>
+            <TreeViewComponent fields={treeData} allowDragAndDrop={true} nodeTemplate={(newList) => nodeTemplate(newList)}/>
           </Col>
         </Row>
       </SideNav>

@@ -54,12 +54,6 @@
     margin-left: 20px !important;
     width: 250px !important;
 }
-.e-treeview {
-    /* margin-left: -70px !important; */
-    height: 100% !important;
-    width: 100% !important;
-    float: left !important;
-}
 
 .e-list-item {
     height: 100% !important;
@@ -70,6 +64,8 @@
     height: 50px !important;
     width: 100% !important;
 }
+
+
 
 
 
