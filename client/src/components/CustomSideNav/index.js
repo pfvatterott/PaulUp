@@ -431,6 +431,7 @@ export default function CustomSideNav() {
     })
   }
 
+
   function nodeTemplate(data) {
     if (data.class === 'space_item') { return (<div>
       <Icon className="left">fiber_manual_record</Icon>
@@ -493,7 +494,7 @@ export default function CustomSideNav() {
         </Row>
         <Row className="left-align">
           <Col s={12} className="left-align">
-            <TreeViewComponent fields={treeData} allowDragAndDrop={true} nodeTemplate={(newList) => nodeTemplate(newList)}/>
+            <TreeViewComponent fields={treeData} allowDragAndDrop={true} nodeTemplate={(newList) => nodeTemplate(newList)} expandOn={'Click'} enablePersistence={true}/>
           </Col>
         </Row>
       </SideNav>
