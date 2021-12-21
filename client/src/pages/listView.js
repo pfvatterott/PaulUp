@@ -39,10 +39,9 @@ function taskView() {
                 handleGetListTasks(currentListVar)
             })            
         }
-    }, [location, openTaskView])
+    }, [location, openTaskView, value])
     
     useEffect(() => {
-        console.log('going')
     }, [userFavorites])
 
     // forces re-render of DOM
@@ -73,6 +72,7 @@ function taskView() {
                 type: type,
                 status: name
             },
+            favorited: [],
             order_index: currentList.tasks.length
         }
         API.saveTask(newTask).then((saveTaskResponse) => {
@@ -161,7 +161,7 @@ function taskView() {
         <div>
             <Row>
                 <Col s={0} l={3}>
-                    <CustomSideNav userFavorites={userFavorites} handleSetUserFavorites={(x) => handleSetUserFavorites(x)}></CustomSideNav>
+                    <CustomSideNav userFavorites={userFavorites} handleSetUserFavorites={(x) => handleSetUserFavorites(x)} value={value} setValue={(x) => setValue(x)}></CustomSideNav>
                 </Col>
                 <Col s={12} l={8} className="container">
                     <Row>
@@ -228,7 +228,7 @@ function taskView() {
                                             <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
                                             <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>   
                                             <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>
-                                            <TaskOptionsDropdown id={task._id} list={task.list_id} orderIndex={task.order_index} handleGetListTasks={(a) => handleGetListTasks(a)} taskName={task.task_name} userFavorites={userFavorites} setUserFavorites={(x) => handleSetUserFavorites(x)} updateTask={(a, b) => updateTask(a, b)}/>
+                                            <TaskOptionsDropdown favorited={task.favorited} id={task._id} list={task.list_id} orderIndex={task.order_index} handleGetListTasks={(a) => handleGetListTasks(a)} taskName={task.task_name} userFavorites={userFavorites} setUserFavorites={(x) => handleSetUserFavorites(x)} updateTask={(a, b) => updateTask(a, b)}/>
                                         </tr>
                                     })}         
                                     </tbody>
@@ -277,7 +277,7 @@ function taskView() {
                                             <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
                                             <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>   
                                             <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>
-                                            <TaskOptionsDropdown id={task._id} list={task.list_id} orderIndex={task.order_index} handleGetListTasks={(a) => handleGetListTasks(a)} taskName={task.task_name} updateTask={(a, b) => updateTask(a, b)}/>
+                                            <TaskOptionsDropdown favorited={task.favorited} id={task._id} list={task.list_id} orderIndex={task.order_index} handleGetListTasks={(a) => handleGetListTasks(a)} taskName={task.task_name} setUserFavorites={(x) => handleSetUserFavorites(x)} updateTask={(a, b) => updateTask(a, b)}/>
                                         </tr>
                                     })}         
                                     </tbody>

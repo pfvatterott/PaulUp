@@ -100,6 +100,42 @@ export default function TaskOptionsDropdown(props) {
                 props.setUserFavorites(oldFavorites)
             })
         })
+        let oldFavorited = props.favorited
+        oldFavorited.push(props.id)
+        let newFavorited = {
+            favorited: oldFavorited
+        }
+        API.updateTask(id, newFavorited).then((res) => {
+        })
+    }
+
+    function handleRemoveFromTaskFavorites(id) {
+        console.log('working')
+        API.getUser(userIdVariable).then((getUserRes) => {
+            let oldFavorites = getUserRes.data.favorites
+            for (let i = 0; i < oldFavorites.length; i++) {
+                if (oldFavorites[i].id === id && oldFavorites[i].type === 'task') {
+                    oldFavorites.splice(i, 1)
+                }
+            }
+            let updatedUserFavorites = {
+                favorites: oldFavorites
+            }
+            API.updateUser(userIdVariable, updatedUserFavorites).then((res) => {
+                props.setUserFavorites(oldFavorites)
+            })
+        })
+        let oldFavorited = props.favorited
+        for (let i = 0; i < oldFavorited.length; i++) {
+            if (oldFavorited[i] === id) {
+                oldFavorited.splice(i, 1)
+            }
+        }
+        let newFavorited = {
+            favorited: oldFavorited
+        }
+        API.updateTask(id, newFavorited).then((res) => {
+        })
     }
 
 
@@ -136,12 +172,19 @@ export default function TaskOptionsDropdown(props) {
                             <Icon className="left">edit</Icon>
                         </div>
                     Rename</a>
+                    {props.favorited && props.favorited.includes(props.id) ? (
+                    <a onClick={() => handleRemoveFromTaskFavorites(props.id)}>
+                        <div>
+                            <Icon className="left">do_not_disturb</Icon>
+                        </div> 
+                    Remove from Favorites</a>
+                     ) : 
                     <a onClick={() => handleAddToTaskFavorites(props.id)}>
                         <div>
                             <Icon className="left">add</Icon>
                         </div> 
                     Add to Favorites</a>
-                   
+                    }
             </Dropdown>
 
             <Modal

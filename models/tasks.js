@@ -13,7 +13,8 @@ const taskSchema = new mongoose.Schema({
   task_status: {
     type: { type: String },
     status: { type: String }
-  }
+  },
+  favorited: [ String ]
 });
 
 const Task = mongoose.model("Task", taskSchema);

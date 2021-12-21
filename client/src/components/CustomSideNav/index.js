@@ -144,7 +144,9 @@ export default function CustomSideNav(props) {
   function handleGetUser() {
     API.getUser(userIdVariable).then((getUserResponse) => {
       setUserData(getUserResponse.data)
-      props.handleSetUserFavorites(getUserResponse.data.favorites)
+      if (props.handleSetUserFavorites) {
+        props.handleSetUserFavorites(getUserResponse.data.favorites)
+      }
     })
   }
 
@@ -487,7 +489,7 @@ export default function CustomSideNav(props) {
         </Row>
         <Row className="left-align">
           <Col s={12} className="left-align">
-            <FavoritesMenu userFavorites={props.userFavorites}/>
+            <FavoritesMenu value={props.value} setValue={(x) => props.setValue(x)} userFavorites={props.userFavorites} setUserFavorites={(x) => props.handleSetUserFavorites(x)}/>
           </Col>
         </Row>
         <Row className="left-align">
