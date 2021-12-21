@@ -3,6 +3,7 @@ import { SideNav, Button, Col, Row, Modal, TextInput, Icon } from 'react-materia
 import { TreeViewComponent } from '@syncfusion/ej2-react-navigations';
 import { enableRipple } from '@syncfusion/ej2-base';
 import { useLocation, Redirect } from "react-router-dom";
+import FavoritesMenu from "../FavoritesMenu/index.js";
 import API from "../../utils/API"
 import "./style.css"
 import GoogleLogin from "react-google-login";
@@ -484,11 +485,21 @@ export default function CustomSideNav() {
             <p className="left padding-left">Workspace: {workspaceData.workspace_name}</p>
           </Col>
         </Row>
+        <Row className="left-align">
+          <Col s={12} className="left-align">
+            <FavoritesMenu/>
+          </Col>
+        </Row>
         <Row>
           <Col s={12}>
             <Button
               onClick={handleOpenCreateSpaceModal}
             >New Space</Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col s={12}>
+            <p className="left padding-left">Spaces:</p>
           </Col>
         </Row>
         <Row className="left-align">

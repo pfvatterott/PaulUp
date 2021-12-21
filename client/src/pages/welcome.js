@@ -21,7 +21,8 @@ const googleSuccess = async (response) => {
         lastName: userObj.familyName,
         image: userObj.imageUrl,
         googleId: userObj.googleId,
-        listedItems: []
+        listedItems: [],
+        favorites: []
     }
     API.getUserByGoogleId(userObj.googleId).then(res => {
         if (res.data.length > 0) {

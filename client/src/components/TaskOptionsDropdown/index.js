@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown, Button, Divider, Icon, Modal, TextInput } from "react-materialize";
+import { useLocation } from "react-router-dom";
 import API from "../../utils/API"
 import "./style.css"
 
 export default function TaskOptionsDropdown(props) {
+    const location = useLocation()
     const [openEditTaskModal, setOpenEditTaskModal] = useState(false);
     const [newTaskName, setNewTaskName] = useState("");
+    let userIdVariable = location.state
 
     useEffect(() => {
         if (openEditTaskModal) {
@@ -81,8 +84,22 @@ export default function TaskOptionsDropdown(props) {
         }
     }
 
-    function handleAddToTaskFavorites() {
-        console.log('working')
+    function handleAddToTaskFavorites(id) {
+        API.getUser(userIdVariable).then((getUserRes) => {
+            let oldFavorites = getUserRes.data.favorites
+            let newFavorite = {
+                id: id,
+                name: props.taskName,
+                type: 'task'
+            }
+            oldFavorites.push(newFavorite)
+            let updatedUserFavorites = {
+                favorites: oldFavorites
+            }
+            API.updateUser(userIdVariable, updatedUserFavorites).then((res) => {
+            })
+        })
+
     }
 
 
@@ -119,7 +136,7 @@ export default function TaskOptionsDropdown(props) {
                             <Icon className="left">edit</Icon>
                         </div>
                     Rename</a>
-                    <a onClick={() => handleAddToTaskFavorites()}>
+                    <a onClick={() => handleAddToTaskFavorites(props.id)}>
                         <div>
                             <Icon className="left">add</Icon>
                         </div> 
