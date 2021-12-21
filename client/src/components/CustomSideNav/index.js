@@ -5,7 +5,6 @@ import { enableRipple } from '@syncfusion/ej2-base';
 import { useLocation, Redirect } from "react-router-dom";
 import API from "../../utils/API"
 import "./style.css"
-import TreeMenu, { ItemComponent, defaultChildren } from 'react-simple-tree-menu';
 import GoogleLogin from "react-google-login";
 import '../../../node_modules/react-simple-tree-menu/dist/main.css';
 

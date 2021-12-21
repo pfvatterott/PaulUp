@@ -23,7 +23,14 @@ const usersSchema = new mongoose.Schema({
       type: String
   },
 
-  workspaces: [String]
+  workspaces: [String],
+
+  favorites: {
+    spaces: { type: [String] },
+    folders: { type: [String] },
+    lists: { type: [String] },
+    tasks: { type: [String] }
+  }
 
 });
 

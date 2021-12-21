@@ -21,6 +21,7 @@ function taskView() {
     const [openTaskView, setOpenTaskView] = useState(false)
     const [taskViewTask, setTaskViewTask] = useState('')
     const [value, setValue] = useState(0);
+    const [groupBy, setGroupBy] = useState('status')
     let userIdVariable = location.state
 
     useEffect(() => {
@@ -142,9 +143,11 @@ function taskView() {
             })
         })
     }
+
+    function handleGroupByChange(x) {
+        setGroupBy(x)
+    }
  
-
-
     return (
         <div>
             <Row>
@@ -156,10 +159,40 @@ function taskView() {
                         <Col s={3}>
                             <h3 className="left">{currentList.list_name}</h3>
                         </Col>
-                        <Col s={9}></Col>
+                        <Col s={9}>
+                        </Col>
                     </Row>
-
-                    {listStatuses ? listStatuses.map(item => (
+                    <Row>
+                        <Col s={9}></Col>
+                        <Col s={3}>
+                            <Dropdown
+                                id='groupByDropdown'
+                                className="dropdownMenuTaskoptions"
+                                options={{
+                                    alignment: 'left',
+                                    autoTrigger: true,
+                                    closeOnClick: true,
+                                    constrainWidth: false,
+                                    container: null,
+                                    coverTrigger: false,
+                                    hover: false,
+                                    inDuration: 150,
+                                    onCloseEnd: null,
+                                    onCloseStart: null,
+                                    onOpenEnd: null,
+                                    onOpenStart: null,
+                                    outDuration: 250
+                                }}
+                                trigger={<Button node="button">Sort By: {groupBy}</Button>}
+                                >
+                                    <a onClick={() => handleGroupByChange('none')}>None</a>
+                                    <a onClick={() => handleGroupByChange('status')}>Status</a>
+                            </Dropdown>
+                        </Col>
+                    </Row>
+                    
+                    {/* Group by Status */}
+                    {listStatuses && groupBy === 'status' ? listStatuses.map(item => (
                         <Row key={item._id}>
                             <Col s={12}>
                                 <Row>
@@ -210,6 +243,55 @@ function taskView() {
                             </Col>
                         </Row>
                     )): null }
+
+                    {/* Group by None */}
+
+                    {listStatuses && groupBy === 'none' ? listStatuses.map(item => {
+                        if(listStatuses[0] === item)
+                        return <Row key={item._id}>
+                            <Col s={12}>
+                                 <table>
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th onClick={() => handleSortByTaskName()} className='task_name'>{taskNameLabel}</th>
+                                        <th className="right">Start &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                                        Due&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    {listTasks.map(task => {
+                                            return <tr className="collection-item" key={task._id}>
+                                            <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
+                                            <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>   
+                                            <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>
+                                            <TaskOptionsDropdown id={task._id} list={task.list_id} orderIndex={task.order_index} handleGetListTasks={(a) => handleGetListTasks(a)} taskName={task.task_name} updateTask={(a, b) => updateTask(a, b)}/>
+                                        </tr>
+                                    })}         
+                                    </tbody>
+                                </table>
+
+
+                                <ul className="collection left-align taskViewCollection">
+                                    { item.showing ? (
+                                         <li className="collection-item create_task_collection_item">
+                                         <div className="input-field">
+                                             <input autoFocus placeholder="Create New Task" id="first_name" type="text" className="validate" onChange={handleNewTaskNameChange} value={newTaskName}
+                                             onKeyPress={event => {
+                                                 if (event.key === 'Enter') {
+                                                 handleCreateNewTask(item.name, item.type)
+                                                 }
+                                             }}/>
+                                         </div>
+                                     </li>
+                                    ) : <Button flat node="button" waves="light" onClick={() => handleOpenCreateTaskInput(item._id)}>+ Task</Button>}
+                                </ul>   
+                            </Col>
+                        </Row>
+                    }): null }
                 </Col>
             </Row>
             <TaskView open={openTaskView} task={taskViewTask} close={() => handleTaskViewClose()}/>

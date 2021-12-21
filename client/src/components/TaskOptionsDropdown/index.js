@@ -81,6 +81,10 @@ export default function TaskOptionsDropdown(props) {
         }
     }
 
+    function handleAddToTaskFavorites() {
+        console.log('working')
+    }
+
 
     return (
         <td>
@@ -115,7 +119,7 @@ export default function TaskOptionsDropdown(props) {
                             <Icon className="left">edit</Icon>
                         </div>
                     Rename</a>
-                    <a>
+                    <a onClick={() => handleAddToTaskFavorites()}>
                         <div>
                             <Icon className="left">add</Icon>
                         </div> 
@@ -131,7 +135,7 @@ export default function TaskOptionsDropdown(props) {
                 options={{
                 dismissible: true
                 }}>
-                <h3>Rename your list:</h3>
+                <h3>Rename your task:</h3>
                 <br></br>
                 <TextInput
                 onChange={handleTaskNameChange}
