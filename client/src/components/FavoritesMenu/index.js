@@ -5,19 +5,14 @@ import TaskView from "../TaskView/index"
 import API from "../../utils/API"
 import "./style.css"
 
-export default function FavoritesMenu() {
+export default function FavoritesMenu(props) {
     const [location, setLocation] = useState(useLocation())
-    const [userFavorites, setUserFavorites] = useState([])
     const [openTaskView, setOpenTaskView] = useState(false)
     const [taskViewTask, setTaskViewTask] = useState('')
     let userIdVariable = location.state
 
     useEffect(() => {
-        API.getUser(userIdVariable).then((getUserRes) => {
-            setUserFavorites(getUserRes.data.favorites)
-            console.log(getUserRes.data.favorites)
-        })
-    }, [])
+    }, [props.userFavorites])
 
     function handleOpenTaskView(task_id) {
         setTaskViewTask(task_id)
@@ -34,11 +29,11 @@ export default function FavoritesMenu() {
             <CollapsibleItem
                 expanded={false}
                 header="Favorites"
-                icon={<Icon>filter_drama</Icon>}
+                icon={<Icon>favorite_border</Icon>}
                 node="div"
             >
                 <Collection>
-                {userFavorites ? userFavorites.map(item => {
+                {props.userFavorites ? props.userFavorites.map(item => {
                     if (item.type === "task") {
                     return <CollectionItem className="favoritesCollection" onClick={() => handleOpenTaskView(item.id)}>
                         <Icon>check</Icon> {item.name}

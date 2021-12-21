@@ -65,6 +65,9 @@
     width: 100% !important;
 }
 
+.e-list-parent {
+    overflow:  hidden !important;
+}
 
 
 

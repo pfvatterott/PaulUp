@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SideNav, Button, Col, Row, Modal, TextInput, Icon } from 'react-materialize'
+import { SideNav, Button, Col, Row, Modal, TextInput, Icon, Collapsible, CollapsibleItem } from 'react-materialize'
 import { TreeViewComponent } from '@syncfusion/ej2-react-navigations';
 import { enableRipple } from '@syncfusion/ej2-base';
 import { useLocation, Redirect } from "react-router-dom";
@@ -9,7 +9,7 @@ import "./style.css"
 import GoogleLogin from "react-google-login";
 import '../../../node_modules/react-simple-tree-menu/dist/main.css';
 
-export default function CustomSideNav() {
+export default function CustomSideNav(props) {
   const [workspaceData, setWorkspaceData] = useState([])
   const [openCreateSpaceModal, setOpenCreateSpaceModal] = useState(false)
   const [openCreateWorkspaceModal, setOpenCreateWorkspaceModal] = useState(false)
@@ -47,7 +47,6 @@ export default function CustomSideNav() {
       handleGetWorkspaces()
       handleGetUser()
     }
-    // setNewList(newData)
     
     var x = document.getElementsByClassName("rstm-tree-item-level0")
   }, [])
@@ -144,7 +143,8 @@ export default function CustomSideNav() {
 
   function handleGetUser() {
     API.getUser(userIdVariable).then((getUserResponse) => {
-      setUserData(getUserResponse.data[0])
+      setUserData(getUserResponse.data)
+      props.handleSetUserFavorites(getUserResponse.data.favorites)
     })
   }
 
@@ -487,24 +487,33 @@ export default function CustomSideNav() {
         </Row>
         <Row className="left-align">
           <Col s={12} className="left-align">
-            <FavoritesMenu/>
-          </Col>
-        </Row>
-        <Row>
-          <Col s={12}>
-            <Button
-              onClick={handleOpenCreateSpaceModal}
-            >New Space</Button>
-          </Col>
-        </Row>
-        <Row>
-          <Col s={12}>
-            <p className="left padding-left">Spaces:</p>
+            <FavoritesMenu userFavorites={props.userFavorites}/>
           </Col>
         </Row>
         <Row className="left-align">
           <Col s={12} className="left-align">
-            <TreeViewComponent fields={treeData} allowDragAndDrop={true} nodeTemplate={(newList) => nodeTemplate(newList)} expandOn={'Click'} enablePersistence={true}/>
+            <Collapsible accordion>
+            <CollapsibleItem
+                expanded={false}
+                header="Spaces"
+                icon={<Icon>fiber_manual_record</Icon>}
+                node="div"
+            >
+              <Row>
+                <Col s={12} className="center-align">
+                  <Button
+                    onClick={handleOpenCreateSpaceModal}
+                  >New Space</Button>
+                </Col>
+              </Row>
+              <Row>
+                <Col s={12}>
+                  <TreeViewComponent fields={treeData} allowDragAndDrop={true} nodeTemplate={(newList) => nodeTemplate(newList)} expandOn={'Click'} enablePersistence={true}/>
+                </Col>
+              </Row>
+            </CollapsibleItem>
+            </Collapsible>
+
           </Col>
         </Row>
       </SideNav>

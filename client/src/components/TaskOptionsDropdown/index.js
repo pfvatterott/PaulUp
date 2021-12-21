@@ -97,9 +97,9 @@ export default function TaskOptionsDropdown(props) {
                 favorites: oldFavorites
             }
             API.updateUser(userIdVariable, updatedUserFavorites).then((res) => {
+                props.setUserFavorites(oldFavorites)
             })
         })
-
     }
 
 
