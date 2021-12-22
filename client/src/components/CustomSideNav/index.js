@@ -32,7 +32,8 @@ export default function CustomSideNav(props) {
   const [userID, setUserID] = useState('')
   const [location, setLocation] = useState(useLocation())
   const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-  const [newList, setNewList] = useState([])
+  const [sideNavValue, setSideNavValue] = useState(0)
+
   let userIdVariable = location.state
   enableRipple(true);
 
@@ -50,7 +51,7 @@ export default function CustomSideNav(props) {
     }
     
     var x = document.getElementsByClassName("rstm-tree-item-level0")
-  }, [])
+  }, [sideNavValue])
 
 
   const googleSuccess = async (response) => {
@@ -439,7 +440,7 @@ export default function CustomSideNav(props) {
     if (data.class === 'space_item') { return (<div>
       <Icon className="left treeIcon">fiber_manual_record</Icon>
       <p className="left">{data.name}</p>
-      <TreeEllipsesMenu className="right" data={data}/>
+      <TreeEllipsesMenu className="right" data={data} sideNavValue={sideNavValue} setSideNavValue={(x) => setSideNavValue(x)} userFavorites={props.userFavorites} setUserFavorites={(x) => props.handleSetUserFavorites(x)}/>
       </div>)}
     else if (data.class === 'folder_item') { return (<div>
       <Icon className="left">folder</Icon>
@@ -512,7 +513,6 @@ export default function CustomSideNav(props) {
               </Row>
               <Row>
                 <Col s={12}>
-                  
                   <TreeViewComponent fields={treeData} allowDragAndDrop={true} nodeTemplate={(newList) => nodeTemplate(newList)} expandOn={'Click'} enablePersistence={true}/>
                 </Col>
               </Row>

@@ -96,4 +96,7 @@ export default {
   deleteList: function(id) {
     return axios.delete("/api/lists/" + id);
   },
+  deleteFolder: function(id) {
+    return axios.delete("/api/folders/" + id);
+  },
 };

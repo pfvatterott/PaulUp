@@ -8,12 +8,7 @@ export default function TreeEllipsesMenu(props) {
     const [location, setLocation] = useState(useLocation())
     let userIdVariable = location.state
 
-    useEffect(() => {
-      
-    }, [])
-
     function deleteHierarchy() {
-
         // If deleting a space, delete all folders and tasks in that space. Also delete all favorites that lived in that space.
         console.log(props.data.class)
         API.getUser(userIdVariable).then((userRes) => {
@@ -29,25 +24,52 @@ export default function TreeEllipsesMenu(props) {
                                         let newFavorites = {
                                             favorites: userFavorites
                                         }
-                                        API.updateUser(userIdVariable, newFavorites).then((res) => {})
+                                        API.updateUser(userIdVariable, newFavorites).then((res) => {props.setUserFavorites(userFavorites)})
                                     }
                                 }
                                 API.deleteTask(getListTasksRes.data[p]._id).then((deleteTaskRes) => {
                                 })                      
                             }
                         })
-                        
                     }
                     for (let s = 0; s < getSpaceListsRes.data.length; s++) {
                         API.deleteList(getSpaceListsRes.data[s]._id).then((deleteListRes) => {
                             
                         })
-                    
                     }
+                })
+                API.getSpaceFolders(props.data.id).then((getSpaceFoldersRes) => {
+                    for (let i = 0; i < getSpaceFoldersRes.data.length; i++) {
+                        API.getFolderLists(getSpaceFoldersRes.data[i]._id).then((getFolderListsRes) => {
+                            for (let p = 0; p < getFolderListsRes.data.length; p++) {
+                                API.getListTasks(getFolderListsRes.data[p]._id).then((getListTasksRes) => {
+                                    for (let p = 0; p < getListTasksRes.data.length; p++) {
+                                        for (let j = 0; j < userFavorites.length; j++) {
+                                            if (userFavorites[j].id === getListTasksRes.data[p]._id) {
+                                                userFavorites.splice(j, 1)
+                                                let newFavorites = {
+                                                    favorites: userFavorites
+                                                }
+                                                API.updateUser(userIdVariable, newFavorites).then((res) => {props.setUserFavorites(userFavorites)})
+                                            }
+                                        }
+                                        API.deleteTask(getListTasksRes.data[p]._id).then((deleteTaskRes) => {
+                                        })                      
+                                    }
+                                })
+                                API.deleteList(getFolderListsRes.data[p]._id).then((deleteListRes) => {
+                                })                      
+                            }
+                        })
+                        API.deleteFolder(getSpaceFoldersRes.data[i]._id).then((deleteFolderRes) => {
+                        })
+                    }
+                })
+                API.deleteSpace(props.data.id).then((deleteSpaceRes) => {
+                    props.setSideNavValue(props.sideNavValue + 1)
                 })
             }
         })
-
     }
 
     return (
