@@ -13,7 +13,6 @@ export default function TreeEllipsesMenu(props) {
 
     function deleteHierarchy() {
         // If deleting a space, delete all folders and tasks in that space. Also delete all favorites that lived in that space.
-        console.log(props.data.class)
         API.getUser(userIdVariable).then((userRes) => {
             let userFavorites = userRes.data.favorites
 
@@ -49,10 +48,6 @@ export default function TreeEllipsesMenu(props) {
                     for (let i = 0; i < getSpaceFoldersRes.data.length; i++) {
                         API.getFolderLists(getSpaceFoldersRes.data[i]._id).then((getFolderListsRes) => {
                             for (let p = 0; p < getFolderListsRes.data.length; p++) {
-                                 // If URL is set to a List that lives in the deleted Space, redirect to Workspace
-                                if (getFolderListsRes.data[p]._id === currentList) {
-                                    setRedirect(true)
-                                }
                                 API.getListTasks(getFolderListsRes.data[p]._id).then((getListTasksRes) => {
                                     for (let p = 0; p < getListTasksRes.data.length; p++) {
                                         for (let j = 0; j < userFavorites.length; j++) {
@@ -61,11 +56,17 @@ export default function TreeEllipsesMenu(props) {
                                                 let newFavorites = {
                                                     favorites: userFavorites
                                                 }
-                                                API.updateUser(userIdVariable, newFavorites).then((res) => {props.setUserFavorites(userFavorites)})
+                                                API.updateUser(userIdVariable, newFavorites).then((res) => {
+                                                    props.setUserFavorites(userFavorites)
+                                                })
                                             }
                                         }
                                         API.deleteTask(getListTasksRes.data[p]._id).then((deleteTaskRes) => {
-                                        })                      
+                                        })   
+                                        if (getFolderListsRes.data[p]._id === currentList) {
+                                            console.log('working?')
+                                            setRedirect(true)
+                                        }                   
                                     }
                                 })
                                 API.deleteList(getFolderListsRes.data[p]._id).then((deleteListRes) => {
