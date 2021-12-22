@@ -260,6 +260,9 @@ export default function CustomSideNav(props) {
         API.updateSpace(spaceResponse.data._id, newSpaceData).then((updateSpaceResponse) => {
           handleGetWorkspaces()
           handleGetUser()
+          // navigates to new list
+          setCurrentList(saveListResponse.data._id)
+          setRedirectToList(true)
         })
       })
     })
@@ -309,6 +312,9 @@ export default function CustomSideNav(props) {
         API.updateFolder(getFolderResponse.data._id, newFolderData).then((updateFolderResponse) => {
           handleGetWorkspaces()
           handleGetUser()
+          // navigates to new list
+          setCurrentList(saveListResponse.data._id)
+          setRedirectToList(true)
         })
       })
     })
@@ -476,8 +482,6 @@ export default function CustomSideNav(props) {
         onFailure={googleFailure}
         cookiePolicy={"single_host_origin"}
         isSignedIn={true}
-  
-        
         />
       <SideNav>
         <Row>
