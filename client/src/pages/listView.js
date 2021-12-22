@@ -21,6 +21,7 @@ function taskView() {
     const [openTaskView, setOpenTaskView] = useState(false)
     const [taskViewTask, setTaskViewTask] = useState('')
     const [value, setValue] = useState(0);
+    const [forceUpdate, setForceUpdate] = useState(0);
     const [groupBy, setGroupBy] = useState('status')
     const [userFavorites, setUserFavorites] = useState([])
     let userIdVariable = location.state
@@ -46,8 +47,8 @@ function taskView() {
 
     // forces re-render of DOM
     function useForceUpdate() {
-        let newValue = value + 1
-        setValue(newValue)
+        let newValue = forceUpdate + 1
+        setForceUpdate(newValue)
     }
 
 

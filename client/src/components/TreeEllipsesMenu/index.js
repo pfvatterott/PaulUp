@@ -6,7 +6,7 @@ import "./style.css"
 export default function TreeEllipsesMenu(props) {
 
     useEffect(() => {
-        console.log(props.data)
+      
     }, [])
 
     function deleteHierarchy() {
