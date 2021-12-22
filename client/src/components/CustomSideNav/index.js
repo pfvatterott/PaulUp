@@ -498,7 +498,7 @@ export default function CustomSideNav(props) {
           <Col s={12} className="left-align">
             <Collapsible accordion>
             <CollapsibleItem
-                expanded={false}
+                expanded={true}
                 header="Spaces"
                 icon={<Icon>fiber_manual_record</Icon>}
                 node="div"
@@ -512,6 +512,7 @@ export default function CustomSideNav(props) {
               </Row>
               <Row>
                 <Col s={12}>
+                  
                   <TreeViewComponent fields={treeData} allowDragAndDrop={true} nodeTemplate={(newList) => nodeTemplate(newList)} expandOn={'Click'} enablePersistence={true}/>
                 </Col>
               </Row>

@@ -77,3 +77,10 @@
     width: 100%;
 }
 
+.e-list-parent {
+    min-height: 150px !important;
+}
+
+.e-list-text {
+    height: 56px !important;
+}

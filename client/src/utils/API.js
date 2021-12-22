@@ -93,4 +93,7 @@ export default {
   deleteTask: function(id) {
     return axios.delete("/api/tasks/" + id);
   },
+  deleteList: function(id) {
+    return axios.delete("/api/lists/" + id);
+  },
 };
