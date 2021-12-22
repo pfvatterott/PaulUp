@@ -69,6 +69,11 @@
     overflow:  hidden !important;
 }
 
+.treeIcon {
+    margin-top: 15px;
+}
 
-
+.e-list-text {
+    width: 100%;
+}
 

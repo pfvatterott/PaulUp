@@ -4,6 +4,7 @@ import { TreeViewComponent } from '@syncfusion/ej2-react-navigations';
 import { enableRipple } from '@syncfusion/ej2-base';
 import { useLocation, Redirect } from "react-router-dom";
 import FavoritesMenu from "../FavoritesMenu/index.js";
+import TreeEllipsesMenu from "../TreeEllipsesMenu/index.js";
 import API from "../../utils/API"
 import "./style.css"
 import GoogleLogin from "react-google-login";
@@ -436,8 +437,9 @@ export default function CustomSideNav(props) {
 
   function nodeTemplate(data) {
     if (data.class === 'space_item') { return (<div>
-      <Icon className="left">fiber_manual_record</Icon>
-      <p>{data.name}</p>
+      <Icon className="left treeIcon">fiber_manual_record</Icon>
+      <p className="left">{data.name}</p>
+      <TreeEllipsesMenu className="right" data={data}/>
       </div>)}
     else if (data.class === 'folder_item') { return (<div>
       <Icon className="left">folder</Icon>

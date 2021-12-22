@@ -1,0 +1,15 @@
+.treeOptionsEllipses {
+    margin-top: 13px;
+    color: gray;
+    opacity: 0%;
+}
+
+.treeOptionsEllipses:hover {
+    opacity: 100%;
+    cursor: pointer;
+    z-index: 5 !important;
+}
+
+.treeOptionsDropdown {
+    width: 160px;
+}
