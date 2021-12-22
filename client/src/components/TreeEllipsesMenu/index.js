@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { Icon, Dropdown} from "react-materialize";
-import { useLocation } from "react-router-dom";
+import { useLocation, Redirect } from "react-router-dom";
 import API from "../../utils/API"
 import "./style.css"
 
 export default function TreeEllipsesMenu(props) {
     const [location, setLocation] = useState(useLocation())
     let userIdVariable = location.state
+    let currentURL = window.location.href
+    let currentList = currentURL.substring(currentURL.lastIndexOf("/") + 1);
+    const [redirect, setRedirect] = useState(false)
 
     function deleteHierarchy() {
         // If deleting a space, delete all folders and tasks in that space. Also delete all favorites that lived in that space.
         console.log(props.data.class)
         API.getUser(userIdVariable).then((userRes) => {
             let userFavorites = userRes.data.favorites
+
             if (props.data.class === "space_item") {
                 API.getSpaceLists(props.data.id).then((getSpaceListsRes) => {
                     for (let i = 0; i < getSpaceListsRes.data.length; i++) {
+                        // If URL is set to a List that lives in the deleted Space, redirect to Workspace
+                        if (getSpaceListsRes.data[i]._id === currentList) {
+                            setRedirect(true)
+                        }
                         API.getListTasks(getSpaceListsRes.data[i]._id).then((getListTasksRes) => {
                             for (let p = 0; p < getListTasksRes.data.length; p++) {
                                 for (let j = 0; j < userFavorites.length; j++) {
@@ -34,7 +42,6 @@ export default function TreeEllipsesMenu(props) {
                     }
                     for (let s = 0; s < getSpaceListsRes.data.length; s++) {
                         API.deleteList(getSpaceListsRes.data[s]._id).then((deleteListRes) => {
-                            
                         })
                     }
                 })
@@ -42,6 +49,10 @@ export default function TreeEllipsesMenu(props) {
                     for (let i = 0; i < getSpaceFoldersRes.data.length; i++) {
                         API.getFolderLists(getSpaceFoldersRes.data[i]._id).then((getFolderListsRes) => {
                             for (let p = 0; p < getFolderListsRes.data.length; p++) {
+                                 // If URL is set to a List that lives in the deleted Space, redirect to Workspace
+                                if (getFolderListsRes.data[p]._id === currentList) {
+                                    setRedirect(true)
+                                }
                                 API.getListTasks(getFolderListsRes.data[p]._id).then((getListTasksRes) => {
                                     for (let p = 0; p < getListTasksRes.data.length; p++) {
                                         for (let j = 0; j < userFavorites.length; j++) {
@@ -73,6 +84,8 @@ export default function TreeEllipsesMenu(props) {
     }
 
     return (
+        <div>
+            { redirect ? (<Redirect push to={{pathname: '/workspace', state: userIdVariable}}/>) : null }
         <Dropdown
             id={props.data.id.concat('', 'TreeOptionsDropdown')}
             className="treeOptionsDropdown"
@@ -107,5 +120,6 @@ export default function TreeEllipsesMenu(props) {
                     Favorite
                 </a>
         </Dropdown>
+        </div>
     )
 }
