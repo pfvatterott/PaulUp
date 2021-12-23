@@ -13,9 +13,6 @@
 .treeOptionsDropdown {
     width: 200px;
     height: 100px !important;
-    z-index: 100 !important;
-    position: absolute !important;
-  
 }
 
 .treeOptionsIcon {

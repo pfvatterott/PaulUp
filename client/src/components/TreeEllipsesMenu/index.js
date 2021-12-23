@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Icon, Dropdown} from "react-materialize";
+import { Icon} from "react-materialize";
 import { useLocation, Redirect } from "react-router-dom";
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
 import API from "../../utils/API"
 import "./style.css"
 
@@ -84,10 +86,63 @@ export default function TreeEllipsesMenu(props) {
         })
     }
 
+    function addToFavorites() {
+        console.log('working')
+        API.getUser(userIdVariable).then((userRes) => {
+            let userFavorites = userRes.data.favorites
+            userFavorites.push({
+                id: props.data.id,
+                name: props.data.name,
+                type: props.data.class
+            })
+            let newFavorites = {
+                favorites: userFavorites
+            }
+            API.updateUser(userIdVariable, newFavorites).then((res) => {
+                props.setUserFavorites(userFavorites)
+            })
+            if (props.data.class === "space_item") {
+                API.getSpace(props.data.id).then((getSpaceRes) => {
+                    let oldFavorites = getSpaceRes.data.favorited
+                    oldFavorites.push(userIdVariable)
+                    let newFavorites = {
+                        favorited: oldFavorites
+                    }
+                    API.updateSpace(getSpaceRes.data._id, newFavorites).then((res) => {
+                    })
+                })
+            }
+        })
+    }
+
+    const options = [
+        { value: 'one', label: 'One' },
+        { value: 'two', label: 'Two', className: 'myOptionClassName' },
+        {
+         type: 'group', name: 'group1', items: [
+           { value: 'three', label: 'Three', className: 'myOptionClassName' },
+           { value: 'four', label: 'Four' }
+         ]
+        },
+        {
+         type: 'group', name: 'group2', items: [
+           { value: 'five', label: 'Five' },
+           { value: 'six', label: 'Six' }
+         ]
+        }
+      ];
+    const defaultOption = options[0];
+
+    function testFunction(e) {
+        console.log('working')
+        console.log(e)
+    }
+    
+
     return (
         <div>
             { redirect ? (<Redirect push to={{pathname: '/workspace', state: userIdVariable}}/>) : null }
-        <Dropdown
+        {/* <Dropdown
             id={props.data.id.concat('', 'TreeOptionsDropdown')}
             className="treeOptionsDropdown"
             options={{
@@ -114,13 +169,65 @@ export default function TreeEllipsesMenu(props) {
                     Delete
            
                 </a>
-                <a>
+                <a onClick={() => addToFavorites()}>
+                    <div>
+                        <Icon className="treeOptionsIcon left">add</Icon>
+                    </div> {/* <Dropdown
+            id={props.data.id.concat('', 'TreeOptionsDropdown')}
+            className="treeOptionsDropdown"
+            options={{
+                alignment: 'left',
+                autoTrigger: true,
+                closeOnClick: true,
+                constrainWidth: false,
+                container: null,
+                coverTrigger: true,
+                hover: false,
+                inDuration: 150,
+                onCloseEnd: null,
+                onCloseStart: null,
+                onOpenEnd: null,
+                onOpenStart: null,
+                outDuration: 250
+            }}
+            trigger={<Icon className="treeOptionsEllipses right">more_horiz</Icon>}
+            >
+                <a onClick={() => deleteHierarchy()}>
+                    <div>
+                        <Icon className="treeOptionsIcon left">delete</Icon>
+                    </div>
+                    Delete
+           
+                </a>
+                <a onClick={() => addToFavorites()}>
+                    <div>
+                        <Icon className="treeOptionsIcon left">add</Icon>
+                    </div>
+                    Favorite
+                </a>
+                <a onClick={() => addToFavorites()}>
                     <div>
                         <Icon className="treeOptionsIcon left">add</Icon>
                     </div>
                     Favorite
                 </a>
         </Dropdown>
+                    Favorite
+                </a>
+                <a onClick={() => addToFavorites()}>
+                    <div>
+                        <Icon className="treeOptionsIcon left">add</Icon>
+                    </div>
+                    Favorite
+                </a>
+        </Dropdown> */}
+       <Dropdown 
+            options={options} 
+            placeholder={<Icon className="treeOptionsIcon left">add</Icon>} 
+            arrowClosed={<span/>}
+            arrowOpen={<span/>}
+            onChange={(e) => testFunction(e)}
+        />;
         </div>
     )
 }

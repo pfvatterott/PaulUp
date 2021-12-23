@@ -15,7 +15,9 @@ const spaceSchema = new mongoose.Schema({
       color: {type: String},
       order_index: {type: Number}
     }
-  ]
+  ],
+  favorited: [ String ]
+
 });
 
 const Space = mongoose.model("Space", spaceSchema);
