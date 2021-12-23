@@ -36,21 +36,40 @@ export default function FavoritesMenu(props) {
             props.setUserFavorites(data)
             setValue(value + 1)
         })
-        API.getTask(x.id).then((res) => {
-            let oldFavorited = res.data.favorited
-            for (let i = 0; i < oldFavorited.length; i++) {
-                if (oldFavorited[i] === x.id) {
-                    oldFavorited.splice(i, 1);
-                    break
+        if (x.type === 'task') {
+            API.getTask(x.id).then((res) => {
+                let oldFavorited = res.data.favorited
+                for (let i = 0; i < oldFavorited.length; i++) {
+                    if (oldFavorited[i] === userIdVariable) {
+                        oldFavorited.splice(i, 1);
+                        break
+                    }
                 }
-            }
-            let newFavorited = {
-                favorited: oldFavorited
-            }
-            API.updateTask(x.id, newFavorited).then((res) => {
-                props.setValue(props.value + 1)
+                let newFavorited = {
+                    favorited: oldFavorited
+                }
+                API.updateTask(x.id, newFavorited).then((res) => {
+                    props.setValue(props.value + 1)
+                })
             })
-        })
+        }
+        if (x.type === 'space_item') {
+            API.getSpace(x.id).then((res) => {
+                let oldFavorited = res.data.favorited
+                for (let i = 0; i < oldFavorited.length; i++) {
+                    if (oldFavorited[i] === userIdVariable) {
+                        oldFavorited.splice(i, 1);
+                        break
+                    }
+                }
+                let newFavorited = {
+                    favorited: oldFavorited
+                }
+                API.updateSpace(x.id, newFavorited).then((res) => {
+                    props.setValue(props.value + 1)
+                })
+            })
+        }
     }
 
     return (
@@ -68,6 +87,42 @@ export default function FavoritesMenu(props) {
                     return <CollectionItem>
                         <div className="left favoritesCollectionItem valign-wrapper" onClick={() => handleOpenTaskView(item.id)}>
                             <Icon className="favoritesCheck">check</Icon>
+                            {item.name}
+                        </div>
+                        
+                        <Dropdown
+                            id={item.id.concat('', 'favoritesDropdown')}
+                            className="dropdownMenuFavorites"
+                            options={{
+                                alignment: 'right',
+                                autoTrigger: true,
+                                closeOnClick: true,
+                                constrainWidth: false,
+                                container: null,
+                                coverTrigger: false,
+                                hover: false,
+                                inDuration: 150,
+                                onCloseEnd: null,
+                                onCloseStart: null,
+                                onOpenEnd: null,
+                                onOpenStart: null,
+                                outDuration: 250
+                            }}
+                            trigger={<Icon className="favoritesEllipses right">more_horiz</Icon>}
+                            >
+                                <a onClick={() => removeFavorite(item)}>
+                                    <div>
+                                        <Icon className="left unfavorite_icon">do_not_disturb</Icon>
+                                    </div>
+                                Unfavorite
+                                </a>        
+                        </Dropdown>
+                    </CollectionItem>
+                    }
+                    if (item.type === "space_item") {
+                        return <CollectionItem>
+                        <div className="left favoritesCollectionItem valign-wrapper">
+                            <Icon className="favoritesCheck">fiber_manual_record</Icon>
                             {item.name}
                         </div>
                         

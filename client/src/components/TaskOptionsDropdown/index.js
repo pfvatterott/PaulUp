@@ -101,7 +101,7 @@ export default function TaskOptionsDropdown(props) {
             })
         })
         let oldFavorited = props.favorited
-        oldFavorited.push(props.id)
+        oldFavorited.push(userIdVariable)
         let newFavorited = {
             favorited: oldFavorited
         }
@@ -127,7 +127,7 @@ export default function TaskOptionsDropdown(props) {
         })
         let oldFavorited = props.favorited
         for (let i = 0; i < oldFavorited.length; i++) {
-            if (oldFavorited[i] === id) {
+            if (oldFavorited[i] === userIdVariable) {
                 oldFavorited.splice(i, 1)
             }
         }
@@ -172,7 +172,7 @@ export default function TaskOptionsDropdown(props) {
                             <Icon className="left">edit</Icon>
                         </div>
                     Rename</a>
-                    {props.favorited && props.favorited.includes(props.id) ? (
+                    {props.favorited && props.favorited.includes(userIdVariable) ? (
                     <a onClick={() => handleRemoveFromTaskFavorites(props.id)}>
                         <div>
                             <Icon className="left">do_not_disturb</Icon>
