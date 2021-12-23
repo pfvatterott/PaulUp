@@ -11,10 +11,6 @@ export default function TreeEllipsesMenu(props) {
     let currentList = currentURL.substring(currentURL.lastIndexOf("/") + 1);
     const [redirect, setRedirect] = useState(false)
 
-    useEffect(() => {
-        console.log(props)
-    }, [])
-
     function deleteHierarchy() {
         // If deleting a space, delete all folders and tasks in that space. Also delete all favorites that lived in that space.
         API.getUser(userIdVariable).then((userRes) => {
@@ -111,6 +107,7 @@ export default function TreeEllipsesMenu(props) {
                         favorited: oldFavorites
                     }
                     API.updateSpace(getSpaceRes.data._id, newFavorites).then((res) => {
+                        props.setSideNavValue(props.sideNavValue + 1)
                     })
                 })
             }
@@ -146,7 +143,7 @@ export default function TreeEllipsesMenu(props) {
                         favorited: oldFavorited
                     }
                     API.updateSpace(props.data.id, newFavorited).then((updateSpaceRes) => {
-                        
+                        props.setSideNavValue(props.sideNavValue + 1)
                     })
                 })
             }
