@@ -19,3 +19,11 @@
 .favoritesEllipses {
     margin-top: 5px;
 }
+
+.favoritesCollection{
+    overflow: visible !important; 
+}
+
+.favoritesCollectionItem {
+    overflow: visible !important;
+}

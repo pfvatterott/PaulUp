@@ -78,9 +78,14 @@
 }
 
 .e-list-parent {
-    min-height: 150px !important;
+    overflow: visible !important;
 }
 
 .e-list-text {
     height: 56px !important;
+    overflow: visible !important;
+}
+
+.e-treeview {
+    overflow: visible !important;
 }

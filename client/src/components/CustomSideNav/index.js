@@ -348,7 +348,8 @@ export default function CustomSideNav(props) {
                 name: getSpaceListsResponse.data[g].list_name,
                 order_index: (getSpaceListsResponse.data[g].order_index + spacesArray[i].folders.length),
                 onClickNode: 'openList',
-                class: 'list_item'
+                class: 'list_item',
+                favorited: getSpaceListsResponse.data[g].favorited
               }
               nodeArray.push(listObj)
             }
@@ -374,6 +375,7 @@ export default function CustomSideNav(props) {
             order_index: spacesArray[i].order_index,
             subChild: nodeArray,
             class: 'space_item',
+            favorited: spacesArray[i].favorited
           }
           newTreeData.push(spaceTreeData)
         })
@@ -393,7 +395,8 @@ export default function CustomSideNav(props) {
                 name: getSpaceFolderResponse.data[j].folder_name,
                 order_index: getSpaceFolderResponse.data[j].order_index,
                 class: 'folder_item',
-                subChild: listArray
+                subChild: listArray,
+                favorited: getSpaceFolderResponse.data[j].favorited,
               }
               nodeArray.unshift(folderObj)
               nodeArray.sort((a, b) => parseFloat(a.order_index) - parseFloat(b.order_index));
@@ -407,6 +410,7 @@ export default function CustomSideNav(props) {
                       order_index: getFolderListsResponse.data[o].order_index,
                       onClickNode: 'openFolderList',
                       class: 'folder_list_item',
+                      favorited: getFolderListsResponse.data[o].favorited
                     }
                     listArray.push(listObj)
                   }
@@ -421,6 +425,7 @@ export default function CustomSideNav(props) {
                     id: getSpaceFolderResponse.data[j]._id,
                     name: getSpaceFolderResponse.data[j].folder_name,
                     order_index: getSpaceFolderResponse.data[j].order_index,
+                    favorited: getSpaceFolderResponse.data[j].favorited,
                     subChild: listArray,
                     class: 'folder_item',
                   }

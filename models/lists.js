@@ -15,7 +15,8 @@ const listSchema = new mongoose.Schema({
       color: {type: String},
       order_index: {type: Number}
     }
-  ]
+  ],
+  favorited: [ String ]
 });
 
 const List = mongoose.model("List", listSchema);

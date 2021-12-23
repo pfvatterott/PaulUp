@@ -14,7 +14,8 @@ const folderSchema = new mongoose.Schema({
       color: {type: String},
       order_index: {type: Number}
     }
-  ]
+  ],
+  favorited: [ String ]
 });
 
 const Folder = mongoose.model("Folder", folderSchema);

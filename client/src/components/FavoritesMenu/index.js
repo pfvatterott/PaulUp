@@ -62,11 +62,11 @@ export default function FavoritesMenu(props) {
                 icon={<Icon>favorite_border</Icon>}
                 node="div"
             >
-                <Collection>
+                <Collection className="favoritesCollection">
                 {props.userFavorites ? props.userFavorites.map(item => {
                     if (item.type === "task") {
                     return <CollectionItem>
-                        <div className="left favoritesCollection valign-wrapper" onClick={() => handleOpenTaskView(item.id)}>
+                        <div className="left favoritesCollectionItem valign-wrapper" onClick={() => handleOpenTaskView(item.id)}>
                             <Icon className="favoritesCheck">check</Icon>
                             {item.name}
                         </div>
@@ -75,7 +75,7 @@ export default function FavoritesMenu(props) {
                             id={item.id.concat('', 'favoritesDropdown')}
                             className="dropdownMenuFavorites"
                             options={{
-                                alignment: 'left',
+                                alignment: 'right',
                                 autoTrigger: true,
                                 closeOnClick: true,
                                 constrainWidth: false,
