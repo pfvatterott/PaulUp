@@ -188,8 +188,17 @@ export default function TreeEllipsesMenu(props) {
                     })
                 })
             }
-            if (props.data.class === "folder_item") {
-                console.log('working')
+            else if (props.data.class === "folder_item") {
+                API.getFolder(props.data.id).then((getFolderRes) => {
+                    let oldFavorites = getFolderRes.data.favorited
+                    oldFavorites.push(userIdVariable)
+                    let newFavorited = {
+                        favorited: oldFavorites
+                    }
+                    API.updateFolder(props.data.id, newFavorited).then((updateFolderRes) => {
+                        props.setSideNavValue(props.sideNavValue + 1)
+                    })
+                })
             }
         })
     }
@@ -228,7 +237,7 @@ export default function TreeEllipsesMenu(props) {
                 })
             }
             if (props.data.class === "folder_item") {
-                console.log('working')
+               console.log('working')
             }
         })
     }

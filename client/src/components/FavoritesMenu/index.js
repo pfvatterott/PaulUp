@@ -70,6 +70,23 @@ export default function FavoritesMenu(props) {
                 })
             })
         }
+        if (x.type === 'folder_item') {
+            API.getFolder(x.id).then((res) => {
+                let oldFavorited = res.data.favorited
+                for (let i = 0; i < oldFavorited.length; i++) {
+                    if (oldFavorited[i] === userIdVariable) {
+                        oldFavorited.splice(i, 1);
+                        break
+                    }
+                }
+                let newFavorited = {
+                    favorited: oldFavorited
+                }
+                API.updateFolder(x.id, newFavorited).then((res) => {
+                    props.setValue(props.value + 1)
+                })
+            })
+        }
     }
 
     return (
@@ -119,10 +136,46 @@ export default function FavoritesMenu(props) {
                         </Dropdown>
                     </CollectionItem>
                     }
-                    if (item.type === "space_item") {
+                    else if (item.type === "space_item") {
                         return <CollectionItem>
                         <div className="left favoritesCollectionItem valign-wrapper">
                             <Icon className="favoritesCheck">fiber_manual_record</Icon>
+                            {item.name}
+                        </div>
+                        
+                        <Dropdown
+                            id={item.id.concat('', 'favoritesDropdown')}
+                            className="dropdownMenuFavorites"
+                            options={{
+                                alignment: 'right',
+                                autoTrigger: true,
+                                closeOnClick: true,
+                                constrainWidth: false,
+                                container: null,
+                                coverTrigger: false,
+                                hover: false,
+                                inDuration: 150,
+                                onCloseEnd: null,
+                                onCloseStart: null,
+                                onOpenEnd: null,
+                                onOpenStart: null,
+                                outDuration: 250
+                            }}
+                            trigger={<Icon className="favoritesEllipses right">more_horiz</Icon>}
+                            >
+                                <a onClick={() => removeFavorite(item)}>
+                                    <div>
+                                        <Icon className="left unfavorite_icon">do_not_disturb</Icon>
+                                    </div>
+                                Unfavorite
+                                </a>        
+                        </Dropdown>
+                    </CollectionItem>
+                    }
+                    else if (item.type === "folder_item") {
+                        return <CollectionItem>
+                        <div className="left favoritesCollectionItem valign-wrapper">
+                            <Icon className="favoritesCheck">folder</Icon>
                             {item.name}
                         </div>
                         
