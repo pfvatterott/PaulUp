@@ -182,14 +182,12 @@ export default function CustomSideNav(props) {
   }
 
   function handleOpenCreateNewFolderOrListModal(key) {
-    console.log(key)
     setOpenCreateNewFolderOrListModal(true)
     let newKey = key.replace('/create_new', '')
     setCurrentSpace(newKey)
   }
 
   function handleOpenCreateListForFolder(key) {
-    console.log(key)
     setOpenCreateNewListForFolderModal(true)
     setCurrentFolder(key)
   }
@@ -279,7 +277,6 @@ export default function CustomSideNav(props) {
         statuses: spaceResponse.data.statuses
       }
       API.saveFolder(newFolder).then((saveFolderResponse) => {
-        console.log(saveFolderResponse.data)
         let updatedFolderArray = spaceResponse.data.folders
         updatedFolderArray.push(saveFolderResponse.data._id)
         let newSpaceData = {

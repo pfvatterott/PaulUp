@@ -51,7 +51,7 @@ export default function TreeEllipsesMenu(props) {
                                 API.getListTasks(getFolderListsRes.data[p]._id).then((getListTasksRes) => {
                                     for (let p = 0; p < getListTasksRes.data.length; p++) {
                                         for (let j = 0; j < userFavorites.length; j++) {
-                                            if (userFavorites[j].id === getListTasksRes.data[p]._id) {
+                                            if (userFavorites[j].id === (getListTasksRes.data[p]._id || props.data.id)) {
                                                 userFavorites.splice(j, 1)
                                                 let newFavorites = {
                                                     favorites: userFavorites
@@ -77,6 +77,17 @@ export default function TreeEllipsesMenu(props) {
                     }
                 })
                 API.getSpace(props.data.id).then((getSpaceRes) => {
+                    for (let j = 0; j < userFavorites.length; j++) {
+                        if (userFavorites[j].id === props.data.id) {
+                            userFavorites.splice(j, 1)
+                            let newFavorites = {
+                                favorites: userFavorites
+                            }
+                            API.updateUser(userIdVariable, newFavorites).then((res) => {
+                                props.setUserFavorites(userFavorites)
+                            })
+                        }
+                    }
                     let workspaceId = getSpaceRes.data.workspace_id
                     API.getWorkspace(workspaceId).then((getWorkspaceRes) => {
                         let oldSpaces = getWorkspaceRes.data.spaces
@@ -97,7 +108,54 @@ export default function TreeEllipsesMenu(props) {
                 })
             }
             if (props.data.class === "folder_item") {
-                console.log('working')
+                // remove folder id from Space db folder array
+                API.getFolder(props.data.id).then((getFolderRes) => {
+                    let spaceId = getFolderRes.data.space_id
+                    API.getSpace(spaceId).then((getSpaceRes) => {
+                        console.log(getSpaceRes.data)
+                        let old_space_folders = getSpaceRes.data.folders
+                        for (let i = 0; i < old_space_folders.length; i++) {
+                            if (old_space_folders[i] === props.data.id) {
+                                old_space_folders.splice(i, 1);
+                                break
+                            }
+                        }
+                        let new_space_folders = {
+                            folders: old_space_folders
+                        }
+                        API.updateSpace(props.data.id, new_space_folders).then((updateSpaceRes) => {})
+                    })
+                })
+                // get lists in folder
+                API.getFolderLists(props.data.id).then((getFolderListsRes) => {
+                    for (let p = 0; p < getFolderListsRes.data.length; p++) {
+                        API.getListTasks(getFolderListsRes.data[p]._id).then((getListTasksRes) => {
+                            for (let p = 0; p < getListTasksRes.data.length; p++) {
+                                for (let j = 0; j < userFavorites.length; j++) {
+                                    if (userFavorites[j].id === getListTasksRes.data[p]._id) {
+                                        userFavorites.splice(j, 1)
+                                        let newFavorites = {
+                                            favorites: userFavorites
+                                        }
+                                        API.updateUser(userIdVariable, newFavorites).then((res) => {
+                                            props.setUserFavorites(userFavorites)
+                                        })
+                                    }
+                                }
+                                API.deleteTask(getListTasksRes.data[p]._id).then((deleteTaskRes) => {
+                                })   
+                                if (getFolderListsRes.data[p]._id === currentList) {
+                                    setRedirect(true)
+                                }                   
+                            }
+                        })
+                        API.deleteList(getFolderListsRes.data[p]._id).then((deleteListRes) => {
+                        })                      
+                    }
+                })
+                API.deleteFolder(props.data.id).then((deleteFolderRes) => {
+                    props.setSideNavValue(props.sideNavValue + 1)
+                })
             }
 
         })
