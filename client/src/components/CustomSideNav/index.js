@@ -443,16 +443,20 @@ export default function CustomSideNav(props) {
     })
   }
 
+  function handleSetSideNavValue(x) {
+    setSideNavValue(x)
+  }
+
 
   function nodeTemplate(data) {
     if (data.class === 'space_item') { return (<div>
       <Icon className="left treeIcon">fiber_manual_record</Icon>
       <p className="left">{data.name}</p>
-      <TreeEllipsesMenu className="right" data={data} sideNavValue={sideNavValue} setSideNavValue={(x) => setSideNavValue(x)} userFavorites={props.userFavorites} setUserFavorites={(x) => props.handleSetUserFavorites(x)}/>
+      <TreeEllipsesMenu className="right" data={data} sideNavValue={sideNavValue} setSideNavValue={(x) => handleSetSideNavValue(x)} userFavorites={props.userFavorites} setUserFavorites={(x) => props.handleSetUserFavorites(x)}/>
       </div>)}
     else if (data.class === 'folder_item') { return (<div>
       <Icon className="left">folder</Icon>
-      <TreeEllipsesMenu className="right" data={data} sideNavValue={sideNavValue} setSideNavValue={(x) => setSideNavValue(x)} userFavorites={props.userFavorites} setUserFavorites={(x) => props.handleSetUserFavorites(x)}/>
+      <TreeEllipsesMenu className="right" data={data} sideNavValue={sideNavValue} setSideNavValue={(x) => handleSetSideNavValue(x)} userFavorites={props.userFavorites} setUserFavorites={(x) => props.handleSetUserFavorites(x)}/>
       <p>{data.name}</p>
       </div>)}
     else if (data.class === 'folder_list_item') { return (<div onClick={() => handleOpenFolderList(data.id)}>
@@ -499,7 +503,7 @@ export default function CustomSideNav(props) {
         </Row>
         <Row className="left-align">
           <Col s={12} className="left-align">
-            <FavoritesMenu value={props.value} setValue={(x) => props.setValue(x)} userFavorites={props.userFavorites} setUserFavorites={(x) => props.handleSetUserFavorites(x)}/>
+            <FavoritesMenu value={props.value} setValue={(x) => props.setValue(x)} userFavorites={props.userFavorites} setUserFavorites={(x) => props.handleSetUserFavorites(x)} sideNavValue={sideNavValue} setSideNavValue={(x) => handleSetSideNavValue(x)}/>
           </Col>
         </Row>
         <Row className="left-align">

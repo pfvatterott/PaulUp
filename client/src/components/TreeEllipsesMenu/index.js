@@ -237,7 +237,21 @@ export default function TreeEllipsesMenu(props) {
                 })
             }
             if (props.data.class === "folder_item") {
-               console.log('working')
+                API.getFolder(props.data.id).then((getSpaceRes) => {
+                    let oldFavorited = getSpaceRes.data.favorited
+                    for (let i = 0; i < oldFavorited.length; i++) {
+                        if (oldFavorited[i] === userIdVariable) {
+                            oldFavorited.splice(i, 1);
+                            break
+                        }
+                    }
+                    let newFavorited = {
+                        favorited: oldFavorited
+                    }
+                    API.updateFolder(props.data.id, newFavorited).then((updateSpaceRes) => {
+                        props.setSideNavValue(props.sideNavValue + 1)
+                    })
+                })
             }
         })
     }

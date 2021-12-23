@@ -50,6 +50,7 @@ export default function FavoritesMenu(props) {
                 }
                 API.updateTask(x.id, newFavorited).then((res) => {
                     props.setValue(props.value + 1)
+                    props.setSideNavValue(props.sideNavValue + 1)
                 })
             })
         }
@@ -67,6 +68,7 @@ export default function FavoritesMenu(props) {
                 }
                 API.updateSpace(x.id, newFavorited).then((res) => {
                     props.setValue(props.value + 1)
+                    props.setSideNavValue(props.sideNavValue + 1)
                 })
             })
         }
@@ -84,6 +86,7 @@ export default function FavoritesMenu(props) {
                 }
                 API.updateFolder(x.id, newFavorited).then((res) => {
                     props.setValue(props.value + 1)
+                    props.setSideNavValue(props.sideNavValue + 1)
                 })
             })
         }
