@@ -11,7 +11,7 @@ export default function TreeEllipsesMenu(props) {
     let currentList = currentURL.substring(currentURL.lastIndexOf("/") + 1);
     const [redirect, setRedirect] = useState(false)
 
-    function deleteHierarchy() {
+    function deleteHierarchyItem() {
         // If deleting a space, delete all folders and tasks in that space. Also delete all favorites that lived in that space.
         API.getUser(userIdVariable).then((userRes) => {
             let userFavorites = userRes.data.favorites
@@ -64,7 +64,6 @@ export default function TreeEllipsesMenu(props) {
                                         API.deleteTask(getListTasksRes.data[p]._id).then((deleteTaskRes) => {
                                         })   
                                         if (getFolderListsRes.data[p]._id === currentList) {
-                                            console.log('working?')
                                             setRedirect(true)
                                         }                   
                                     }
@@ -77,10 +76,30 @@ export default function TreeEllipsesMenu(props) {
                         })
                     }
                 })
+                API.getSpace(props.data.id).then((getSpaceRes) => {
+                    let workspaceId = getSpaceRes.data.workspace_id
+                    API.getWorkspace(workspaceId).then((getWorkspaceRes) => {
+                        let oldSpaces = getWorkspaceRes.data.spaces
+                        for (let i = 0; i < oldSpaces.length; i++) {
+                            if (oldSpaces[i] === props.data.id) {
+                                oldSpaces.splice(i, 1);
+                                break
+                            }
+                        }
+                        let newSpaces = {
+                            spaces: oldSpaces
+                        }
+                        API.updateWorkspace(workspaceId, newSpaces).then((updateWorkspaceRes) => {})
+                    })
+                })
                 API.deleteSpace(props.data.id).then((deleteSpaceRes) => {
                     props.setSideNavValue(props.sideNavValue + 1)
                 })
             }
+            if (props.data.class === "folder_item") {
+                console.log('working')
+            }
+
         })
     }
 
@@ -110,6 +129,9 @@ export default function TreeEllipsesMenu(props) {
                         props.setSideNavValue(props.sideNavValue + 1)
                     })
                 })
+            }
+            if (props.data.class === "folder_item") {
+                console.log('working')
             }
         })
     }
@@ -147,7 +169,9 @@ export default function TreeEllipsesMenu(props) {
                     })
                 })
             }
-
+            if (props.data.class === "folder_item") {
+                console.log('working')
+            }
         })
     }
 
@@ -173,9 +197,9 @@ export default function TreeEllipsesMenu(props) {
                 onOpenStart: null,
                 outDuration: 250
             }}
-            trigger={<Icon className="treeOptionsEllipses right">more_horiz</Icon>}
+            trigger={props.data.class === 'folder_item' ? (<Icon className="treeOptionsEllipsesFolder right">more_horiz</Icon>) : <Icon className="treeOptionsEllipses right">more_horiz</Icon>}
             >
-                <a onClick={() => deleteHierarchy()}>
+                <a onClick={() => deleteHierarchyItem()}>
                     <div>
                         <Icon className="treeOptionsIcon left">delete</Icon>
                     </div>

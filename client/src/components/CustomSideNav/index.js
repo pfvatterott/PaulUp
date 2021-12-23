@@ -455,6 +455,7 @@ export default function CustomSideNav(props) {
       </div>)}
     else if (data.class === 'folder_item') { return (<div>
       <Icon className="left">folder</Icon>
+      <TreeEllipsesMenu className="right" data={data} sideNavValue={sideNavValue} setSideNavValue={(x) => setSideNavValue(x)} userFavorites={props.userFavorites} setUserFavorites={(x) => props.handleSetUserFavorites(x)}/>
       <p>{data.name}</p>
       </div>)}
     else if (data.class === 'folder_list_item') { return (<div onClick={() => handleOpenFolderList(data.id)}>

@@ -21,3 +21,14 @@
 .treeOptionsIcon {
     margin-top: 10px
 }
+
+.treeOptionsEllipsesFolder {
+    color: gray;
+    opacity: 0%;
+}
+
+.treeOptionsEllipsesFolder:hover {
+    opacity: 100%;
+    cursor: pointer;
+    z-index: 5 !important;
+}
