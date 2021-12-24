@@ -506,7 +506,7 @@ export default function CustomSideNav(props) {
         </Row>
         <Row className="left-align">
           <Col s={12} className="left-align">
-            <FavoritesMenu value={props.value} setValue={(x) => props.setValue(x)} userFavorites={props.userFavorites} setUserFavorites={(x) => props.handleSetUserFavorites(x)} sideNavValue={sideNavValue} setSideNavValue={(x) => handleSetSideNavValue(x)}/>
+            <FavoritesMenu value={props.value} setValue={(x) => props.setValue(x)} userFavorites={props.userFavorites} setUserFavorites={(x) => props.handleSetUserFavorites(x)} sideNavValue={sideNavValue} setSideNavValue={(x) => handleSetSideNavValue(x)} handleOpenList={(x) => handleOpenList(x)}/>
           </Col>
         </Row>
         <Row className="left-align">

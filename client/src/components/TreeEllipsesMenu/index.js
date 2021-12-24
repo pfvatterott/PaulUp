@@ -15,7 +15,6 @@ export default function TreeEllipsesMenu(props) {
         // If deleting a space, delete all folders and tasks in that space. Also delete all favorites that lived in that space.
         API.getUser(userIdVariable).then((userRes) => {
             let userFavorites = userRes.data.favorites
-
             if (props.data.class === "space_item") {
                 API.getSpaceLists(props.data.id).then((getSpaceListsRes) => {
                     for (let i = 0; i < getSpaceListsRes.data.length; i++) {
@@ -203,7 +202,16 @@ export default function TreeEllipsesMenu(props) {
                 })
             }
             else if (props.data.class === "list_item" || 'folder_list_item') { 
-                console.log('working')
+                API.getList(props.data.id).then((getListRes) => {
+                    let oldFavorites = getListRes.data.favorited
+                    oldFavorites.push(userIdVariable)
+                    let newFavorited = {
+                        favorited: oldFavorites
+                    }
+                    API.updateList(props.data.id, newFavorited).then((updateListRes) => {
+                        props.setSideNavValue(props.sideNavValue + 1)
+                    })
+                })
             }
         })
     }
@@ -260,6 +268,21 @@ export default function TreeEllipsesMenu(props) {
             }
             else if (props.data.class === "list_item" || 'folder_list_item') { 
                 console.log('working')
+                API.getList(props.data.id).then((getListRes) => {
+                    let oldFavorited = getListRes.data.favorited
+                    for (let i = 0; i < oldFavorited.length; i++) {
+                        if (oldFavorited[i] === userIdVariable) {
+                            oldFavorited.splice(i, 1);
+                            break
+                        }
+                    }
+                    let newFavorited = {
+                        favorited: oldFavorited
+                    }
+                    API.updateList(props.data.id, newFavorited).then((updateListRes) => {
+                        props.setSideNavValue(props.sideNavValue + 1)
+                    })
+                })
             }
         })
     }
