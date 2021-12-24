@@ -157,7 +157,75 @@ export default function TreeEllipsesMenu(props) {
                 })
             }
             else if (props.data.class === "list_item" || 'folder_list_item') { 
-                console.log('working')
+                API.getList(props.data.id).then((getListRes) => {
+                    if (getListRes.data.space_id) {
+                        let spaceId = getListRes.data.space_id
+                        API.getSpace(spaceId).then((getSpaceRes) => {
+                            let old_space_lists = getSpaceRes.data.lists
+                            for (let i = 0; i < old_space_lists.length; i++) {
+                                if (old_space_lists[i] === props.data.id) {
+                                    old_space_lists.splice(i, 1);
+                                    break
+                                }
+                            }
+                            let new_space_lists = {
+                                lists: old_space_lists
+                            }
+                            API.updateSpace(spaceId, new_space_lists).then((updateSpaceRes) => {})
+                        })
+                    }
+                    else if (getListRes.data.folder_id) {
+                        let folderId = getListRes.data.folder_id
+                        API.getFolder(folderId).then((getFolderRes) => {
+                            let old_folder_lists = getFolderRes.data.lists
+                            for (let i = 0; i < old_folder_lists.length; i++) {
+                                if (old_folder_lists[i] === props.data.id) {
+                                    old_folder_lists.splice(i, 1);
+                                    break
+                                }
+                            }
+                            let new_folder_lists = {
+                                lists: old_folder_lists
+                            }
+                            API.updateFolder(folderId, new_folder_lists).then((updateFolderRes) => {})
+                        })
+                    }
+                    API.getListTasks(props.data.id).then((getListTasksRes) => {
+                        for (let p = 0; p < getListTasksRes.data.length; p++) {
+                            for (let j = 0; j < userFavorites.length; j++) {
+                                if (userFavorites[j].id === getListTasksRes.data[p]._id) {
+                                    userFavorites.splice(j, 1)
+                                    let newFavorites = {
+                                        favorites: userFavorites
+                                    }
+                                    API.updateUser(userIdVariable, newFavorites).then((res) => {
+                                        props.setUserFavorites(userFavorites)
+                                    })
+                                }
+                            }
+                            API.deleteTask(getListTasksRes.data[p]._id).then((deleteTaskRes) => {
+                            })                  
+                        }
+                    })
+                    for (let j = 0; j < userFavorites.length; j++) {
+                        if (userFavorites[j].id === props.data.id) {
+                            userFavorites.splice(j, 1)
+                            let newFavorites = {
+                                favorites: userFavorites
+                            }
+                            API.updateUser(userIdVariable, newFavorites).then((res) => {
+                                props.setUserFavorites(userFavorites)
+                            })
+                        }
+                    }
+                    API.deleteList(props.data.id).then((deleteListRes) => {
+                        props.setSideNavValue(props.sideNavValue + 1)
+                    })
+                    if (props.data.id === currentList) {
+                        setRedirect(true)
+                    }    
+                })
+
             }
         })
     }
