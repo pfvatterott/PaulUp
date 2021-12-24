@@ -157,7 +157,9 @@ export default function TreeEllipsesMenu(props) {
                     props.setSideNavValue(props.sideNavValue + 1)
                 })
             }
-
+            else if (props.data.class === "list_item" || 'folder_list_item') { 
+                console.log('working')
+            }
         })
     }
 
@@ -200,6 +202,9 @@ export default function TreeEllipsesMenu(props) {
                     })
                 })
             }
+            else if (props.data.class === "list_item" || 'folder_list_item') { 
+                console.log('working')
+            }
         })
     }
 
@@ -236,7 +241,7 @@ export default function TreeEllipsesMenu(props) {
                     })
                 })
             }
-            if (props.data.class === "folder_item") {
+            else if (props.data.class === "folder_item") {
                 API.getFolder(props.data.id).then((getSpaceRes) => {
                     let oldFavorited = getSpaceRes.data.favorited
                     for (let i = 0; i < oldFavorited.length; i++) {
@@ -252,6 +257,9 @@ export default function TreeEllipsesMenu(props) {
                         props.setSideNavValue(props.sideNavValue + 1)
                     })
                 })
+            }
+            else if (props.data.class === "list_item" || 'folder_list_item') { 
+                console.log('working')
             }
         })
     }
@@ -278,7 +286,7 @@ export default function TreeEllipsesMenu(props) {
                 onOpenStart: null,
                 outDuration: 250
             }}
-            trigger={props.data.class === 'folder_item' ? (<Icon className="treeOptionsEllipsesFolder right">more_horiz</Icon>) : <Icon className="treeOptionsEllipses right">more_horiz</Icon>}
+            trigger={props.data.class === 'folder_item' || 'list_item' || 'folder_list_item' ? (<Icon className="treeOptionsEllipsesFolder right">more_horiz</Icon>) : <Icon className="treeOptionsEllipses right">more_horiz</Icon>}
             >
                 <a onClick={() => deleteHierarchyItem()}>
                     <div>

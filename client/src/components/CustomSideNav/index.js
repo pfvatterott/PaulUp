@@ -462,10 +462,12 @@ export default function CustomSideNav(props) {
       </div>)}
     else if (data.class === 'folder_list_item') { return (<div onClick={() => handleOpenFolderList(data.id)}>
       <Icon className="left">format_list_bulleted</Icon>
+      <TreeEllipsesMenu className="right" data={data} sideNavValue={sideNavValue} setSideNavValue={(x) => handleSetSideNavValue(x)} userFavorites={props.userFavorites} setUserFavorites={(x) => props.handleSetUserFavorites(x)}/>
       <p>{data.name}</p>
       </div>)}
     else if (data.class === 'list_item') { return (<div onClick={() => handleOpenList(data.id)}>
       <Icon className="left">format_list_bulleted</Icon>
+      <TreeEllipsesMenu className="right" data={data} sideNavValue={sideNavValue} setSideNavValue={(x) => handleSetSideNavValue(x)} userFavorites={props.userFavorites} setUserFavorites={(x) => props.handleSetUserFavorites(x)}/>
       <p>{data.name}</p>
       </div>)}
     else if (data.class === 'create_new_list_for_folder') { return (<div onClick={() => handleOpenCreateListForFolder(data.id)}>
@@ -525,7 +527,7 @@ export default function CustomSideNav(props) {
               </Row>
               <Row>
                 <Col s={12}>
-                  <TreeViewComponent fields={treeData} allowDragAndDrop={true} nodeTemplate={(newList) => nodeTemplate(newList)} expandOn={'Click'} enablePersistence={true}/>
+                  <TreeViewComponent fields={treeData} allowDragAndDrop={true} nodeTemplate={(newList) => nodeTemplate(newList)} expandOn={'Auto'} enablePersistence={true}/>
                 </Col>
               </Row>
             </CollapsibleItem>
