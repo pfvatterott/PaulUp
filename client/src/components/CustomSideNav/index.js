@@ -372,7 +372,8 @@ export default function CustomSideNav(props) {
             order_index: spacesArray[i].order_index,
             subChild: nodeArray,
             class: 'space_item',
-            favorited: spacesArray[i].favorited
+            favorited: spacesArray[i].favorited,
+            expanded: true
           }
           newTreeData.push(spaceTreeData)
         })
