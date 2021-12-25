@@ -89,3 +89,7 @@
 .e-treeview {
     overflow: visible !important;
 }
+
+.createStatusesModalCollection {
+    overflow: visible !important;
+}

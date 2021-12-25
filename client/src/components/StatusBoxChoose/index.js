@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown, Button, Divider, Icon } from "react-materialize";
+import { TwitterPicker } from 'react-color'
 import API from "../../utils/API"
 import "./style.css"
 
@@ -10,6 +11,10 @@ export default function StatusBoxChoose(props) {
     useEffect(() => {
 
     }, [])
+
+    function handleColorChoice(x) {
+        console.log(x)
+    }
 
 
     return (
@@ -34,6 +39,7 @@ export default function StatusBoxChoose(props) {
                 }}
                 trigger={<div className='status_box left' key={props.id} style={{backgroundColor: 'red'}}></div>}
                 >
+                    <TwitterPicker onChange={(x) => handleColorChoice(x)}/>
                   
             </Dropdown>
         </div>

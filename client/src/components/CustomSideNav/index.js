@@ -585,7 +585,7 @@ export default function CustomSideNav(props) {
         <Row>
           <Col s={12}>
             <h4>OPEN</h4>
-            <Collection>
+            <Collection className="createStatusesModalCollection">
              <CollectionItem>
                 <StatusBoxChoose />
                 Test
