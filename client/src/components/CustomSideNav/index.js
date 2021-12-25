@@ -580,14 +580,36 @@ export default function CustomSideNav(props) {
         options={{
           dismissible: false
         }}>
-        <h3>Create your Statuses:</h3>
+        <h4>Create your Statuses:</h4>
         <br></br>
         <Row>
           <Col s={12}>
-            <h4>OPEN</h4>
+            <h5>Open</h5>
             <Collection className="createStatusesModalCollection">
              <CollectionItem>
-                <StatusBoxChoose />
+                <StatusBoxChoose type="open"/>
+                Test
+             </CollectionItem>
+            </Collection>
+          </Col>
+        </Row>
+        <Row>
+          <Col s={12}>
+            <h5>In Progress</h5>
+            <Collection className="createStatusesModalCollection">
+             <CollectionItem>
+                <StatusBoxChoose type="in_progress"/>
+                Test
+             </CollectionItem>
+            </Collection>
+          </Col>
+        </Row>
+        <Row>
+          <Col s={12}>
+            <h5>Closed</h5>
+            <Collection className="createStatusesModalCollection">
+             <CollectionItem>
+                <StatusBoxChoose type="done"/>
                 Test
              </CollectionItem>
             </Collection>

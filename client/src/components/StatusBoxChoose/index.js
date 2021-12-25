@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown, Button, Divider, Icon } from "react-materialize";
-import { TwitterPicker } from 'react-color'
+import { CirclePicker } from 'react-color'
 import API from "../../utils/API"
 import "./style.css"
 
@@ -9,7 +9,15 @@ export default function StatusBoxChoose(props) {
     const [currentColor, setCurrentColor] = useState('')
 
     useEffect(() => {
-
+        if (props.type === 'open') {
+            setCurrentColor('#D3D3D3')
+        }
+        else if (props.type === 'in_progress') {
+            setCurrentColor('#A875FF')
+        }
+        else if (props.type === 'done') {
+            setCurrentColor('#6BC950')
+        }
     }, [])
 
     function handleColorChoice(x) {
@@ -37,9 +45,9 @@ export default function StatusBoxChoose(props) {
                     onOpenStart: null,
                     outDuration: 250
                 }}
-                trigger={<div className='status_box left' key={props.id} style={{backgroundColor: 'red'}}></div>}
+                trigger={<div className='status_box left' key={props.id} style={{backgroundColor: currentColor}}></div>}
                 >
-                    <TwitterPicker onChange={(x) => handleColorChoice(x)}/>
+                    <CirclePicker className="circleColorPicker" onChange={(x) => handleColorChoice(x)}/>
                   
             </Dropdown>
         </div>

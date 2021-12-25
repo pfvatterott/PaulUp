@@ -4,6 +4,8 @@
     margin-left: 10px;
 }
 
-.dropdownMenu {
-    /* width: 150px !important; */
+.circleColorPicker {
+    padding-left: 10px;
+    padding-top: 10px;
+    max-width: 220px;
 }
