@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SideNav, Button, Col, Row, Modal, TextInput, Icon, Collapsible, CollapsibleItem } from 'react-materialize'
+import { SideNav, Button, Col, Row, Modal, TextInput, Icon, Collapsible, CollapsibleItem , Collection, CollectionItem} from 'react-materialize'
 import { TreeViewComponent } from '@syncfusion/ej2-react-navigations';
 import { enableRipple } from '@syncfusion/ej2-base';
 import { useLocation, Redirect } from "react-router-dom";
@@ -9,6 +9,7 @@ import API from "../../utils/API"
 import "./style.css"
 import GoogleLogin from "react-google-login";
 import '../../../node_modules/react-simple-tree-menu/dist/main.css';
+import StatusBoxChoose from "../StatusBoxChoose/index.js";
 
 export default function CustomSideNav(props) {
   const [workspaceData, setWorkspaceData] = useState([])
@@ -32,6 +33,7 @@ export default function CustomSideNav(props) {
   const [userID, setUserID] = useState('')
   const [location, setLocation] = useState(useLocation())
   const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const [openCreateSpaceStatuses, setOpenCreateSpaceStatuses] = useState(false)
   const [sideNavValue, setSideNavValue] = useState(0)
 
   let userIdVariable = location.state
@@ -152,6 +154,10 @@ export default function CustomSideNav(props) {
     })
   }
 
+  function resetCreateSpaceStatusesModal() {
+    setOpenCreateSpaceStatuses(false)
+  }
+
   function resetCreateSpaceModal() {
     setOpenCreateSpaceModal(false)
   }
@@ -195,6 +201,11 @@ export default function CustomSideNav(props) {
   function handleOpenCreateListModal() {
     setOpenCreateNewFolderOrListModal(false)
     setOpenCreateListModal(true)
+  }
+
+  function handleOpenCreateSpaceStatuses() {
+    setOpenCreateSpaceModal(false)
+    setOpenCreateSpaceStatuses(true)
   }
 
 
@@ -555,8 +566,38 @@ export default function CustomSideNav(props) {
         <br></br>
         <br></br><br></br>
         <a><Button id="modalBtn" modal="close" onClick={handleCreateSpace}>Create Space</Button></a>
+        <a><Button id="modalBtn" modal="close" onClick={handleOpenCreateSpaceStatuses}>Create Space new</Button></a>
         <br></br><br></br>
         <a><Button id="modalBtn" modal="close" onClick={resetCreateSpaceModal}>Cancel</Button></a>
+      </Modal>
+
+      {/* Set Space Statuses Modal */}
+
+      <Modal
+        open={openCreateSpaceStatuses}
+        className='center-align'
+        actions={[]}
+        options={{
+          dismissible: false
+        }}>
+        <h3>Create your Statuses:</h3>
+        <br></br>
+        <Row>
+          <Col s={12}>
+            <h4>OPEN</h4>
+            <Collection>
+             <CollectionItem>
+                <StatusBoxChoose />
+                Test
+             </CollectionItem>
+            </Collection>
+          </Col>
+        </Row>
+        <br></br><br></br>
+        <a><Button id="modalBtn" modal="close" onClick={handleCreateSpace}>Create Space</Button></a>
+        <a><Button id="modalBtn" modal="close" onClick={handleOpenCreateSpaceStatuses}>Create Space new</Button></a>
+        <br></br><br></br>
+        <a><Button id="modalBtn" modal="close" onClick={resetCreateSpaceStatusesModal}>Cancel</Button></a>
       </Modal>
 
       {/* Create Workspace Modal */}
