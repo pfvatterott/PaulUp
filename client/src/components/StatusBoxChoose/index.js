@@ -5,23 +5,19 @@ import API from "../../utils/API"
 import "./style.css"
 
 export default function StatusBoxChoose(props) {
-    const [currentStatus, setCurrentStatus] = useState('')
-    const [currentColor, setCurrentColor] = useState('')
-
-    useEffect(() => {
-        if (props.type === 'open') {
-            setCurrentColor('#D3D3D3')
-        }
-        else if (props.type === 'in_progress') {
-            setCurrentColor('#A875FF')
-        }
-        else if (props.type === 'done') {
-            setCurrentColor('#6BC950')
-        }
-    }, [])
+    const [currentColor, setCurrentColor] = useState(props.info.color)
 
     function handleColorChoice(x) {
-        console.log(x)
+        for (let i = 0; i < props.statusSet.length; i++) {
+            if (props.statusSet[i].index === props.info.index) {
+                setCurrentColor(x.hex)
+                let newStatusColor = props.info
+                newStatusColor.color = x.hex
+                let newStatusSet = props.statusSet
+                newStatusSet[props.info.index] = newStatusColor
+                props.setStatusColor(newStatusSet)
+            }
+        }
     }
 
 

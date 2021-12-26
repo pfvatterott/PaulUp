@@ -35,6 +35,25 @@ export default function CustomSideNav(props) {
   const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const [openCreateSpaceStatuses, setOpenCreateSpaceStatuses] = useState(false)
   const [sideNavValue, setSideNavValue] = useState(0)
+  const [newOpenStatuses, setNewOpenStatuses] = useState([{
+    type: 'open',
+    color: '#D3D3D3',
+    name: 'open',
+    index: 0
+    }
+  ])
+  const [newInProgressStatuses, setNewInProgressStatuses] = useState([{
+    type: 'in progress',
+    color: '#A875FF',
+    name: 'in progress',
+    index: 0
+  }])
+  const [newClosedStatuses, setNewClosedStatuses] = useState([{
+    type: 'done',
+    color: '#6BC950',
+    name: 'done',
+    index: 0
+  }]);
 
   let userIdVariable = location.state
   enableRipple(true);
@@ -492,6 +511,18 @@ export default function CustomSideNav(props) {
     </div>)};
   }
 
+  function handleStatusColorChange(x) {
+    if (x.type === 'open') {
+      setNewOpenStatuses(x) 
+    }
+    else if (x.type === 'in progress') {
+      setNewInProgressStatuses(x)
+    }
+    else {
+      setNewClosedStatuses(x)
+    }
+  }
+
   return (
     <div>
       { redirectToList ? (<Redirect push to={{pathname: '/listview/' + currentList, state: userID}}/>) : null }
@@ -586,10 +617,12 @@ export default function CustomSideNav(props) {
           <Col s={12}>
             <h5>Open</h5>
             <Collection className="createStatusesModalCollection">
-             <CollectionItem>
-                <StatusBoxChoose type="open"/>
-                Test
-             </CollectionItem>
+              {newOpenStatuses? newOpenStatuses.map(item => (
+                <CollectionItem>
+                  <StatusBoxChoose info={item} statusSet={newOpenStatuses} setStatusColor={(x) => handleStatusColorChange(x)}/>
+                {item.name}
+               </CollectionItem>
+              )) : null}
             </Collection>
           </Col>
         </Row>
@@ -597,10 +630,12 @@ export default function CustomSideNav(props) {
           <Col s={12}>
             <h5>In Progress</h5>
             <Collection className="createStatusesModalCollection">
-             <CollectionItem>
-                <StatusBoxChoose type="in_progress"/>
-                Test
-             </CollectionItem>
+              {newInProgressStatuses? newInProgressStatuses.map(item => (
+                <CollectionItem>
+                  <StatusBoxChoose info={item} statusSet={newInProgressStatuses} setStatusColor={(x) => handleStatusColorChange(x)}/>
+                  {item.name}
+                </CollectionItem>
+              )) : null}
             </Collection>
           </Col>
         </Row>
@@ -608,10 +643,12 @@ export default function CustomSideNav(props) {
           <Col s={12}>
             <h5>Closed</h5>
             <Collection className="createStatusesModalCollection">
-             <CollectionItem>
-                <StatusBoxChoose type="done"/>
-                Test
-             </CollectionItem>
+              {newClosedStatuses? newClosedStatuses.map(item => (
+                <CollectionItem>
+                  <StatusBoxChoose info={item} statusSet={newClosedStatuses} setStatusColor={(x) => handleStatusColorChange(x)}/>
+                  {item.name}
+                </CollectionItem>
+              )) : null}
             </Collection>
           </Col>
         </Row>
