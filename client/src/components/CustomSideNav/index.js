@@ -54,7 +54,10 @@ export default function CustomSideNav(props) {
     name: 'done',
     index: 0
   }]);
-
+  const [createOpenStatusInput, setCreateOpenStatusInput] = useState(false)
+  const [createInProgressStatusInput, setCreateInProgressStatusInput] = useState(false)
+  const [createDoneStatusInput, setCreateDoneStatusInput] = useState(false)
+  const [newStatusName, setNewStatusName] = useState('')
   let userIdVariable = location.state
   enableRipple(true);
 
@@ -523,6 +526,71 @@ export default function CustomSideNav(props) {
     }
   }
 
+  function handleOpenCreateStatusInput(x) {
+      if (x === 'open') {
+        setCreateOpenStatusInput(true)
+        setCreateInProgressStatusInput(false)
+        setCreateDoneStatusInput(false)
+      }
+      else if (x === 'in progress') {
+        setCreateOpenStatusInput(false)
+        setCreateInProgressStatusInput(true)
+        setCreateDoneStatusInput(false)
+      }
+      else if (x === 'done') {
+        setCreateOpenStatusInput(false)
+        setCreateInProgressStatusInput(false)
+        setCreateDoneStatusInput(true)
+      }
+  }
+
+  function handleNewStatusNameChange(event) {
+    const name = event.target.value;
+    setNewStatusName(name)
+  }
+
+  function handleCreateNewStatus(type) {
+    setCreateOpenStatusInput(false)
+    setCreateInProgressStatusInput(false)
+    setCreateDoneStatusInput(false)
+    console.log(newStatusName)
+    if (newStatusName !== '') {
+      if (type === 'open') {
+        let newStatus = newOpenStatuses
+        newStatus.push({
+          type: 'open', 
+          color: '#D3D3D3',
+          name: newStatusName,
+          index: newStatus.length
+        })
+        setNewOpenStatuses(newStatus)
+        setNewStatusName('')
+      }
+      else if (type === 'in progress') {
+        let newStatus = newInProgressStatuses
+        newStatus.push({
+          type: 'in progress', 
+          color: '#A875FF',
+          name: newStatusName,
+          index: newStatus.length
+        })
+        setNewInProgressStatuses(newStatus)
+        setNewStatusName('')
+      }
+      else if (type === 'done') {
+        let newStatus = newClosedStatuses
+        newStatus.push({
+          type: 'done', 
+          color: '#6BC950',
+          name: newStatusName,
+          index: newStatus.length
+        })
+        setNewClosedStatuses(newStatus)
+        setNewStatusName('')
+      }
+    }
+  }
+
   return (
     <div>
       { redirectToList ? (<Redirect push to={{pathname: '/listview/' + currentList, state: userID}}/>) : null }
@@ -618,11 +686,27 @@ export default function CustomSideNav(props) {
             <h5>Open</h5>
             <Collection className="createStatusesModalCollection">
               {newOpenStatuses? newOpenStatuses.map(item => (
+                <div>
                 <CollectionItem>
                   <StatusBoxChoose info={item} statusSet={newOpenStatuses} setStatusColor={(x) => handleStatusColorChange(x)}/>
                 {item.name}
-               </CollectionItem>
+               </CollectionItem>  
+               </div>
               )) : null}
+              <CollectionItem className="collection left-align taskViewCollection">
+                  { createOpenStatusInput ? (
+                        <li className="collection-item create_task_collection_item">
+                        <div className="input-field">
+                            <input autoFocus placeholder="Create New Status" id="first_name" type="text" className="validate" onChange={handleNewStatusNameChange} value={newStatusName}
+                            onKeyPress={event => {
+                                if (event.key === 'Enter') {
+                                  handleCreateNewStatus('open')
+                                }
+                            }}/>
+                        </div>
+                    </li>
+                  ) : <Button flat node="button" waves="light" onClick={() => handleOpenCreateStatusInput('open')}>+ Status</Button>}
+              </CollectionItem> 
             </Collection>
           </Col>
         </Row>
@@ -631,11 +715,27 @@ export default function CustomSideNav(props) {
             <h5>In Progress</h5>
             <Collection className="createStatusesModalCollection">
               {newInProgressStatuses? newInProgressStatuses.map(item => (
+                <div>
                 <CollectionItem>
                   <StatusBoxChoose info={item} statusSet={newInProgressStatuses} setStatusColor={(x) => handleStatusColorChange(x)}/>
                   {item.name}
                 </CollectionItem>
+                </div>
               )) : null}
+               <CollectionItem className="collection left-align taskViewCollection">
+                    { createInProgressStatusInput ? (
+                          <li className="collection-item create_task_collection_item">
+                          <div className="input-field">
+                              <input autoFocus placeholder="Create New Status" id="first_name" type="text" className="validate" onChange={handleNewStatusNameChange} value={newStatusName}
+                              onKeyPress={event => {
+                                  if (event.key === 'Enter') {
+                                    handleCreateNewStatus('in progress')
+                                  }
+                              }}/>
+                          </div>
+                      </li>
+                    ) : <Button flat node="button" waves="light" onClick={() => handleOpenCreateStatusInput('in progress')}>+ Status</Button>}
+                </CollectionItem>  
             </Collection>
           </Col>
         </Row>
@@ -644,11 +744,27 @@ export default function CustomSideNav(props) {
             <h5>Closed</h5>
             <Collection className="createStatusesModalCollection">
               {newClosedStatuses? newClosedStatuses.map(item => (
+                <div>
                 <CollectionItem>
                   <StatusBoxChoose info={item} statusSet={newClosedStatuses} setStatusColor={(x) => handleStatusColorChange(x)}/>
                   {item.name}
                 </CollectionItem>
+                </div>
               )) : null}
+              <CollectionItem className="collection left-align taskViewCollection">
+                    { createDoneStatusInput ? (
+                          <li className="collection-item create_task_collection_item">
+                          <div className="input-field">
+                              <input autoFocus placeholder="Create New Status" id="first_name" type="text" className="validate" onChange={handleNewStatusNameChange} value={newStatusName}
+                              onKeyPress={event => {
+                                  if (event.key === 'Enter') {
+                                    handleCreateNewStatus('done')
+                                  }
+                              }}/>
+                          </div>
+                      </li>
+                    ) : <Button flat node="button" waves="light" onClick={() => handleOpenCreateStatusInput('done')}>+ Status</Button>}
+                </CollectionItem>  
             </Collection>
           </Col>
         </Row>
