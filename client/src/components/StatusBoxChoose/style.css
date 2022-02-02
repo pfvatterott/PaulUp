@@ -1,0 +1,11 @@
+.status_box {
+    padding: 10px ;
+    margin-right: 20px;
+    margin-left: 10px;
+}
+
+.circleColorPicker {
+    padding-left: 10px;
+    padding-top: 10px;
+    max-width: 220px;
+}
