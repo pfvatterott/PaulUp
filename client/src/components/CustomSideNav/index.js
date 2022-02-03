@@ -247,7 +247,6 @@ export default function CustomSideNav(props) {
       closedStatuses[p].index = openStatuses.length + inProgressStatuses.length + p
     }
     let newStatuses = [...openStatuses, ...inProgressStatuses, ...closedStatuses]
-    console.log(newStatuses)
     let spaceData = {
       space_name: newSpaceName,
       owner_id: userIdVariable,
@@ -256,6 +255,7 @@ export default function CustomSideNav(props) {
       statuses: newStatuses
     }
     API.saveSpace(spaceData).then((saveSpaceResponse) => {
+      setNewSpaceName('')
       let spacesArray = workspaceData.spaces
       spacesArray.push(saveSpaceResponse.data._id)
       let newSpaceData = {
@@ -264,7 +264,6 @@ export default function CustomSideNav(props) {
       API.updateWorkspace(workspaceData._id, newSpaceData).then((updateWorkspaceResponse) => {
         handleGetWorkspaces()
         handleGetUser()
-        setNewSpaceName('')
       })
     })
   }
@@ -550,7 +549,6 @@ export default function CustomSideNav(props) {
     setCreateOpenStatusInput(false)
     setCreateInProgressStatusInput(false)
     setCreateDoneStatusInput(false)
-    console.log(newStatusName)
     if (newStatusName !== '') {
       if (type === 'open') {
         let newStatus = newOpenStatuses

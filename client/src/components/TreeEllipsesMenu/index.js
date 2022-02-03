@@ -156,7 +156,7 @@ export default function TreeEllipsesMenu(props) {
                     props.setSideNavValue(props.sideNavValue + 1)
                 })
             }
-            else if (props.data.class === "list_item" || 'folder_list_item') { 
+            else if (props.data.class === ("list_item" || 'folder_list_item')) { 
                 API.getList(props.data.id).then((getListRes) => {
                     if (getListRes.data.space_id) {
                         let spaceId = getListRes.data.space_id
@@ -225,7 +225,6 @@ export default function TreeEllipsesMenu(props) {
                         setRedirect(true)
                     }    
                 })
-
             }
         })
     }
