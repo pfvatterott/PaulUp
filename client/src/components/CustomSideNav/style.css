@@ -93,3 +93,8 @@
 .createStatusesModalCollection {
     overflow: visible !important;
 }
+
+.statusTrashIcon {
+    cursor: pointer;
+    color: red;
+}

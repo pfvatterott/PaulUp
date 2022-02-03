@@ -33,6 +33,7 @@ export default function CustomSideNav(props) {
   const [userID, setUserID] = useState('')
   const [location, setLocation] = useState(useLocation())
   const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const [forceUpdate, setForceUpdate] = useState(0);
   const [openCreateSpaceStatuses, setOpenCreateSpaceStatuses] = useState(false)
   const [sideNavValue, setSideNavValue] = useState(0)
   const [newOpenStatuses, setNewOpenStatuses] = useState([{
@@ -178,10 +179,12 @@ export default function CustomSideNav(props) {
 
   function resetCreateSpaceStatusesModal() {
     setOpenCreateSpaceStatuses(false)
+    setNewSpaceName('')
   }
 
   function resetCreateSpaceModal() {
     setOpenCreateSpaceModal(false)
+    setNewSpaceName('')
   }
 
   function resetCreateFolderOrList() {
@@ -233,31 +236,24 @@ export default function CustomSideNav(props) {
 
   function handleCreateSpace() {
     setOpenCreateSpaceModal(false)
+    setOpenCreateSpaceStatuses(false)
+    let openStatuses = newOpenStatuses
+    let inProgressStatuses = newInProgressStatuses
+    let closedStatuses = newClosedStatuses
+    for (let i = 0; i < inProgressStatuses.length; i++) {
+      inProgressStatuses[i].index = openStatuses.length + i
+    }
+    for (let p = 0; p < closedStatuses.length; p++) {
+      closedStatuses[p].index = openStatuses.length + inProgressStatuses.length + p
+    }
+    let newStatuses = [...openStatuses, ...inProgressStatuses, ...closedStatuses]
+    console.log(newStatuses)
     let spaceData = {
       space_name: newSpaceName,
       owner_id: userIdVariable,
       workspace_id: workspaceData._id,
       order_index: workspaceData.spaces.length,
-      statuses: [
-        {
-          name: 'OPEN',
-          type: 'open',
-          color: "#D3D3D3",
-          order_index: 0
-        },
-        {
-          name: 'IN PROGRESS',
-          type: 'in progress',
-          color: "#A875FF",
-          order_index: 1
-        },
-        {
-          name: 'CLOSED',
-          type: 'closed',
-          color: "#6BC950",
-          order_index: 2
-        }
-      ]
+      statuses: newStatuses
     }
     API.saveSpace(spaceData).then((saveSpaceResponse) => {
       let spacesArray = workspaceData.spaces
@@ -268,6 +264,7 @@ export default function CustomSideNav(props) {
       API.updateWorkspace(workspaceData._id, newSpaceData).then((updateWorkspaceResponse) => {
         handleGetWorkspaces()
         handleGetUser()
+        setNewSpaceName('')
       })
     })
   }
@@ -521,7 +518,7 @@ export default function CustomSideNav(props) {
     else if (x.type === 'in progress') {
       setNewInProgressStatuses(x)
     }
-    else {
+    else if (x.type === 'done') {
       setNewClosedStatuses(x)
     }
   }
@@ -588,6 +585,42 @@ export default function CustomSideNav(props) {
         setNewClosedStatuses(newStatus)
         setNewStatusName('')
       }
+    }
+  }
+
+  function handleDeleteStatus(type, index) {
+    if (type === 'open') {
+      let newStatus = newOpenStatuses
+      newStatus.splice(index, 1)
+      for (let i = 0; i < newStatus.length; i++) {
+        if (newStatus[i].index > index) {
+          newStatus[i].index -= 1
+        }
+      }
+      setNewOpenStatuses(newStatus)
+      setForceUpdate(forceUpdate + 1)
+    }
+    else if (type === 'in progress') {
+      let newStatus = newInProgressStatuses
+      newStatus.splice(index, 1)
+      for (let i = 0; i < newStatus.length; i++) {
+        if (newStatus[i].index > index) {
+          newStatus[i].index -= 1
+        }
+      }
+      setNewInProgressStatuses(newStatus)
+      setForceUpdate(forceUpdate + 1)
+    }
+    else if (type === 'done') {
+      let newStatus = newClosedStatuses
+      newStatus.splice(index, 1)
+      for (let i = 0; i < newStatus.length; i++) {
+        if (newStatus[i].index > index) {
+          newStatus[i].index -= 1
+        }
+      }
+      setNewClosedStatuses(newStatus)
+      setForceUpdate(forceUpdate + 1)
     }
   }
 
@@ -664,8 +697,7 @@ export default function CustomSideNav(props) {
         />
         <br></br>
         <br></br><br></br>
-        <a><Button id="modalBtn" modal="close" onClick={handleCreateSpace}>Create Space</Button></a>
-        <a><Button id="modalBtn" modal="close" onClick={handleOpenCreateSpaceStatuses}>Create Space new</Button></a>
+        <a><Button id="modalBtn" modal="close" onClick={handleOpenCreateSpaceStatuses}>Next</Button></a>
         <br></br><br></br>
         <a><Button id="modalBtn" modal="close" onClick={resetCreateSpaceModal}>Cancel</Button></a>
       </Modal>
@@ -689,21 +721,24 @@ export default function CustomSideNav(props) {
                 <div>
                 <CollectionItem>
                   <StatusBoxChoose info={item} statusSet={newOpenStatuses} setStatusColor={(x) => handleStatusColorChange(x)}/>
-                {item.name}
+                  <div className="left">{item.name}</div>
+                  <a className="right">
+                    <Icon className="left statusTrashIcon" onClick={() => handleDeleteStatus(item.type, item.index)}>delete</Icon>
+                  </a>
                </CollectionItem>  
                </div>
               )) : null}
               <CollectionItem className="collection left-align taskViewCollection">
                   { createOpenStatusInput ? (
-                        <li className="collection-item create_task_collection_item">
-                        <div className="input-field">
-                            <input autoFocus placeholder="Create New Status" id="first_name" type="text" className="validate" onChange={handleNewStatusNameChange} value={newStatusName}
-                            onKeyPress={event => {
-                                if (event.key === 'Enter') {
-                                  handleCreateNewStatus('open')
-                                }
-                            }}/>
-                        </div>
+                    <li className="collection-item create_task_collection_item">
+                      <div className="input-field">
+                          <input autoFocus placeholder="Create New Status" id="first_name" type="text" className="validate" onChange={handleNewStatusNameChange} value={newStatusName}
+                          onKeyPress={event => {
+                              if (event.key === 'Enter') {
+                                handleCreateNewStatus('open')
+                              }
+                          }}/>
+                      </div>
                     </li>
                   ) : <Button flat node="button" waves="light" onClick={() => handleOpenCreateStatusInput('open')}>+ Status</Button>}
               </CollectionItem> 
@@ -718,7 +753,10 @@ export default function CustomSideNav(props) {
                 <div>
                 <CollectionItem>
                   <StatusBoxChoose info={item} statusSet={newInProgressStatuses} setStatusColor={(x) => handleStatusColorChange(x)}/>
-                  {item.name}
+                  <div className="left">{item.name}</div>
+                  <a className="right">
+                    <Icon className="left statusTrashIcon" onClick={() => handleDeleteStatus(item.type, item.index)}>delete</Icon>
+                  </a>
                 </CollectionItem>
                 </div>
               )) : null}
@@ -747,7 +785,10 @@ export default function CustomSideNav(props) {
                 <div>
                 <CollectionItem>
                   <StatusBoxChoose info={item} statusSet={newClosedStatuses} setStatusColor={(x) => handleStatusColorChange(x)}/>
-                  {item.name}
+                  <div className="left">{item.name}</div>
+                  <a className="right">
+                    <Icon className="left statusTrashIcon" onClick={() => handleDeleteStatus(item.type, item.index)}>delete</Icon>
+                  </a>
                 </CollectionItem>
                 </div>
               )) : null}
@@ -770,7 +811,6 @@ export default function CustomSideNav(props) {
         </Row>
         <br></br><br></br>
         <a><Button id="modalBtn" modal="close" onClick={handleCreateSpace}>Create Space</Button></a>
-        <a><Button id="modalBtn" modal="close" onClick={handleOpenCreateSpaceStatuses}>Create Space new</Button></a>
         <br></br><br></br>
         <a><Button id="modalBtn" modal="close" onClick={resetCreateSpaceStatusesModal}>Cancel</Button></a>
       </Modal>
