@@ -20,3 +20,14 @@
     max-height: 35px;
     margin-top: 2px;
 }
+
+.user_image_selected_assignee {
+    max-height: 40px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    display: block;
+    border-radius: 200px;
+    box-sizing: border-box;
+    background-color: #DDD;
+    border: 3px solid #7B68EE;
+}
