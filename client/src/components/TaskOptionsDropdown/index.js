@@ -140,7 +140,7 @@ export default function TaskOptionsDropdown(props) {
 
 
     return (
-        <td>
+        <td className="taskOptionsTd">
             <Dropdown
                 id={props.id.concat('', 'TaskOptionsDropdown')}
                 className="dropdownMenuTaskoptions"

@@ -1,5 +1,5 @@
 .empty_assignee_icon {
-    margin-top: 7px;
+    margin-left: 4px;
 }
 
 .user_image {
@@ -18,7 +18,7 @@
 
 .assignee_image {
     max-height: 35px;
-    margin-top: 2px;
+    /* margin-top: 2px; */
 }
 
 .user_image_selected_assignee {
@@ -30,4 +30,9 @@
     box-sizing: border-box;
     background-color: #DDD;
     border: 3px solid #7B68EE;
+}
+
+.assigneeSelectorTd {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
 }

@@ -8,3 +8,7 @@
     cursor: pointer;
     z-index: 5 !important;
 }
+
+.taskOptionsTd {
+    max-width: 30px !important;
+}

@@ -54,7 +54,7 @@ export default function AssigneeSelector(props) {
     }
   }, [props.workspaceUsers])
 
-  return <div>
+  return <td className="assigneeSelectorTd">
     {props.workspaceUsers.length > 0 ? (
     <Dropdown
                 id={props.id + "AssigneeDropdown"}
@@ -83,5 +83,5 @@ export default function AssigneeSelector(props) {
                 {userArray}
             </Dropdown>
     ):null}
-  </div>;
+  </td>;
 }

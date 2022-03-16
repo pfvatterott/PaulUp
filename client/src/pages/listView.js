@@ -229,7 +229,7 @@ function taskView() {
                                     <tr>
                                         <th></th>
                                         <th onClick={() => handleSortByTaskName()} className='task_name'>{taskNameLabel}</th>
-                                        <th>Assignee</th>
+                                        <th className="assigneeHeader">Assignee</th>
                                         <th className="right">Start &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                                         Due&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                         <th></th>
