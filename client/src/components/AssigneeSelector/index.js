@@ -8,7 +8,7 @@ export default function AssigneeSelector(props) {
   const [userArray, setUserArray] = useState([])
   const [assignee, setAssignee] = useState({})
 
-  function addAssignee(user) {
+  function adjustAssignee(user) {
     let newAssignee = {
       task_assignee: user,
     }
@@ -26,7 +26,7 @@ export default function AssigneeSelector(props) {
         // if user is assignee of task
         if (props.workspaceUsers[i].id === props.assignees) {
           let userHTML = 
-          <a onClick={() => addAssignee('')}>
+          <a onClick={() => adjustAssignee('')}>
             <img src={props.workspaceUsers[i].img} className="circle user_image_selected_assignee left"></img>
             <div className="dropdown_selection_text">{props.workspaceUsers[i].first_name} {props.workspaceUsers[i].last_name}</div>
           </a>
@@ -36,7 +36,7 @@ export default function AssigneeSelector(props) {
         // if user is not assignee of task
         else {
           let userHTML = 
-          <a onClick={() => addAssignee(props.workspaceUsers[i].id)}>
+          <a onClick={() => adjustAssignee(props.workspaceUsers[i].id)}>
             <img src={props.workspaceUsers[i].img} className="circle user_image left"></img>
             <div className="dropdown_selection_text">{props.workspaceUsers[i].first_name} {props.workspaceUsers[i].last_name}</div>
           </a>
