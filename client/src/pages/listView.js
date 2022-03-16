@@ -9,6 +9,7 @@ import "./styles/listViewStyle.css"
 import API from "../utils/API";
 import StatusBox from "../components/StatusBox";
 import DateSelector from "../components/DateSelector";
+import AssigneeSelector from "../components/AssigneeSelector";
 // import { List } from "@material-ui/icons";
 
 function taskView() {
@@ -24,6 +25,7 @@ function taskView() {
     const [forceUpdate, setForceUpdate] = useState(0);
     const [groupBy, setGroupBy] = useState('status')
     const [userFavorites, setUserFavorites] = useState([])
+    const [workspaceUsers, setWorkspaceUsers] = useState([])
     let userIdVariable = location.state
 
     useEffect(() => {
@@ -44,6 +46,18 @@ function taskView() {
     
     useEffect(() => {
     }, [userFavorites])
+
+    useEffect(() => {
+        loadUsers()
+    } , [currentList])
+
+    function loadUsers() {
+        API.getSpace(currentList.space_id).then(SpaceRes => {
+          API.getWorkspace(SpaceRes.data.workspace_id).then(workspaceRes => {
+            setWorkspaceUsers(workspaceRes.data.users)
+          })
+        })
+    }
 
     // forces re-render of DOM
     function useForceUpdate() {
@@ -215,6 +229,7 @@ function taskView() {
                                     <tr>
                                         <th></th>
                                         <th onClick={() => handleSortByTaskName()} className='task_name'>{taskNameLabel}</th>
+                                        <th>Assignee</th>
                                         <th className="right">Start &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                                         Due&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                         <th></th>
@@ -227,7 +242,8 @@ function taskView() {
                                         if(task.task_status.status === item.name)
                                             return <tr className="collection-item" key={task._id}>
                                             <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
-                                            <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>   
+                                            <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>
+                                            <AssigneeSelector currentList={currentList} workspaceUsers={workspaceUsers} id={task._id}></AssigneeSelector>
                                             <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>
                                             <TaskOptionsDropdown favorited={task.favorited} id={task._id} list={task.list_id} orderIndex={task.order_index} handleGetListTasks={(a) => handleGetListTasks(a)} taskName={task.task_name} userFavorites={userFavorites} setUserFavorites={(x) => handleSetUserFavorites(x)} updateTask={(a, b) => updateTask(a, b)}/>
                                         </tr>
@@ -265,6 +281,7 @@ function taskView() {
                                     <tr>
                                         <th></th>
                                         <th onClick={() => handleSortByTaskName()} className='task_name'>{taskNameLabel}</th>
+                                        <th>Assignee</th>
                                         <th className="right">Start &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                                         Due&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                         <th></th>
@@ -276,7 +293,8 @@ function taskView() {
                                     {listTasks.map(task => {
                                             return <tr className="collection-item" key={task._id}>
                                             <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
-                                            <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>   
+                                            <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>
+                                            <AssigneeSelector currentList={currentList} workspaceUsers={workspaceUsers} id={task._id}></AssigneeSelector>   
                                             <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>
                                             <TaskOptionsDropdown favorited={task.favorited} id={task._id} list={task.list_id} orderIndex={task.order_index} handleGetListTasks={(a) => handleGetListTasks(a)} taskName={task.task_name} setUserFavorites={(x) => handleSetUserFavorites(x)} updateTask={(a, b) => updateTask(a, b)}/>
                                         </tr>

@@ -98,5 +98,5 @@ export default {
   },
   deleteFolder: function(id) {
     return axios.delete("/api/folders/" + id);
-  },
+  }
 };

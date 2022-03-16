@@ -1,0 +1,17 @@
+.empty_assignee_icon {
+    margin-top: 7px;
+}
+
+.user_image {
+    max-height: 40px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
+.dropdownMenu {
+    min-width: 200px !important;
+}
+
+.dropdown_selection_text {
+    margin-top: 10px;
+}
