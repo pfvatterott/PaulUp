@@ -6,13 +6,15 @@ import API from "../../utils/API"
 
 export default function AssigneeSelector(props) {
   const [userArray, setUserArray] = useState([])
+  const [assignee, setAssignee] = useState({})
 
   function addAssignee(user) {
-    console.log(user)
     let newAssignee = {
       task_assignee: user,
     }
-    API.updateTask(props.id, newAssignee)
+    API.updateTask(props.id, newAssignee).then((updateTaskRes) => {
+      props.setValue(props.value + 1)
+    })
   }
  
   
@@ -28,6 +30,13 @@ export default function AssigneeSelector(props) {
         userArray.push(userHTML)
       }
       setUserArray(userArray)
+    }
+    if(props.assignees && props.assignees.length > 0) {
+      for (let i = 0; i < props.workspaceUsers.length; i++) {
+        if (props.workspaceUsers[i].id === props.assignees) {
+          setAssignee(props.workspaceUsers[i])
+        }
+      }
     }
   }, [props.workspaceUsers])
 
@@ -51,11 +60,13 @@ export default function AssigneeSelector(props) {
                     onOpenStart: null,
                     outDuration: 250
                 }}
-                trigger={<Icon className='left empty_assignee_icon'>add_circle_outline</Icon>}
+                trigger={assignee.id ? (
+                  <img src={assignee.img} className="circle assignee_image left"></img>
+                ): 
+                // if no assignee
+                <Icon className='left empty_assignee_icon'>add_circle_outline</Icon>}
                 >
-                
                 {userArray}
-                   
             </Dropdown>
     ):null}
   </div>;

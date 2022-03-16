@@ -15,3 +15,8 @@
 .dropdown_selection_text {
     margin-top: 10px;
 }
+
+.assignee_image {
+    max-height: 35px;
+    margin-top: 2px;
+}
