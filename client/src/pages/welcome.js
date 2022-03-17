@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import API from "../utils/API";
 import GoogleLogin from "react-google-login";
 import { Redirect } from "react-router-dom";
@@ -11,6 +11,12 @@ function Welcome() {
 const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const [redirect, setRedirect] = useState(false);
 const [userID, setUserID] = useState('')
+
+useEffect(() => {
+    console.log('jih')
+    console.log(googleClientId)
+} , [])
+
 
 const googleSuccess = async (response) => {
     const userObj = response.profileObj
@@ -42,8 +48,6 @@ const googleSuccess = async (response) => {
 const googleFailure = (response) => {
 console.log("please enable cookies to access this app");
 alert("please enable cookies to access this app");
-setUserID("6143d714eb26b4148c4c9879")
-setRedirect(true)
 console.log(response);
 };
 
@@ -62,13 +66,6 @@ return (
         isSignedIn={true}
         render={(renderProps) => (
             <Button
-                large
-                className="loginBtn z-depth-3"
-                node="a"
-                style={{
-                marginRight: "5px",
-                }}
-                waves="light"
                 onClick={renderProps.onClick}
             >
                 Start Swap'n!
