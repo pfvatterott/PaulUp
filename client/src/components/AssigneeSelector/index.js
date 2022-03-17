@@ -13,6 +13,16 @@ export default function AssigneeSelector(props) {
       task_assignee: user,
     }
     API.updateTask(props.id, newAssignee).then((updateTaskRes) => {
+      if (user === '') {
+        setAssignee({})
+      }
+      else {
+        for (let i = 0; i < props.workspaceUsers.length; i++) {
+          if (props.workspaceUsers[i].id === user) {
+            setAssignee(props.workspaceUsers[i])
+          }
+        }
+      }
       props.setValue(props.value + 1)
     })
   }
