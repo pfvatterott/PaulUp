@@ -135,7 +135,15 @@ export default function CustomSideNav(props) {
     setOpenCreateWorkspaceModal(false)
     const newWorkspace = {
       workspace_name: workspaceName,
-      owner_id: userIdVariable
+      owner_id: userIdVariable,
+      users: [
+        {
+          id: userData._id,
+          first_name: userData.firstName,
+          last_name: userData.lastName,
+          img: userData.image
+        }
+      ]
     }
     API.saveWorkspace(newWorkspace).then((createWorkspaceResponse) => {
       setWorkspaceData(createWorkspaceResponse.data)
