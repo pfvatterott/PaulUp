@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, Icon, Modal } from "react-materialize";
+import { Dropdown, Icon, Modal, Collection, CollectionItem } from "react-materialize";
 import API from "../../utils/API"
 import "./style.css"
 
 export default function UserMenu(props) {
     const [openWorkspaceSettingsModal, setOpenWorkspaceSettingsModal] = useState(false)
+    const [workspaceUsers, setWorkspaceUsers] = ([])
+
+    useEffect(() => {
+        setWorkspaceUsers(props.workspaceData.users)
+    }, [props.workspaceData.users])
 
     function handleOpenWorkspaceSettingsModal() {
         setOpenWorkspaceSettingsModal(true)
-        console.log('working')
+        console.log(props.workspaceData)
     }
 
     return (
@@ -61,7 +66,15 @@ export default function UserMenu(props) {
             }}>
             <h3>Workspace Settings</h3>
             <br></br>
-            
+            <h4 className="left">Users</h4>
+            <Collection>
+                {workspaceUsers.map(user => {
+                    <CollectionItem>
+                        <span>{user.first_name}</span>
+                    </CollectionItem>
+                })}
+
+            </Collection>
             <br></br>
             <br></br><br></br>
             

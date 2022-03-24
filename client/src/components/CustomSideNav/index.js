@@ -687,7 +687,7 @@ export default function CustomSideNav(props) {
         </Row>
         <Row className="left-align">
           <Col s={12} className="left-align">
-            <UserMenu userData={userData}/>
+            <UserMenu userData={userData} workspaceData={workspaceData}/>
           </Col>
         </Row>
       </SideNav>
