@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, Button, Divider, Icon } from "react-materialize";
-import { CirclePicker } from 'react-color'
+import { Dropdown, Icon, Modal } from "react-materialize";
 import API from "../../utils/API"
 import "./style.css"
 
 export default function UserMenu(props) {
+    const [openWorkspaceSettingsModal, setOpenWorkspaceSettingsModal] = useState(false)
 
-    useEffect(() => {
-
-        console.log(props.userData)
-    }, [props.userData])
+    function handleOpenWorkspaceSettingsModal() {
+        setOpenWorkspaceSettingsModal(true)
+        console.log('working')
+    }
 
     return (
+        <div>
         <Dropdown
-            id={"UserDropdown"}
+            id="UserDropdown"
             className="userDropdownMenu"
             options={{
                 alignment: 'left',
@@ -33,14 +34,38 @@ export default function UserMenu(props) {
             trigger={props.userData._id ? (
                 <img src={props.userData.image} className="circle user_image left"></img>
             ): 
-            <Icon className='left empty_assignee_icon'>add_circle_outline</Icon>}
+            <Icon></Icon>}
             >
-            <a>
+            <a className="userDropdownItem" onClick={() => handleOpenWorkspaceSettingsModal()}>
                 <div>
-                    <Icon className="left">delete</Icon>
+                    <Icon className="left settings">settings</Icon>
                 </div>
-            Delete
+            Workspace Settings
+            </a>
+            <a className="userDropdownItem">
+                <div>
+                    <Icon className="left settings">person</Icon>
+                </div>
+            User Settings
             </a>
         </Dropdown>
+        
+
+        {/* Workspace Settings Modal */}
+        <Modal
+            open={openWorkspaceSettingsModal}
+            className='center-align'
+            actions={[]}
+            options={{
+                dismissible: false
+            }}>
+            <h3>Workspace Settings</h3>
+            <br></br>
+            
+            <br></br>
+            <br></br><br></br>
+            
+        </Modal>
+        </div>
     )
 }

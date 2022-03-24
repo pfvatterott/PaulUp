@@ -4,3 +4,15 @@
     bottom: 45px;
     left: 10px;
 }
+
+.userDropdownMenu {
+    min-width: 250px !important
+}
+
+.settings {
+    margin-top: 11px;
+}
+
+.userDropdownItem {
+    padding-left: 15px !important;
+}
