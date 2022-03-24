@@ -10,6 +10,7 @@ import "./style.css"
 import GoogleLogin from "react-google-login";
 import '../../../node_modules/react-simple-tree-menu/dist/main.css';
 import StatusBoxChoose from "../StatusBoxChoose/index.js";
+import UserMenu from "../UserMenu/index.js";
 
 export default function CustomSideNav(props) {
   const [workspaceData, setWorkspaceData] = useState([])
@@ -682,6 +683,11 @@ export default function CustomSideNav(props) {
             </CollapsibleItem>
             </Collapsible>
 
+          </Col>
+        </Row>
+        <Row className="left-align">
+          <Col s={12} className="left-align">
+            <UserMenu userData={userData}/>
           </Col>
         </Row>
       </SideNav>
