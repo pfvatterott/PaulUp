@@ -5,11 +5,6 @@ import "./style.css"
 
 export default function UserMenu(props) {
     const [openWorkspaceSettingsModal, setOpenWorkspaceSettingsModal] = useState(false)
-    const [workspaceUsers, setWorkspaceUsers] = ([])
-
-    useEffect(() => {
-        setWorkspaceUsers(props.workspaceData.users)
-    }, [props.workspaceData.users])
 
     function handleOpenWorkspaceSettingsModal() {
         setOpenWorkspaceSettingsModal(true)
@@ -68,11 +63,11 @@ export default function UserMenu(props) {
             <br></br>
             <h4 className="left">Users</h4>
             <Collection>
-                {workspaceUsers.map(user => {
+                {/* {workspaceUsers.map(user => {
                     <CollectionItem>
                         <span>{user.first_name}</span>
                     </CollectionItem>
-                })}
+                })} */}
 
             </Collection>
             <br></br>

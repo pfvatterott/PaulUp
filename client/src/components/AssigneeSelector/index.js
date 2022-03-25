@@ -29,6 +29,7 @@ export default function AssigneeSelector(props) {
 
   
   useEffect(() => {
+    console.log(props.workspaceUsers)
     if (props.workspaceUsers.length > 0) {
       let userArray = []
       for (let i = 0; i < props.workspaceUsers.length; i++) {
@@ -47,7 +48,7 @@ export default function AssigneeSelector(props) {
         else {
           let userHTML = 
           <a onClick={() => adjustAssignee(props.workspaceUsers[i].id)}>
-            <img src={props.workspaceUsers[i].img} className="circle user_image left"></img>
+            <img src={props.workspaceUsers[i].img} className="circle user_image_not_assigned left"></img>
             <div className="dropdown_selection_text">{props.workspaceUsers[i].first_name} {props.workspaceUsers[i].last_name}</div>
           </a>
           userArray.push(userHTML)

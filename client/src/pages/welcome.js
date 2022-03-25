@@ -68,7 +68,7 @@ return (
             <Button
                 onClick={renderProps.onClick}
             >
-                Start Swap'n!
+                Log in
             </Button>
         )}
         />

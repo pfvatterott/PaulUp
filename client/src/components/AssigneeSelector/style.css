@@ -2,10 +2,10 @@
     margin-left: 6px;
 }
 
-.user_image {
-    max-height: 40px;
-    margin-right: 15px;
-    margin-bottom: 15px;
+.user_image_not_assigned {
+    max-height: 40px !important;
+    margin-right: 15px !important;
+    margin-bottom: 15px !important;
 }
 
 .dropdownMenu {
