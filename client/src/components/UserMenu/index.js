@@ -32,7 +32,7 @@ export default function UserMenu(props) {
                 outDuration: 250
             }}
             trigger={props.userData._id ? (
-                <img src={props.userData.image} className="circle user_image left"></img>
+                <img src={props.userData.image} className="circle user_image_settings left"></img>
             ): 
             <Icon></Icon>}
             >
@@ -63,11 +63,11 @@ export default function UserMenu(props) {
             <br></br>
             <h4 className="left">Users</h4>
             <Collection>
-                {/* {workspaceUsers.map(user => {
+                {props.workspaceData.users ? props.workspaceData.users.map(user => 
                     <CollectionItem>
                         <span>{user.first_name}</span>
                     </CollectionItem>
-                })} */}
+                ):null}
 
             </Collection>
             <br></br>

@@ -1,7 +1,7 @@
-.user_image {
-    height: 50px;
+.user_image_settings {
+    height: 40px;
     position:absolute;
-    bottom: 45px;
+    bottom: 50px;
     left: 10px;
 }
 
