@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, Icon, Modal, Collection, CollectionItem } from "react-materialize";
+import { Dropdown, Icon, Modal, Collection, CollectionItem, Row, Col } from "react-materialize";
 import API from "../../utils/API"
 import "./style.css"
 
@@ -8,13 +8,16 @@ export default function UserMenu(props) {
 
     function handleOpenWorkspaceSettingsModal() {
         setOpenWorkspaceSettingsModal(true)
-        console.log(props.workspaceData)
+    }
+
+    function handleRemoveUser(user_id) {
+        console.log('working' + user_id)
     }
 
     return (
         <div>
         <Dropdown
-            id="UserDropdown"
+            id="user_settings_dropdown"
             className="userDropdownMenu"
             options={{
                 alignment: 'left',
@@ -59,17 +62,34 @@ export default function UserMenu(props) {
             options={{
                 dismissible: false
             }}>
-            <h3>Workspace Settings</h3>
+            <Row>
+                <Col s={12}>
+                    <h3>Workspace Settings</h3>
+                </Col>
+            </Row>
             <br></br>
-            <h4 className="left">Users</h4>
-            <Collection>
-                {props.workspaceData.users ? props.workspaceData.users.map(user => 
-                    <CollectionItem>
-                        <span>{user.first_name}</span>
-                    </CollectionItem>
-                ):null}
-
-            </Collection>
+            <Row>
+                <Col s={12}>
+                    <h4 className="left">Users</h4>
+                </Col>
+            </Row>
+            <Row>
+                <Col s={12}>
+                    <Collection>
+                        {props.workspaceData.users ? props.workspaceData.users.map(user => 
+                            <CollectionItem className="avatar workspaceSettingsUserItem">
+                                <img
+                                    className="circle"
+                                    src={user.img}
+                                />
+                                <span className="left workspace_settings_user_name">{user.first_name} {user.last_name}</span>
+                                <Icon className="right workspace_settings_user_trash" onClick={() => handleRemoveUser(user.id)}>delete</Icon>
+                            </CollectionItem>
+                        ):null}
+                    </Collection>
+                </Col>
+            </Row>
+           
             <br></br>
             <br></br><br></br>
             

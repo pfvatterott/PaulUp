@@ -16,3 +16,19 @@
 .userDropdownItem {
     padding-left: 15px !important;
 }
+
+.workspaceSettingsUserItem {
+    min-height: 60px !important;
+}
+
+.workspace_settings_user_name {
+    margin-top: 8px;
+}
+
+.workspace_settings_user_trash {
+    margin-top: 6px;
+}
+
+.workspace_settings_user_trash:hover {
+    cursor: pointer;
+}
