@@ -32,9 +32,24 @@ export default function UserMenu(props) {
                     for (let i = 0; i < props.workspaceData.users.length; i++) {
                         if (props.workspaceData.users[i].id === newUserRes.data[0]._id) {
                             alert('User already in workspace')
+                            return
                         }
-                        
                     }
+                    let newUser = {
+                        id: newUserRes.data[0]._id,
+                        first_name: newUserRes.data[0].firstName,
+                        last_name: newUserRes.data[0].lastName,
+                        img: newUserRes.data[0].image
+                    } 
+                    let newUserArray = props.workspaceData.users
+                    newUserArray.push(newUser)
+                    console.log(newUserArray)
+                    API.updateWorkspace(props.workspaceData._id, { users: newUserArray }).then(res => {
+                        props.handleGetWorkspaces()
+                    })
+                    let newWorkspaceArray = newUserRes.data[0].workspaces
+                    newWorkspaceArray.push(props.workspaceData._id)
+                    API.updateUser(newUserRes.data[0]._id, { workspaces: newWorkspaceArray })
                 }
             })
         }
