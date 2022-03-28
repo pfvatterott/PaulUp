@@ -11,8 +11,29 @@ export default function UserMenu(props) {
         setOpenWorkspaceSettingsModal(true)
     }
 
+    function handleCloseWorkspaceSettingsModal() {
+        setOpenWorkspaceSettingsModal(false)
+    }
+
     function handleRemoveUser(user_id) {
-        console.log('working' + user_id)
+        API.getUser(user_id).then(userRes => {
+            let oldWorkspaceArray = userRes.data.workspaces
+            for (let i = 0; i < oldWorkspaceArray.length; i++) {
+                if (oldWorkspaceArray[i] === props.workspaceData._id) {
+                    oldWorkspaceArray.splice(i,1)
+                }
+            }
+            API.updateUser(user_id, { workspaces: oldWorkspaceArray})
+        })
+        let oldUserArray = props.workspaceData.users
+        for (let j = 0; j < oldUserArray.length; j++) {
+            if (oldUserArray[j].id === user_id) {
+                oldUserArray.splice(j,1)
+            }
+        }
+        API.updateWorkspace(props.workspaceData._id, { users: oldUserArray }).then(res => {
+            props.handleGetWorkspaces()
+        })
     }
 
     function handleAddUserInput(event) {
@@ -23,12 +44,11 @@ export default function UserMenu(props) {
     function handleAddNewUser() {
         if (addNewUserText.length > 0) {
             API.getUserByEmail(addNewUserText).then(newUserRes => {
-                console.log(newUserRes)
                 if(newUserRes.data.length === 0) {
                     alert('User not found')
+                    return
                 }
                 else {
-                    console.log(props.workspaceData)
                     for (let i = 0; i < props.workspaceData.users.length; i++) {
                         if (props.workspaceData.users[i].id === newUserRes.data[0]._id) {
                             alert('User already in workspace')
@@ -146,7 +166,12 @@ export default function UserMenu(props) {
             </Row>
            
             <br></br>
-            <br></br><br></br>
+            <Row>
+                <Col s={12}>
+                    <Button onClick={handleCloseWorkspaceSettingsModal}>Close</Button>
+                </Col>
+            </Row>
+            <br></br>
             
         </Modal>
         </div>
