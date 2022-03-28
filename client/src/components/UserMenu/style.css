@@ -27,8 +27,13 @@
 
 .workspace_settings_user_trash {
     margin-top: 6px;
+    color: red;
 }
 
 .workspace_settings_user_trash:hover {
     cursor: pointer;
+}
+
+.input-field {
+    width: 100%;
 }

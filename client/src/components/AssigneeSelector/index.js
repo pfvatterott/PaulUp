@@ -29,7 +29,6 @@ export default function AssigneeSelector(props) {
 
   
   useEffect(() => {
-    console.log(props.workspaceUsers)
     if (props.workspaceUsers.length > 0) {
       let userArray = []
       for (let i = 0; i < props.workspaceUsers.length; i++) {

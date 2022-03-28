@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, Icon, Modal, Collection, CollectionItem, Row, Col } from "react-materialize";
+import { Dropdown, Icon, Modal, Collection, CollectionItem, Row, Col, TextInput, Button } from "react-materialize";
 import API from "../../utils/API"
 import "./style.css"
 
 export default function UserMenu(props) {
     const [openWorkspaceSettingsModal, setOpenWorkspaceSettingsModal] = useState(false)
+    const [addNewUserText, setAddNewUserText] = useState("")
 
     function handleOpenWorkspaceSettingsModal() {
         setOpenWorkspaceSettingsModal(true)
@@ -12,6 +13,31 @@ export default function UserMenu(props) {
 
     function handleRemoveUser(user_id) {
         console.log('working' + user_id)
+    }
+
+    function handleAddUserInput(event) {
+        const name = event.target.value;
+        setAddNewUserText(name)
+    }
+
+    function handleAddNewUser() {
+        if (addNewUserText.length > 0) {
+            API.getUserByEmail(addNewUserText).then(newUserRes => {
+                console.log(newUserRes)
+                if(newUserRes.data.length === 0) {
+                    alert('User not found')
+                }
+                else {
+                    console.log(props.workspaceData)
+                    for (let i = 0; i < props.workspaceData.users.length; i++) {
+                        if (props.workspaceData.users[i].id === newUserRes.data[0]._id) {
+                            alert('User already in workspace')
+                        }
+                        
+                    }
+                }
+            })
+        }
     }
 
     return (
@@ -70,7 +96,21 @@ export default function UserMenu(props) {
             <br></br>
             <Row>
                 <Col s={12}>
-                    <h4 className="left">Users</h4>
+                    <h4 className="left">Add new users</h4>
+                </Col>
+            </Row>
+            <Row>
+                <Col s={10}>
+                    <TextInput id="add_user_search" placeholder="Search by email" onChange={handleAddUserInput}></TextInput>
+                </Col>
+                <Col s={2}>
+                    <Button onClick={handleAddNewUser}>Add User</Button>
+                </Col>
+            </Row>
+            <br></br>
+            <Row>
+                <Col s={12}>
+                    <h4 className="left">Existing users</h4>
                 </Col>
             </Row>
             <Row>

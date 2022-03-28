@@ -17,6 +17,11 @@ router
   .route('/google/:id')
   .get(usersController.findByGoogleId)
 
+router
+  .route('/email/:id')
+  .get(usersController.findByEmail)
+
+
 router.get('search/:name', (req, res) => {
   console.log(res)
 })

@@ -30,6 +30,9 @@ export default {
   getUserByGoogleId: function(id) {
     return axios.get("/api/users/google/" + id);
   },
+  getUserByEmail: function(id) {
+    return axios.get("/api/users/email/" + id);
+  },
   saveUser: function(userData) {
     return axios.post("/api/users", userData);
   },
