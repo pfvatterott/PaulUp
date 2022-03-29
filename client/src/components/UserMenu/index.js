@@ -7,6 +7,12 @@ export default function UserMenu(props) {
     const [openWorkspaceSettingsModal, setOpenWorkspaceSettingsModal] = useState(false)
     const [addNewUserText, setAddNewUserText] = useState("")
 
+    useEffect(() => {
+        console.log(props.workspaceData.owner_id)
+        console.log(props.workspaceData.users)
+    }, [props.workspaceData.owner_id])
+
+
     function handleOpenWorkspaceSettingsModal() {
         setOpenWorkspaceSettingsModal(true)
     }
@@ -151,16 +157,25 @@ export default function UserMenu(props) {
             <Row>
                 <Col s={12}>
                     <Collection>
-                        {props.workspaceData.users ? props.workspaceData.users.map(user => 
-                            <CollectionItem className="avatar workspaceSettingsUserItem">
+                        {props.workspaceData.users ? props.workspaceData.users.map(user => {
+                            if (user.id === props.workspaceData.owner_id)                            
+                            return <CollectionItem className="avatar workspaceSettingsUserItem">
                                 <img
                                     className="circle"
                                     src={user.img}
                                 />
-                                <span className="left workspace_settings_user_name">{user.first_name} {user.last_name}</span>
+                                <span className="left workspace_settings_user_name">{user.first_name} {user.last_name}</span>                               
+                            </CollectionItem>
+                            else if (user.id != props.workspaceData.owner_id)
+                            return <CollectionItem className="avatar workspaceSettingsUserItem">
+                                <img
+                                    className="circle"
+                                    src={user.img}
+                                />
+                                <span className="left workspace_settings_user_name">{user.first_name} {user.last_name}</span>                               
                                 <Icon className="right workspace_settings_user_trash" onClick={() => handleRemoveUser(user.id)}>delete</Icon>
                             </CollectionItem>
-                        ):null}
+                    }):null}
                     </Collection>
                 </Col>
             </Row>
