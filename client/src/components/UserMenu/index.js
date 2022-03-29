@@ -39,6 +39,7 @@ export default function UserMenu(props) {
         }
         API.updateWorkspace(props.workspaceData._id, { users: oldUserArray }).then(res => {
             props.handleGetWorkspaces()
+            props.loadUsers()
         })
     }
 
@@ -71,6 +72,7 @@ export default function UserMenu(props) {
                     newUserArray.push(newUser)
                     console.log(newUserArray)
                     API.updateWorkspace(props.workspaceData._id, { users: newUserArray }).then(res => {
+                        props.loadUsers()
                         props.handleGetWorkspaces()
                     })
                     let newWorkspaceArray = newUserRes.data[0].workspaces
@@ -161,7 +163,7 @@ export default function UserMenu(props) {
                             if (user.id === props.workspaceData.owner_id)                            
                             return <CollectionItem className="avatar workspaceSettingsUserItem">
                                 <img
-                                    className="circle"
+                                    className="circle existingUserImage"
                                     src={user.img}
                                 />
                                 <span className="left workspace_settings_user_name">{user.first_name} {user.last_name}</span>                               
@@ -169,7 +171,7 @@ export default function UserMenu(props) {
                             else if (user.id != props.workspaceData.owner_id)
                             return <CollectionItem className="avatar workspaceSettingsUserItem">
                                 <img
-                                    className="circle"
+                                    className="circle existingUserImage"
                                     src={user.img}
                                 />
                                 <span className="left workspace_settings_user_name">{user.first_name} {user.last_name}</span>                               

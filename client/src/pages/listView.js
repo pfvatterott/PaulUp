@@ -176,7 +176,7 @@ function taskView() {
         <div>
             <Row>
                 <Col s={0} l={3}>
-                    <CustomSideNav userFavorites={userFavorites} handleSetUserFavorites={(x) => handleSetUserFavorites(x)} value={value} setValue={(x) => setValue(x)}></CustomSideNav>
+                    <CustomSideNav userFavorites={userFavorites} handleSetUserFavorites={(x) => handleSetUserFavorites(x)} value={value} setValue={(x) => setValue(x)} loadUsers={() => loadUsers()}></CustomSideNav>
                 </Col>
                 <Col s={12} l={8} className="container">
                     <Row>

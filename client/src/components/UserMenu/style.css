@@ -37,3 +37,8 @@
 .input-field {
     width: 100%;
 }
+
+.existingUserImage {
+    height: 40px !important;
+    width: 40px !important;
+}
