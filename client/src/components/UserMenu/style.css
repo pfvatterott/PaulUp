@@ -43,3 +43,15 @@
     width: 38px !important;
     margin-top: -2px;
 }
+
+.workspace_collection_item {
+    max-width: 300px;
+}
+
+.current_workspace_collection_item {
+    background-color: aquamarine !important;
+}
+
+.not_current_workspace_collection_item:hover {
+    cursor: pointer;
+}

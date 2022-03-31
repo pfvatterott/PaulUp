@@ -5,12 +5,21 @@ import "./style.css"
 
 export default function UserMenu(props) {
     const [openWorkspaceSettingsModal, setOpenWorkspaceSettingsModal] = useState(false)
+    const [openUserSettingsModal, setOpenUserSettingsModal] = useState(false)
     const [addNewUserText, setAddNewUserText] = useState("")
+    const [workspaceArray, setWorkspaceArray] = useState([])
 
     useEffect(() => {
-        console.log(props.workspaceData.owner_id)
-        console.log(props.workspaceData.users)
-    }, [props.workspaceData.owner_id])
+        let tempWorkspaceArray = []
+        if (props.userData.workspaces) {
+            for (let i = 0; i < props.userData.workspaces.length; i++) {
+                API.getWorkspace(props.userData.workspaces[i]).then(workspaceRes => {
+                    tempWorkspaceArray.push(workspaceRes.data)
+                })
+            }
+            setWorkspaceArray(tempWorkspaceArray)
+        }
+    }, [props.userData.workspaces])
 
 
     function handleOpenWorkspaceSettingsModal() {
@@ -20,6 +29,15 @@ export default function UserMenu(props) {
     function handleCloseWorkspaceSettingsModal() {
         setOpenWorkspaceSettingsModal(false)
     }
+
+    function handleOpenUserSettingsModal() {
+        setOpenUserSettingsModal(true)
+    }
+
+    function handleCloseUserSettingsModal() {
+        setOpenUserSettingsModal(false)
+    }
+
 
     function handleRemoveUser(user_id) {
         API.getUser(user_id).then(userRes => {
@@ -83,6 +101,10 @@ export default function UserMenu(props) {
         }
     }
 
+    function handleChangeWorkspaces(workspace_id) {
+        console.log(workspace_id)
+    }
+
     return (
         <div>
         <Dropdown
@@ -114,7 +136,7 @@ export default function UserMenu(props) {
                 </div>
             Workspace Settings
             </a>
-            <a className="userDropdownItem">
+            <a className="userDropdownItem" onClick={() => handleOpenUserSettingsModal()}>
                 <div>
                     <Icon className="left settings">person</Icon>
                 </div>
@@ -189,8 +211,48 @@ export default function UserMenu(props) {
                 </Col>
             </Row>
             <br></br>
-            
         </Modal>
+
+        {/* User settings Modal */}
+        <Modal
+            open={openUserSettingsModal}
+            className='center-align'
+            actions={[]}
+            options={{
+                dismissible: false
+            }}>
+            <Row>
+                <Col s={12}>
+                    <h3>User Settings</h3>
+                </Col>
+            </Row>
+            <br></br>
+            
+            <Row>
+                <Col s={12}>
+                    <Collection className="workspace_collection_item">
+                    {workspaceArray.map(workspace => {
+                        if(workspace._id === props.workspaceData._id)
+                            return <CollectionItem className="current_workspace_collection_item">
+                            <div className="left">{workspace.workspace_name}</div>
+                            </CollectionItem>
+                        else if (workspace._id != props.workspaceData._id)
+                            return <CollectionItem onClick={() => handleChangeWorkspaces(workspace._id)} className="not_current_workspace_collection_item">
+                            <div className="left">{workspace.workspace_name}</div>
+                            </CollectionItem>
+                    })}
+                    </Collection>
+                </Col>
+            </Row>
+            <Row>
+                <Col s={12}>
+                    <Button onClick={handleCloseUserSettingsModal}>Close</Button>
+                </Col>
+            </Row>
+            <br></br>
+        </Modal>
+
+
         </div>
     )
 }

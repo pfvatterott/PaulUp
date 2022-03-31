@@ -21,6 +21,7 @@ export default function CustomSideNav(props) {
   const [openCreateFolderModal, setOpenCreateFolderModal] = useState(false)
   const [openCreateNewListForFolderModal, setOpenCreateNewListForFolderModal] = useState(false)
   const [redirectToList, setRedirectToList] = useState(false)
+  const [redirectToWorkspace, setRedirectToWorkspace] = useState(false)
   const [currentSpace, setCurrentSpace] = useState('')
   const [currentFolder, setCurrentFolder] = useState('')
   const [currentList, setCurrentList] = useState('')
@@ -69,15 +70,48 @@ export default function CustomSideNav(props) {
       setTimeout(function () {
         handleGetWorkspaces()
         handleGetUser()
+        handleAccessCheck()
       }, 700)
     }
     else {
       handleGetWorkspaces()
       handleGetUser()
+      handleAccessCheck()
     }
     
     var x = document.getElementsByClassName("rstm-tree-item-level0")
   }, [sideNavValue])
+
+  function handleAccessCheck() {
+    let newLocation = location.pathname.replace('/listview/', '')
+    API.getList(newLocation).then(listRes => {
+      if (listRes.data.folder_id) {
+        API.getFolder(listRes.data.folder_id).then(folderRes => {
+          API.getSpace(folderRes.data.space_id).then(spaceRes => {
+            API.getWorkspace(spaceRes.data.workspace_id).then(workspaceRes => {
+              let listOfWorkspaceUsers = workspaceRes.data.users
+              if (listOfWorkspaceUsers.filter(e => e.id === location.state).length === 0) {
+                alert('You dont have access!')
+                setRedirectToWorkspace(true)
+              }
+            })
+          })
+        })
+      }
+      else if (listRes.data.space_id) {
+        API.getSpace(listRes.data.space_id).then(spaceRes => {
+          API.getWorkspace(spaceRes.data.workspace_id).then(workspaceRes => {
+            let listOfWorkspaceUsers = workspaceRes.data.users
+            if (listOfWorkspaceUsers.filter(e => e.id === location.state).length === 0) {
+              alert('You dont have access!')
+              setRedirectToWorkspace(true)
+            }
+          })
+        })
+      }
+      
+    })
+  }
 
 
   const googleSuccess = async (response) => {
@@ -634,6 +668,7 @@ export default function CustomSideNav(props) {
   return (
     <div>
       { redirectToList ? (<Redirect push to={{pathname: '/listview/' + currentList, state: userID}}/>) : null }
+      { redirectToWorkspace ? (<Redirect push to={{pathname: '/workspace', state: userID}}/>) : null }
       <GoogleLogin
         className="loginBtn"
         clientId={googleClientId}
