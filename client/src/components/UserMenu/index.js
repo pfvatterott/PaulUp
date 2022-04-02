@@ -13,7 +13,7 @@ export default function UserMenu(props) {
         let tempWorkspaceArray = []
         if (props.userData.workspaces) {
             for (let i = 0; i < props.userData.workspaces.length; i++) {
-                API.getWorkspace(props.userData.workspaces[i]).then(workspaceRes => {
+                API.getWorkspace(props.userData.workspaces[i].id).then(workspaceRes => {
                     tempWorkspaceArray.push(workspaceRes.data)
                 })
             }
@@ -43,7 +43,7 @@ export default function UserMenu(props) {
         API.getUser(user_id).then(userRes => {
             let oldWorkspaceArray = userRes.data.workspaces
             for (let i = 0; i < oldWorkspaceArray.length; i++) {
-                if (oldWorkspaceArray[i] === props.workspaceData._id) {
+                if (oldWorkspaceArray[i].id === props.workspaceData._id) {
                     oldWorkspaceArray.splice(i,1)
                 }
             }
@@ -94,7 +94,7 @@ export default function UserMenu(props) {
                         props.handleGetWorkspaces()
                     })
                     let newWorkspaceArray = newUserRes.data[0].workspaces
-                    newWorkspaceArray.push(props.workspaceData._id)
+                    newWorkspaceArray.push({id: props.workspaceData._id, active: false})
                     API.updateUser(newUserRes.data[0]._id, { workspaces: newWorkspaceArray })
                 }
             })
@@ -102,7 +102,21 @@ export default function UserMenu(props) {
     }
 
     function handleChangeWorkspaces(workspace_id) {
-        console.log(workspace_id)
+        console.log(props.userData)
+        let userWorkspaces = props.userData.workspaces
+        for (let i = 0; i < userWorkspaces.length; i++) {
+            if ((userWorkspaces[i].active === true) && (userWorkspaces[i].id != workspace_id)) {
+                console.log(userWorkspaces[i].id)
+                userWorkspaces[i].active = false
+            }
+            else if (userWorkspaces[i].id === workspace_id) {
+                userWorkspaces[i].active = true
+                console.log(userWorkspaces[i].active + userWorkspaces[i].id)
+            }
+            API.updateUser(props.userData._id, {workspaces: userWorkspaces}).then(updateUserRes => {
+                props.handleGetWorkspaces()
+            })
+        }
     }
 
     return (

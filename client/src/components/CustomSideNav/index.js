@@ -184,7 +184,12 @@ export default function CustomSideNav(props) {
       setWorkspaceData(createWorkspaceResponse.data)
       API.getUser(userIdVariable).then((getUserResponse) => {
         let workSpacesArray =getUserResponse.data.workspaces
-        workSpacesArray.push(createWorkspaceResponse.data._id)
+        for (let i = 0; i < workSpacesArray.length; i++) {
+          if (workSpacesArray[i].active === true) {
+            workSpacesArray[i].active = false
+          }
+        }
+        workSpacesArray.push({id: createWorkspaceResponse.data._id, active: true})
         let newWorkspaceData = {
           workspaces: workSpacesArray
         }
@@ -197,18 +202,46 @@ export default function CustomSideNav(props) {
   }
 
   function handleGetWorkspaces() {  
-    API.getUserWorkspaces(userIdVariable).then((getUserWorkspacesResponse) => {
-      if (getUserWorkspacesResponse.data.length === 0) {
+    API.getUser(userIdVariable).then(userRes => {
+      if (userRes.data.workspaces.length > 1) {
+        for (let i = 0; i < userRes.data.workspaces.length; i++) {
+          if (userRes.data.workspaces[i].active === true) {
+            API.getWorkspace(userRes.data.workspaces[i].id).then(workspaceRes => {
+              setWorkspaceData(workspaceRes.data)
+              handleTreeRefreshNew(workspaceRes.data._id)
+            })
+          }
+          
+        }
+      }
+      else if (userRes.data.workspaces.length === 0) {
         setOpenCreateWorkspaceModal(true)
       }
-      else if (getUserWorkspacesResponse.data.length === 1) {
-        setWorkspaceData(getUserWorkspacesResponse.data[0])
-        handleTreeRefreshNew(getUserWorkspacesResponse.data[0]._id)
-      }
       else {
-        console.log('need to set up a way to switch workspaces')
+        API.getWorkspace(userRes.data.workspaces[0].id).then(workspaceRes => {
+          setWorkspaceData(workspaceRes.data)
+          handleTreeRefreshNew(workspaceRes.data._id)
+        })
       }
     })
+
+
+
+
+
+    // API.getUserWorkspaces(userIdVariable).then((getUserWorkspacesResponse) => {
+    //   console.log(getUserWorkspacesResponse.data)
+    //   if (getUserWorkspacesResponse.data.length === 0) {
+    //     setOpenCreateWorkspaceModal(true)
+    //   }
+    //   else if (getUserWorkspacesResponse.data.length === 1) {
+    //     setWorkspaceData(getUserWorkspacesResponse.data[0])
+    //     handleTreeRefreshNew(getUserWorkspacesResponse.data[0]._id)
+    //   }
+    //   else {
+    //     console.log('need to set up a way to switch workspaces')
+    //   } 
+    // })
   }
 
   function handleGetUser() {

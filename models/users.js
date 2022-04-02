@@ -23,7 +23,12 @@ const usersSchema = new mongoose.Schema({
       type: String
   },
 
-  workspaces: [String],
+  workspaces: [
+    {
+      id: String,
+      active: Boolean
+    }
+],
 
   favorites: [
     {
