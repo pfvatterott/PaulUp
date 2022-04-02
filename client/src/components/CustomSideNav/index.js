@@ -698,6 +698,10 @@ export default function CustomSideNav(props) {
     }
   }
 
+  function handleRedirectToWorkspace() {
+    setRedirectToWorkspace(true)
+  }
+
   return (
     <div>
       { redirectToList ? (<Redirect push to={{pathname: '/listview/' + currentList, state: userID}}/>) : null }
@@ -755,7 +759,7 @@ export default function CustomSideNav(props) {
         </Row>
         <Row className="left-align">
           <Col s={12} className="left-align">
-            <UserMenu userData={userData} workspaceData={workspaceData} handleGetWorkspaces={() => handleGetWorkspaces()} loadUsers={() => props.loadUsers()}/>
+            <UserMenu userData={userData} workspaceData={workspaceData} handleGetWorkspaces={() => handleGetWorkspaces()} loadUsers={() => props.loadUsers()} handleRedirectToWorkspace={() => handleRedirectToWorkspace()}/>
           </Col>
         </Row>
       </SideNav>

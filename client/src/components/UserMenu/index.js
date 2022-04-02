@@ -106,15 +106,15 @@ export default function UserMenu(props) {
         let userWorkspaces = props.userData.workspaces
         for (let i = 0; i < userWorkspaces.length; i++) {
             if ((userWorkspaces[i].active === true) && (userWorkspaces[i].id != workspace_id)) {
-                console.log(userWorkspaces[i].id)
                 userWorkspaces[i].active = false
             }
             else if (userWorkspaces[i].id === workspace_id) {
                 userWorkspaces[i].active = true
-                console.log(userWorkspaces[i].active + userWorkspaces[i].id)
             }
             API.updateUser(props.userData._id, {workspaces: userWorkspaces}).then(updateUserRes => {
                 props.handleGetWorkspaces()
+                handleCloseUserSettingsModal()
+                props.handleRedirectToWorkspace()
             })
         }
     }
@@ -241,7 +241,11 @@ export default function UserMenu(props) {
                 </Col>
             </Row>
             <br></br>
-            
+            <Row>
+                <Col s={12}>
+                    <h4 className="left">Available Workspaces</h4>
+                </Col>
+            </Row>
             <Row>
                 <Col s={12}>
                     <Collection className="workspace_collection_item">
