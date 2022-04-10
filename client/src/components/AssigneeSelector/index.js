@@ -7,6 +7,7 @@ import API from "../../utils/API"
 export default function AssigneeSelector(props) {
   const [userArray, setUserArray] = useState([])
   const [assignee, setAssignee] = useState({})
+  const [taskView, setTaskView] = useState(false)
 
   function adjustAssignee(user) {
     let newAssignee = {
@@ -29,7 +30,6 @@ export default function AssigneeSelector(props) {
 
   
   useEffect(() => {
-    console.log(props)
     if (props.workspaceUsers.length > 0) {
       let userArray = []
       for (let i = 0; i < props.workspaceUsers.length; i++) {
@@ -63,12 +63,15 @@ export default function AssigneeSelector(props) {
         }
       }
     }
+    if (props.taskView) {
+      setTaskView(true)
+    }
   }, [props.workspaceUsers])
 
   return <td className="assigneeSelectorTd">
     {props.workspaceUsers.length > 0 ? (
     <Dropdown
-                id={props.id + "AssigneeDropdown"}
+                id={props.id + "AssigneeDropdown_taskView=" + taskView}
                 className="dropdownMenu"
                 options={{
                     alignment: 'left',

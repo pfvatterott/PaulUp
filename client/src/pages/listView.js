@@ -30,7 +30,7 @@ function taskView() {
 
     useEffect(() => {
         if (location.pathname.length > 30) {
-            let currentListVar
+            let currentListVar  
             let newLocation = location.pathname.replace('/listview/', '')
             API.getList(newLocation).then((getListResponse) => {
                 for (let j = 0; j < getListResponse.data.statuses.length; j++) {
@@ -322,7 +322,8 @@ function taskView() {
                     }): null }
                 </Col>
             </Row>
-            <TaskView open={openTaskView} task={taskViewTask} close={() => handleTaskViewClose()} currentList={currentList} workspaceUsers={workspaceUsers} value={value} setValue={(x) => setValue(x)}/>
+            { openTaskView === true ? (<TaskView open={openTaskView} task={taskViewTask} close={() => handleTaskViewClose()} currentList={currentList} workspaceUsers={workspaceUsers} value={value} setValue={(x) => setValue(x)}/>) : null}
+          
         </div>
        
     )
