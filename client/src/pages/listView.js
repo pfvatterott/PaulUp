@@ -322,7 +322,7 @@ function taskView() {
                     }): null }
                 </Col>
             </Row>
-            <TaskView open={openTaskView} task={taskViewTask} close={() => handleTaskViewClose()}/>
+            <TaskView open={openTaskView} task={taskViewTask} close={() => handleTaskViewClose()} currentList={currentList} workspaceUsers={workspaceUsers} value={value} setValue={(x) => setValue(x)}/>
         </div>
        
     )

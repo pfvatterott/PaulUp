@@ -4,6 +4,7 @@ import ReactQuill from 'react-quill'; // ES6
 import 'react-quill/dist/quill.snow.css'; // ES6
 import DateSelector from "../DateSelector"
 import API from "../../utils/API"
+import AssigneeSelector from "../AssigneeSelector"
 import "./style.css"
 
 export default function TaskView(props) {
@@ -11,11 +12,13 @@ export default function TaskView(props) {
     const [dueDate, setDueDate] = useState('')
     const [startDate, setStartDate] = useState('')
     const [description, setDescription] = useState({text: ''})
+    const [taskAssignee, setTaskAssignee] = useState('')
 
 
     useEffect(() => {
-        if (props.task && props.open) {
+        if (props.task && props.open === true) {
             API.getTask(props.task).then((getTaskRes) => {
+                setTaskAssignee(getTaskRes.data.task_assignee)
                 setTaskName(getTaskRes.data.task_name)
                 setDueDate(getTaskRes.data.due_date)
                 setStartDate(getTaskRes.data.start_date)
@@ -55,8 +58,11 @@ export default function TaskView(props) {
             dismissible: false
             }}>
                 <Row>
-                    <Col s={6}>
+                    <Col s={3}>
                         <h4>{taskName}</h4>
+                    </Col>
+                    <Col s={3}>
+                        { props.workspaceUsers ? (<AssigneeSelector currentList={props.currentList} workspaceUsers={props.workspaceUsers} id={props.task} assignees={taskAssignee} value={props.value} setValue={(x) => props.setValue(x)}></AssigneeSelector> ) : null} 
                     </Col>
                     <Col s={5}>
                         <DateSelector id={props.task} startDate={startDate} dueDate={dueDate}/>
