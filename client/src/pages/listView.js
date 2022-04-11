@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Redirect, useParams, BrowserRouter as Router, useLocation } from "react-router-dom";
-import { Col, Row, Button, Icon, Dropdown, Divider } from "react-materialize";
+import { Col, Row, Button, Dropdown } from "react-materialize";
 import ListViewTaskTitle from "../components/ListViewTaskTitle";
 import CustomSideNav from "../components/CustomSideNav";
 import TaskView from "../components/TaskView"

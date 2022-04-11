@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import API from "../../utils/API"
 import 'react-day-picker/lib/style.css';
+import { Icon } from "react-materialize";
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { formatDate, parseDate } from 'react-day-picker/moment';
 import "./style.css"
@@ -68,7 +69,7 @@ export default function DateSelector(props) {
         <td className="InputFromTo">
         <DayPickerInput
           value={from}
-          placeholder=""
+          placeholder=''
           format="MM/DD/YYYY"
           formatDate={formatDate}
           parseDate={parseDate}

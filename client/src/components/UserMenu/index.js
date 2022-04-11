@@ -88,7 +88,6 @@ export default function UserMenu(props) {
                     } 
                     let newUserArray = props.workspaceData.users
                     newUserArray.push(newUser)
-                    console.log(newUserArray)
                     API.updateWorkspace(props.workspaceData._id, { users: newUserArray }).then(res => {
                         props.loadUsers()
                         props.handleGetWorkspaces()
