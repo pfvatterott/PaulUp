@@ -261,7 +261,7 @@ function taskView() {
                                             return <tr className="collection-item" key={task._id}>
                                             <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
                                             <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>
-                                            <AssigneeSelector currentList={currentList} workspaceUsers={workspaceUsers} id={task._id} assignees={task.task_assignee} value={value} setValue={(x) => setValue(x)}></AssigneeSelector>
+                                            <AssigneeSelector currentList={currentList} workspaceUsers={workspaceUsers} id={task._id} assignees={task.task_assignee} value={value} setValue={(x) => setValue(x)} currentUser={userIdVariable}></AssigneeSelector>
                                             <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>
                                             <TaskOptionsDropdown favorited={task.favorited} id={task._id} list={task.list_id} orderIndex={task.order_index} handleGetListTasks={(a) => handleGetListTasks(a)} taskName={task.task_name} userFavorites={userFavorites} setUserFavorites={(x) => handleSetUserFavorites(x)} updateTask={(a, b) => updateTask(a, b)}/>
                                         </tr>
@@ -312,7 +312,7 @@ function taskView() {
                                             return <tr className="collection-item" key={task._id}>
                                             <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
                                             <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>
-                                            <AssigneeSelector currentList={currentList} workspaceUsers={workspaceUsers} id={task._id} assignees={task.task_assignee} value={value} setValue={(x) => setValue(x)}></AssigneeSelector>  
+                                            <AssigneeSelector currentList={currentList} workspaceUsers={workspaceUsers} id={task._id} assignees={task.task_assignee} value={value} setValue={(x) => setValue(x)} currentUser={userIdVariable}></AssigneeSelector>  
                                             <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>
                                             <TaskOptionsDropdown favorited={task.favorited} id={task._id} list={task.list_id} orderIndex={task.order_index} handleGetListTasks={(a) => handleGetListTasks(a)} taskName={task.task_name} setUserFavorites={(x) => handleSetUserFavorites(x)} updateTask={(a, b) => updateTask(a, b)}/>
                                         </tr>
@@ -340,7 +340,7 @@ function taskView() {
                     }): null }
                 </Col>
             </Row>
-            { openTaskView === true ? (<TaskView open={openTaskView} task={taskViewTask} close={() => handleTaskViewClose()} currentList={currentList} workspaceUsers={workspaceUsers} value={value} setValue={(x) => setValue(x)}/>) : null}
+            { openTaskView === true ? (<TaskView open={openTaskView} task={taskViewTask} close={() => handleTaskViewClose()} currentList={currentList} workspaceUsers={workspaceUsers} value={value} setValue={(x) => setValue(x)} currentUser={userIdVariable}/>) : null}
           
         </div>
        

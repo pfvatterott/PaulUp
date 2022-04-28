@@ -107,5 +107,8 @@ export default {
   },
   getTaskHistory: function(id) {
     return axios.get("/api/taskHistory/task/" + id);
+  },
+  updateTaskHistory: function(taskHistoryId, taskHistoryData) {
+    return axios.put("/api/taskHistory/" + taskHistoryId, taskHistoryData)
   }
 };

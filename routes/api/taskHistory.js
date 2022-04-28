@@ -5,8 +5,10 @@ const taskHistoryController = require("../../controllers/taskHistoryController.j
 router.route("/")
   .post(taskHistoryController.create);
 
-router
-  .route("/task/:id")
+router.route("/:id")
+  .put(taskHistoryController.update)
+
+router.route("/task/:id")
   .get(taskHistoryController.findByTaskId)
 
 module.exports = router;

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Row, Col} from "react-materialize";
 import Moment from 'react-moment';
 import API from "../../utils/API";
-
+import "./style.css";
 
 export default function TaskViewHistory(props) {
   const [historyItemArray, setHistoryItemArray] = useState([]);
@@ -19,7 +20,17 @@ export default function TaskViewHistory(props) {
               date: taskHistoryRawData[i].date
             }
             tempTaskHistory.push(historyItem)
-            console.log(historyItem)
+          })
+        }
+        else if (taskHistoryRawData[i].action === "task_assigned") {
+          API.getUser(taskHistoryRawData[i].user).then((getUserRes) => {
+            API.getUser(taskHistoryRawData[i].to).then((getAssigneeRes) => {
+              let historyItem = {
+                description: `${getUserRes.data.firstName} ${getUserRes.data.lastName} changed assignee to ${getAssigneeRes.data.firstName} ${getAssigneeRes.data.lastName}`,
+                date: taskHistoryRawData[i].date
+              }
+              tempTaskHistory.push(historyItem)
+            })
           })
         }
       }
@@ -32,10 +43,14 @@ export default function TaskViewHistory(props) {
   return (
     <div className='taskViewHistoryContainer'>
       {historyItemArray.map(historyItem => {
-        return <div>
-          <p className='left'>{historyItem.description}</p>
-          <p className='right'><Moment format="MM/DD/YY">{historyItem.date}</Moment><span> </span><Moment format="h:mm a">{historyItem.date}</Moment></p>
-        </div>
+        return <Row className="Row historyItemRow" key={historyItem.description + Math.random()}>
+          <Col s={9} className="left">
+          <p>{historyItem.description}</p>
+          </Col>
+          <Col s={3} className="right">
+          <p><Moment format="MM/DD/YY">{historyItem.date}</Moment><span> </span><Moment format="h:mm a">{historyItem.date}</Moment></p>
+          </Col>
+        </Row>
       })}
     </div>
   )
