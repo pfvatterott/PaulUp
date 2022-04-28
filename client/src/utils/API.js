@@ -104,5 +104,8 @@ export default {
   },
   createNewTaskHistory: function(taskHistoryData) {
     return axios.post("/api/taskHistory", taskHistoryData);
+  },
+  getTaskHistory: function(id) {
+    return axios.get("/api/taskHistory/task/" + id);
   }
 };

@@ -115,7 +115,7 @@ function taskView() {
                 ]
             }
             API.createNewTaskHistory(newHistoryItem).then((createNewTaskHistoryResponse) => {
-                console.log(createNewTaskHistoryResponse)
+                
             })
 
         })
