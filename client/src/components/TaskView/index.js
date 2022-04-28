@@ -5,6 +5,7 @@ import 'react-quill/dist/quill.snow.css'; // ES6
 import DateSelector from "../DateSelector"
 import API from "../../utils/API"
 import AssigneeSelector from "../AssigneeSelector"
+import TaskViewHistory from "../TaskViewHistory";
 import "./style.css"
 
 export default function TaskView(props) {
@@ -74,6 +75,9 @@ export default function TaskView(props) {
                 <Row>
                     <Col s={7}>
                         <ReactQuill key={props.task} className="descriptionBox"  value={description.text} onChange={handleDescriptionChange}/>
+                    </Col>
+                    <Col s={5} className='taskViewHistoryCol'>
+                        <TaskViewHistory task={props.task}/>
                     </Col>
                 </Row>
           

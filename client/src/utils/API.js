@@ -101,5 +101,8 @@ export default {
   },
   deleteFolder: function(id) {
     return axios.delete("/api/folders/" + id);
+  },
+  createNewTaskHistory: function(taskHistoryData) {
+    return axios.post("/api/taskHistory", taskHistoryData);
   }
 };

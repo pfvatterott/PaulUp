@@ -101,8 +101,26 @@ function taskView() {
                     setCurrentList(getListResponse.data)
                     handleGetListTasks(currentList._id)
                 })
-                })
+            })
+
+            // adding history item of task creation
+            let newHistoryItem = {
+                task_id: saveTaskResponse.data._id,
+                event: [
+                    {
+                        action: "task_created",
+                        user: userIdVariable,
+                        date: new Date()
+                    }
+                ]
+            }
+            API.createNewTaskHistory(newHistoryItem).then((createNewTaskHistoryResponse) => {
+                console.log(createNewTaskHistoryResponse)
+            })
+
         })
+
+        
     }
 
     function handleGetListTasks(id) {

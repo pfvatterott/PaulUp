@@ -6,3 +6,10 @@
 .ql-editor {
     height: 300px !important;
 }
+
+.taskViewHistoryCol {
+    background-color: lightgray;
+    min-height: 450px !important;
+    width: 100%;
+    border-radius: 10px;
+}

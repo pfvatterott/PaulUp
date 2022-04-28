@@ -4,5 +4,6 @@ module.exports = {
   Space: require("./spaces"),
   Folder: require("./folders"),
   List: require("./lists"),
-  Task: require("./tasks")
+  Task: require("./tasks"),
+  TaskHistory: require("./taskHistory")
 };

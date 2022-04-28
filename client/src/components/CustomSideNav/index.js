@@ -203,26 +203,30 @@ export default function CustomSideNav(props) {
 
   function handleGetWorkspaces() {  
     API.getUser(userIdVariable).then(userRes => {
-      if (userRes.data.workspaces.length > 1) {
-        for (let i = 0; i < userRes.data.workspaces.length; i++) {
-          if (userRes.data.workspaces[i].active === true) {
-            API.getWorkspace(userRes.data.workspaces[i].id).then(workspaceRes => {
-              setWorkspaceData(workspaceRes.data)
-              handleTreeRefreshNew(workspaceRes.data._id)
-            })
+      if (userRes.data.workspaces) {
+        if (userRes.data.workspaces.length > 1) {
+          for (let i = 0; i < userRes.data.workspaces.length; i++) {
+            if (userRes.data.workspaces[i].active === true) {
+              API.getWorkspace(userRes.data.workspaces[i].id).then(workspaceRes => {
+                setWorkspaceData(workspaceRes.data)
+                handleTreeRefreshNew(workspaceRes.data._id)
+              })
+            }
+            
           }
-          
+        }
+        else if (userRes.data.workspaces.length === 0) {
+          setOpenCreateWorkspaceModal(true)
+        }
+        else {
+          API.getWorkspace(userRes.data.workspaces[0].id).then(workspaceRes => {
+            setWorkspaceData(workspaceRes.data)
+            handleTreeRefreshNew(workspaceRes.data._id)
+          })
         }
       }
-      else if (userRes.data.workspaces.length === 0) {
-        setOpenCreateWorkspaceModal(true)
-      }
-      else {
-        API.getWorkspace(userRes.data.workspaces[0].id).then(workspaceRes => {
-          setWorkspaceData(workspaceRes.data)
-          handleTreeRefreshNew(workspaceRes.data._id)
-        })
-      }
+
+      
     })
 
 
