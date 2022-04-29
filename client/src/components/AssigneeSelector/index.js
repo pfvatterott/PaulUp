@@ -28,11 +28,18 @@ export default function AssigneeSelector(props) {
     })
     API.getTaskHistory(props.id).then((getTaskHistoryRes) => {
       let tempTaskHistory = getTaskHistoryRes.data[0].event
+      let taskHistoryUser = ''
+      if (user === '') {
+        taskHistoryUser = 'unassigned'
+      }
+      else {
+        taskHistoryUser = user
+      }
       let newTaskHistory = {
         action: "task_assigned",
         user: props.currentUser,
         date: new Date(),
-        to: user
+        to: taskHistoryUser
       }
       tempTaskHistory.push(newTaskHistory)
       API.updateTaskHistory(getTaskHistoryRes.data[0]._id, { event: tempTaskHistory }).then((updateTaskHistoryRes) => {})

@@ -24,21 +24,31 @@ export default function TaskViewHistory(props) {
         }
         else if (taskHistoryRawData[i].action === "task_assigned") {
           API.getUser(taskHistoryRawData[i].user).then((getUserRes) => {
-            API.getUser(taskHistoryRawData[i].to).then((getAssigneeRes) => {
+            if (taskHistoryRawData[i].to === "unassigned") {
               let historyItem = {
-                description: `${getUserRes.data.firstName} ${getUserRes.data.lastName} changed assignee to ${getAssigneeRes.data.firstName} ${getAssigneeRes.data.lastName}`,
+                description: `${getUserRes.data.firstName} ${getUserRes.data.lastName} unassigned task`,
                 date: taskHistoryRawData[i].date
               }
               tempTaskHistory.push(historyItem)
-            })
+            }
+            else {
+              API.getUser(taskHistoryRawData[i].to).then((getAssigneeRes) => {
+                let historyItem = {
+                  description: `${getUserRes.data.firstName} ${getUserRes.data.lastName} changed assignee to ${getAssigneeRes.data.firstName} ${getAssigneeRes.data.lastName}`,
+                  date: taskHistoryRawData[i].date
+                }
+                tempTaskHistory.push(historyItem)
+              })
+            }
           })
         }
       }
-      setHistoryItemArray(tempTaskHistory)
+      setHistoryItemArray(tempTaskHistory.sort((a, b) => { Date(b.date).getTime() - Date(a.date).getTime() }))
     })
   },[])
 
-  useEffect(() => {},[historyItemArray])
+  useEffect(() => {
+  },[historyItemArray])
 
   return (
     <div className='taskViewHistoryContainer'>
@@ -48,7 +58,7 @@ export default function TaskViewHistory(props) {
           <p>{historyItem.description}</p>
           </Col>
           <Col s={3} className="right">
-          <p><Moment format="MM/DD/YY">{historyItem.date}</Moment><span> </span><Moment format="h:mm a">{historyItem.date}</Moment></p>
+          <p><Moment format="MM/DD/YY h:mm a">{historyItem.date}</Moment></p>
           </Col>
         </Row>
       })}
