@@ -1,0 +1,15 @@
+.task_view_modal {
+    height: 99% !important;
+    width: 95% !important;
+}
+
+.ql-editor {
+    height: 300px !important;
+}
+
+.taskViewHistoryCol {
+    background-color: lightgray;
+    min-height: 450px !important;
+    width: 100%;
+    border-radius: 10px;
+}

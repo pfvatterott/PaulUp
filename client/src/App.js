@@ -5,6 +5,7 @@ import listView from "./pages/listView";
 import welcome from "./pages/welcome"
 import workspace from "./pages/workspace";
 import CustomSideNav from "./components/CustomSideNav";
+import taskView from "./pages/taskView";
 import "./App.css";
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
       <Route exact path="/workspace" component={workspace} />
       <Route exact path="/listView" component={listView} />
       <Route exact path="/listView/:id" component={listView} />
+      <Route exact path="/task/:id" component={taskView} />
     </div>
   );
 }

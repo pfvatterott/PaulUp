@@ -3,14 +3,12 @@ import { Redirect, useParams, BrowserRouter as Router, useLocation } from "react
 import { Col, Row, Button, Dropdown } from "react-materialize";
 import ListViewTaskTitle from "../components/ListViewTaskTitle";
 import CustomSideNav from "../components/CustomSideNav";
-import TaskView from "../components/TaskView"
 import TaskOptionsDropdown from "../components/TaskOptionsDropdown";
 import "./styles/listViewStyle.css"
 import API from "../utils/API";
 import StatusBox from "../components/StatusBox";
 import DateSelector from "../components/DateSelector";
 import AssigneeSelector from "../components/AssigneeSelector";
-// import { List } from "@material-ui/icons";
 
 function taskView() {
     const location = useLocation()
@@ -52,11 +50,23 @@ function taskView() {
     } , [currentList])
 
     function loadUsers() {
-        API.getSpace(currentList.space_id).then(SpaceRes => {
-          API.getWorkspace(SpaceRes.data.workspace_id).then(workspaceRes => {
-            setWorkspaceUsers(workspaceRes.data.users)
-          })
-        })
+        if (currentList.space_id) {
+            API.getSpace(currentList.space_id).then(SpaceRes => {
+                API.getWorkspace(SpaceRes.data.workspace_id).then(workspaceRes => {
+                  setWorkspaceUsers(workspaceRes.data.users)
+                })
+              })
+        }
+        else {
+            API.getFolder(currentList.folder_id).then(FolderRes => {
+                API.getSpace(FolderRes.data.space_id).then(SpaceRes => {
+                    API.getWorkspace(SpaceRes.data.workspace_id).then(workspaceRes => {
+                      setWorkspaceUsers(workspaceRes.data.users)
+                    })
+                  })
+            })
+        }
+       
     }
 
     // forces re-render of DOM
@@ -192,6 +202,8 @@ function taskView() {
  
     return (
         <div>
+            { openTaskView ? (<Redirect push to={{pathname: '/task/' + taskViewTask, state: userIdVariable}}/>) : null }
+
             <Row>
                 <Col s={0} l={3}>
                     <CustomSideNav userFavorites={userFavorites} handleSetUserFavorites={(x) => handleSetUserFavorites(x)} value={value} setValue={(x) => setValue(x)} loadUsers={() => loadUsers()}></CustomSideNav>
@@ -340,8 +352,8 @@ function taskView() {
                     }): null }
                 </Col>
             </Row>
-            { openTaskView === true ? (<TaskView open={openTaskView} task={taskViewTask} close={() => handleTaskViewClose()} currentList={currentList} workspaceUsers={workspaceUsers} value={value} setValue={(x) => setValue(x)} currentUser={userIdVariable}/>) : null}
-          
+            {/* { openTaskView === true ? (<TaskView open={openTaskView} task={taskViewTask} close={() => handleTaskViewClose()} currentList={currentList} workspaceUsers={workspaceUsers} value={value} setValue={(x) => setValue(x)} currentUser={userIdVariable}/>) : null}
+           */}
         </div>
        
     )
