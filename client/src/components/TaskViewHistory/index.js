@@ -9,6 +9,13 @@ export default function TaskViewHistory(props) {
 
 
   useEffect(() => {
+    getTaskHistory()
+  },[])
+
+  useEffect(() => {
+  },[historyItemArray])
+
+  function getTaskHistory() {
     API.getTaskHistory(props.task).then((getTaskHistoryRes) => {
       let taskHistoryRawData = getTaskHistoryRes.data[0].event
       let tempTaskHistory = []
@@ -42,13 +49,16 @@ export default function TaskViewHistory(props) {
             }
           })
         }
-      }
-      setHistoryItemArray(tempTaskHistory.sort((a, b) => { Date(b.date).getTime() - Date(a.date).getTime() }))
-    })
-  },[])
+        setTimeout(function () {
+          if (tempTaskHistory.length === taskHistoryRawData.length) {
+            let sortedTime = tempTaskHistory.sort(function(a,b){return new Date(a.date).valueOf() - new Date(b.date).valueOf()})
+            setHistoryItemArray(sortedTime)
+          }
 
-  useEffect(() => {
-  },[historyItemArray])
+        }, 1000)
+      }
+    })
+  }
 
   return (
     <div className='taskViewHistoryContainer'>

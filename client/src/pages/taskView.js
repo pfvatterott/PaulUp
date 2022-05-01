@@ -114,7 +114,7 @@ export default function TaskView(props) {
                         <ReactQuill key={currentTask} className="descriptionBox"  value={description.text} onChange={handleDescriptionChange}/>
                     </Col>
                     <Col s={5} className='taskViewHistoryCol'>
-                        <TaskViewHistory task={currentTask}/>
+                        <TaskViewHistory task={currentTask} workspaceUsers={workspaceUsers}/>
                     </Col>
                 </Row>
           
