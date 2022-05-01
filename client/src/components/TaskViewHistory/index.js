@@ -10,10 +10,12 @@ export default function TaskViewHistory(props) {
 
   useEffect(() => {
     getTaskHistory()
-  },[])
+  },[props.value])
 
   useEffect(() => {
   },[historyItemArray])
+
+
 
   function getTaskHistory() {
     API.getTaskHistory(props.task).then((getTaskHistoryRes) => {

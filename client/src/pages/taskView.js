@@ -44,11 +44,8 @@ export default function TaskView(props) {
                 loadUsers(getListRes.data)
             })
         })
-
-        
-        
-    
     }, [])
+
 
     function loadUsers(listData) {
         if (listData.space_id) {
@@ -114,7 +111,7 @@ export default function TaskView(props) {
                         <ReactQuill key={currentTask} className="descriptionBox"  value={description.text} onChange={handleDescriptionChange}/>
                     </Col>
                     <Col s={5} className='taskViewHistoryCol'>
-                        <TaskViewHistory task={currentTask} workspaceUsers={workspaceUsers}/>
+                        <TaskViewHistory task={currentTask} workspaceUsers={workspaceUsers} value={value} setValue={(x) => setValue(x)}/>
                     </Col>
                 </Row>
           

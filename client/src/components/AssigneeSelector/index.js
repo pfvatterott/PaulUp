@@ -42,7 +42,9 @@ export default function AssigneeSelector(props) {
         to: taskHistoryUser
       }
       tempTaskHistory.push(newTaskHistory)
-      API.updateTaskHistory(getTaskHistoryRes.data[0]._id, { event: tempTaskHistory }).then((updateTaskHistoryRes) => {})
+      API.updateTaskHistory(getTaskHistoryRes.data[0]._id, { event: tempTaskHistory }).then((updateTaskHistoryRes) => {
+        props.setValue(props.value + 1)
+      })
     })
   }
 
