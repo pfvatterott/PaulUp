@@ -51,6 +51,15 @@ export default function TaskViewHistory(props) {
             }
           })
         }
+        else if (taskHistoryRawData[i].action === "comment") {
+          API.getUser(taskHistoryRawData[i].user).then((getUserRes) => {
+            let historyItem = {
+              description: `${getUserRes.data.firstName} ${getUserRes.data.lastName} commented '${taskHistoryRawData[i].to}'`,
+              date: taskHistoryRawData[i].date
+            }
+            tempTaskHistory.push(historyItem)
+          })
+        }
         setTimeout(function () {
           if (tempTaskHistory.length === taskHistoryRawData.length) {
             let sortedTime = tempTaskHistory.sort(function(a,b){return new Date(a.date).valueOf() - new Date(b.date).valueOf()})

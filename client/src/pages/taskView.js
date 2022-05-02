@@ -17,6 +17,7 @@ export default function TaskView(props) {
     const [description, setDescription] = useState({text: ''})
     const [taskAssignee, setTaskAssignee] = useState('')
     const [currentList, setCurrentList] = useState('')
+    const [newComment, setNewComment] = useState('')
     const [workspaceUsers, setWorkspaceUsers] = useState([])
     const [value, setValue] = useState(0);
     const [redirectToList, setRedirectToList] = useState(false);
@@ -45,7 +46,6 @@ export default function TaskView(props) {
             })
         })
     }, [])
-
 
     function loadUsers(listData) {
         if (listData.space_id) {
@@ -79,6 +79,30 @@ export default function TaskView(props) {
             setDescription({text: ''})
             setRedirectToList(true)
         })
+    }
+
+    function handleTaskCommentChange(event) {
+        const comment = event.target.value;
+        setNewComment(comment)
+    }
+
+    function handleSaveComment() {
+        if (newComment.trim() !== '') {
+            API.getTaskHistory(currentTask).then((TaskHistoryRes) => {
+                let tempTaskHistory = TaskHistoryRes.data[0].event
+                let newCommentObj = {
+                    action: "comment",
+                    user: userIdVariable,
+                    date: new Date(),
+                    to: newComment
+                }
+                tempTaskHistory.push(newCommentObj)
+                API.updateTaskHistory(TaskHistoryRes.data[0]._id, { event: tempTaskHistory }).then((updateTaskHistoryRes) => {
+                    setNewComment('')
+                    setValue(value + 1)
+                })
+            })
+        }
     }
     
 
@@ -114,7 +138,15 @@ export default function TaskView(props) {
                         <TaskViewHistory task={currentTask} workspaceUsers={workspaceUsers} value={value} setValue={(x) => setValue(x)}/>
                     </Col>
                 </Row>
-          
+                <Row>
+                    <Col s={7}>
+                    </Col>
+                    <Col s={5} className="text_area_col">
+                        <Textarea id="taskViewCommentTextArea" onChange={handleTaskCommentChange} value={newComment}></Textarea>
+                    </Col>
+                </Row>
+                <Button className="right" id="taskViewCommentButton" onClick={handleSaveComment}>Comment</Button>
+
            
         </Modal>
     )
