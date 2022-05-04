@@ -26,7 +26,8 @@ export default function TaskViewHistory(props) {
           API.getUser(taskHistoryRawData[i].user).then((getUserRes) => {
             let historyItem = {
               description: `${getUserRes.data.firstName} ${getUserRes.data.lastName} created task`,
-              date: taskHistoryRawData[i].date
+              date: taskHistoryRawData[i].date,
+              type: "task_created"
             }
             tempTaskHistory.push(historyItem)
           })
@@ -36,7 +37,8 @@ export default function TaskViewHistory(props) {
             if (taskHistoryRawData[i].to === "unassigned") {
               let historyItem = {
                 description: `${getUserRes.data.firstName} ${getUserRes.data.lastName} unassigned task`,
-                date: taskHistoryRawData[i].date
+                date: taskHistoryRawData[i].date,
+                type: "unassigned"
               }
               tempTaskHistory.push(historyItem)
             }
@@ -44,7 +46,8 @@ export default function TaskViewHistory(props) {
               API.getUser(taskHistoryRawData[i].to).then((getAssigneeRes) => {
                 let historyItem = {
                   description: `${getUserRes.data.firstName} ${getUserRes.data.lastName} changed assignee to ${getAssigneeRes.data.firstName} ${getAssigneeRes.data.lastName}`,
-                  date: taskHistoryRawData[i].date
+                  date: taskHistoryRawData[i].date,
+                  type: "assignee"
                 }
                 tempTaskHistory.push(historyItem)
               })
@@ -54,8 +57,10 @@ export default function TaskViewHistory(props) {
         else if (taskHistoryRawData[i].action === "comment") {
           API.getUser(taskHistoryRawData[i].user).then((getUserRes) => {
             let historyItem = {
-              description: `${getUserRes.data.firstName} ${getUserRes.data.lastName} commented '${taskHistoryRawData[i].to}'`,
-              date: taskHistoryRawData[i].date
+              description: taskHistoryRawData[i].to,
+              date: taskHistoryRawData[i].date,
+              type: "comment",
+              img: getUserRes.data.image
             }
             tempTaskHistory.push(historyItem)
           })
@@ -74,15 +79,26 @@ export default function TaskViewHistory(props) {
   return (
     <div className='taskViewHistoryContainer'>
       {historyItemArray.map(historyItem => {
-        return <Row className="Row historyItemRow" key={historyItem.description + Math.random()}>
+        if(historyItem.type === "comment")
+        return <Row className="Row historyItemRow historyItemRowComment" key={historyItem.description + Math.random()}>
           <Col s={9} className="left">
+          <img alt="profilePicComment" src={historyItem.img} className="circle profilePicComment"></img>
           <p>{historyItem.description}</p>
           </Col>
           <Col s={3} className="right">
           <p><Moment format="MM/DD/YY h:mm a">{historyItem.date}</Moment></p>
           </Col>
         </Row>
-      })}
+        if(historyItem.type !== "comment")
+        return <Row className="Row historyItemRow" key={historyItem.description + Math.random()}>
+        <Col s={9} className="left">
+        <p>{historyItem.description}</p>
+        </Col>
+        <Col s={3} className="right">
+        <p><Moment format="MM/DD/YY h:mm a">{historyItem.date}</Moment></p>
+        </Col>
+      </Row>
+    })}
     </div>
   )
 }
