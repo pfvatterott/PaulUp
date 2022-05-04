@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Row, Col} from "react-materialize";
 import Moment from 'react-moment';
 import API from "../../utils/API";
@@ -6,6 +6,7 @@ import "./style.css";
 
 export default function TaskViewHistory(props) {
   const [historyItemArray, setHistoryItemArray] = useState([]);
+  const messagesEndRef = useRef(null)
 
 
   useEffect(() => {
@@ -69,6 +70,7 @@ export default function TaskViewHistory(props) {
           if (tempTaskHistory.length === taskHistoryRawData.length) {
             let sortedTime = tempTaskHistory.sort(function(a,b){return new Date(a.date).valueOf() - new Date(b.date).valueOf()})
             setHistoryItemArray(sortedTime)
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
           }
 
         }, 1000)
@@ -99,6 +101,7 @@ export default function TaskViewHistory(props) {
         </Col>
       </Row>
     })}
+    <div ref={messagesEndRef}></div>
     </div>
   )
 }
