@@ -27,7 +27,6 @@ export default function TaskView(props) {
 
 
     useEffect(() => {
-        console.log(currentTask)
         API.getTask(currentTask).then((getTaskRes) => {
             setTaskAssignee(getTaskRes.data.task_assignee)
             setTaskName(getTaskRes.data.task_name)
@@ -40,7 +39,6 @@ export default function TaskView(props) {
                 setDescription({text: ''})
             }
             API.getList(getTaskRes.data.list_id).then((getListRes) => {
-                console.log(getListRes)
                 setCurrentList(getListRes.data)
                 loadUsers(getListRes.data)
             })

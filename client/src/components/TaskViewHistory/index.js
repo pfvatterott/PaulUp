@@ -87,7 +87,7 @@ export default function TaskViewHistory(props) {
             messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
           }
 
-        }, 1000)
+        }, 2000)
       }
     })
   }
@@ -115,7 +115,7 @@ export default function TaskViewHistory(props) {
         </Col>
       </Row>
     })}
-    <div ref={messagesEndRef}></div>
+    <div ref={messagesEndRef} className='last_div'></div>
     </div>
   )
 }

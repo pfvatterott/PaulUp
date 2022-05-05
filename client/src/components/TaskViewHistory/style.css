@@ -14,11 +14,14 @@
     border-style: solid;
     border-radius: 10px;
     background-color: white;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin: 5px !important;
 }
 
 .profilePicComment {
     max-height: 35px;
     margin-top: 10px;
+}
+
+.last_div {
+    padding-top: 5px;
 }
