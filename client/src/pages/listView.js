@@ -271,7 +271,7 @@ function taskView() {
                                     {listTasks.map(task => {
                                         if(task.task_status.status === item.name)
                                             return <tr className="collection-item" key={task._id}>
-                                            <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
+                                            <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses} user={userIdVariable}/></td>
                                             <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>
                                             <AssigneeSelector currentList={currentList} workspaceUsers={workspaceUsers} id={task._id} assignees={task.task_assignee} value={value} setValue={(x) => setValue(x)} currentUser={userIdVariable}></AssigneeSelector>
                                             <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>
@@ -322,7 +322,7 @@ function taskView() {
                                     <tbody>
                                     {listTasks.map(task => {
                                             return <tr className="collection-item" key={task._id}>
-                                            <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses}/></td>
+                                            <td className="status_box"><StatusBox id={task._id} status={task.task_status} updateLists={(a) => handleGetListTasks(a)} list_statuses={currentList.statuses} user={userIdVariable}/></td>
                                             <ListViewTaskTitle taskName={task.task_name} taskID={task._id} handleOpenTaskView={(x) => handleOpenTaskView(x)}/>
                                             <AssigneeSelector currentList={currentList} workspaceUsers={workspaceUsers} id={task._id} assignees={task.task_assignee} value={value} setValue={(x) => setValue(x)} currentUser={userIdVariable}></AssigneeSelector>  
                                             <DateSelector id={task._id} startDate={task.start_date} dueDate={task.due_date}></DateSelector>

@@ -22,6 +22,7 @@ export default function StatusBox(props) {
                 setCurrentColor(props.list_statuses[i].color)
             }    
         }
+        
     }, [currentStatus])
 
     function handleStatusChange(status, status_type) {
@@ -31,9 +32,22 @@ export default function StatusBox(props) {
                 status: status
             }
         }
-        API.updateTask(props.id, newTaskData).then((updateTaskRes) => {
-            setCurrentStatus(status)
-            props.updateLists(updateTaskRes.data.list_id)
+        API.getTaskHistory(props.id).then((getTaskHistoryRes) => {
+            let tempTaskHistory = getTaskHistoryRes.data[0].event
+            let newTaskHistory = {
+              action: "status_change",
+              user: props.user,
+              date: new Date(),
+              to: status,
+              from: currentStatus.status
+            }
+            tempTaskHistory.push(newTaskHistory)
+            API.updateTaskHistory(getTaskHistoryRes.data[0]._id, { event: tempTaskHistory }).then((updateTaskHistoryRes) => {   
+            })
+            API.updateTask(props.id, newTaskData).then((updateTaskRes) => {
+                setCurrentStatus(status)
+                props.updateLists(updateTaskRes.data.list_id)
+            })
         })
     }
     

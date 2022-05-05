@@ -33,6 +33,7 @@ export default function TaskViewHistory(props) {
             tempTaskHistory.push(historyItem)
           })
         }
+
         else if (taskHistoryRawData[i].action === "task_assigned") {
           API.getUser(taskHistoryRawData[i].user).then((getUserRes) => {
             if (taskHistoryRawData[i].to === "unassigned") {
@@ -55,6 +56,7 @@ export default function TaskViewHistory(props) {
             }
           })
         }
+
         else if (taskHistoryRawData[i].action === "comment") {
           API.getUser(taskHistoryRawData[i].user).then((getUserRes) => {
             let historyItem = {
@@ -66,6 +68,18 @@ export default function TaskViewHistory(props) {
             tempTaskHistory.push(historyItem)
           })
         }
+
+        else if (taskHistoryRawData[i].action === 'status_change') {
+          API.getUser(taskHistoryRawData[i].user).then((getUserRes) => {
+            let historyItem = {
+              description: `${getUserRes.data.firstName} ${getUserRes.data.lastName} changed status from ${taskHistoryRawData[i].from} to ${taskHistoryRawData[i].to}`,
+              date: taskHistoryRawData[i].data,
+              type: 'status_change'
+            }
+            tempTaskHistory.push(historyItem)
+          })
+        }
+
         setTimeout(function () {
           if (tempTaskHistory.length === taskHistoryRawData.length) {
             let sortedTime = tempTaskHistory.sort(function(a,b){return new Date(a.date).valueOf() - new Date(b.date).valueOf()})
