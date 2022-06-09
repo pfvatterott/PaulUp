@@ -31,6 +31,19 @@ export default function DateSelector(props) {
         }
         API.updateTask(props.id, startDate).then((updateTaskRes) => {
         })
+        API.getTaskHistory(props.id).then((getTaskHistoryRes) => {
+          let tempTaskHistory = getTaskHistoryRes.data[0].event
+          let newTaskHistory = {
+            action: "start_date_changed",
+            user: props.currentUser,
+            date: new Date(),
+            from: from,
+            to: null
+          }
+          tempTaskHistory.push(newTaskHistory)
+          API.updateTaskHistory(getTaskHistoryRes.data[0]._id, { event: tempTaskHistory }).then((updateTaskHistoryRes) => {
+          })
+        })
       }
       else {
         setFrom(date)
@@ -38,6 +51,19 @@ export default function DateSelector(props) {
             start_date: date
           }
           API.updateTask(props.id, startDate).then((updateTaskRes) => {
+          })
+          API.getTaskHistory(props.id).then((getTaskHistoryRes) => {
+            let tempTaskHistory = getTaskHistoryRes.data[0].event
+            let newTaskHistory = {
+              action: "start_date_changed",
+              user: props.currentUser,
+              date: new Date(),
+              from: from,
+              to: date
+            }
+            tempTaskHistory.push(newTaskHistory)
+            API.updateTaskHistory(getTaskHistoryRes.data[0]._id, { event: tempTaskHistory }).then((updateTaskHistoryRes) => {
+            })
           })
       }
     }
@@ -50,6 +76,19 @@ export default function DateSelector(props) {
         }
         API.updateTask(props.id, dueDate).then((updateTaskRes) => {
         })
+        API.getTaskHistory(props.id).then((getTaskHistoryRes) => {
+          let tempTaskHistory = getTaskHistoryRes.data[0].event
+          let newTaskHistory = {
+            action: "due_date_changed",
+            user: props.currentUser,
+            date: new Date(),
+            from: to,
+            to: null
+          }
+          tempTaskHistory.push(newTaskHistory)
+          API.updateTaskHistory(getTaskHistoryRes.data[0]._id, { event: tempTaskHistory }).then((updateTaskHistoryRes) => {
+          })
+        })
       }
       else {
         setTo(date)
@@ -58,6 +97,19 @@ export default function DateSelector(props) {
           due_date: date
         }
         API.updateTask(props.id, dueDate).then((updateTaskRes) => {
+        })
+        API.getTaskHistory(props.id).then((getTaskHistoryRes) => {
+          let tempTaskHistory = getTaskHistoryRes.data[0].event
+          let newTaskHistory = {
+            action: "due_date_changed",
+            user: props.currentUser,
+            date: new Date(),
+            from: to,
+            to: date
+          }
+          tempTaskHistory.push(newTaskHistory)
+          API.updateTaskHistory(getTaskHistoryRes.data[0]._id, { event: tempTaskHistory }).then((updateTaskHistoryRes) => {
+          })
         })
       }
     }

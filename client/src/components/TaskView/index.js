@@ -66,7 +66,7 @@ export default function TaskView(props) {
                         { props.workspaceUsers ? (<AssigneeSelector currentList={props.currentList} workspaceUsers={props.workspaceUsers} id={props.task} assignees={taskAssignee} value={props.value} setValue={(x) => props.setValue(x)} taskView={true} currentUser={props.currentUser}></AssigneeSelector> ) : null} 
                     </Col>
                     <Col s={5}>
-                        <DateSelector id={props.task} startDate={startDate} dueDate={dueDate}/>
+                        <DateSelector id={props.task} startDate={startDate} dueDate={dueDate} currentUser={props.currentUser}/>
                     </Col>
                     <Col s={1}>
                         <Button onClick={closeModal}className="right">Close</Button>

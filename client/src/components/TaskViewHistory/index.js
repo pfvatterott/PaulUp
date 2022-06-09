@@ -80,6 +80,28 @@ export default function TaskViewHistory(props) {
           })
         }
 
+        else if (taskHistoryRawData[i].action === 'start_date_changed') {
+          API.getUser(taskHistoryRawData[i].user).then((getUserRes) => {
+            let historyItem = {
+              description: `${getUserRes.data.firstName} ${getUserRes.data.lastName} changed start date from ${taskHistoryRawData[i].from} to ${taskHistoryRawData[i].to}`,
+              date: taskHistoryRawData[i].data,
+              type: 'start_date_changed'
+            }
+            tempTaskHistory.push(historyItem)
+          })
+        }
+
+        else if (taskHistoryRawData[i].action === 'due_date_changed') {
+          API.getUser(taskHistoryRawData[i].user).then((getUserRes) => {
+            let historyItem = {
+              description: `${getUserRes.data.firstName} ${getUserRes.data.lastName} changed due date from ${taskHistoryRawData[i].from} to ${taskHistoryRawData[i].to}`,
+              date: taskHistoryRawData[i].data,
+              type: 'due_date_changed'
+            }
+            tempTaskHistory.push(historyItem)
+          })
+        }
+
         setTimeout(function () {
           if (tempTaskHistory.length === taskHistoryRawData.length) {
             let sortedTime = tempTaskHistory.sort(function(a,b){return new Date(a.date).valueOf() - new Date(b.date).valueOf()})
